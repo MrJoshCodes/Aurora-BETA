@@ -17,6 +17,8 @@ namespace AuroraEmu.Database.Mappings
             Map(x => x.Visible).Column("is_visible").Not.Nullable();
             Map(x => x.ParentId).Column("parent_id").Length(11).Not.Nullable();
             Map(x => x.MinRank).Column("min_rank").Length(2).Not.Nullable();
+            Map(x => x.Layout).Column("layout").Length(15).Not.Nullable();
+            Map(x => x.HasContent).Column("has_content").Not.Nullable();
         }
     }
 }

@@ -17,6 +17,7 @@ namespace AuroraEmu.Network.Game.Packets
             {
                 { 8, new GetCreditsMessageEvent() },
                 { 101, new GetCatalogIndexMessageEvent() },
+                { 102, new GetCatalogPageMessageEvent() },
                 { 206, new InitCryptoMessageEvent() },
                 { 415, new SSOTicketMessageEvent() }
             };
