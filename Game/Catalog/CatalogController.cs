@@ -1,28 +1,51 @@
 ﻿using AuroraEmu.Network.Game.Packets;
 using NHibernate;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace AuroraEmu.Game.Catalog
 {
     public class CatalogController
     {
-        private readonly IReadOnlyList<CatalogPage> pages;
+        private readonly IReadOnlyDictionary<int, CatalogPage> pages;
 
         public CatalogController()
         {
             using (ISession session = Engine.Database.SessionFactory.OpenSession())
             {
-                pages = session.CreateCriteria<CatalogPage>().List<CatalogPage>() as IReadOnlyList<CatalogPage>;
+                pages = session.CreateCriteria<CatalogPage>().List<CatalogPage>().ToDictionary(x => x.Id);
+                
+                IReadOnlyList<CatalogPageData> data = session.CreateCriteria<CatalogPageData>().List<CatalogPageData>() as IReadOnlyList<CatalogPageData>;
+
+                foreach(CatalogPageData pageData in data)
+                {
+                    if (!pages[pageData.PageId].PageData.ContainsKey(pageData.Type))
+                    {
+                        pages[pageData.PageId].PageData.Add(pageData.Type, new List<CatalogPageData>());
+                    }
+
+                    pages[pageData.PageId].PageData[pageData.Type].Add(pageData);
+                }
             }
 
-            Engine.Logger.Info($"Loaded {pages.Count} catalog pages.");
+             Engine.Logger.Info($"Loaded {pages.Count} catalog pages.");
+        }
+
+        public CatalogPage GetPage(int id)
+        {
+            CatalogPage page;
+
+            if (pages.TryGetValue(id, out page))
+                return page;
+
+            return null;
         }
 
         private IReadOnlyList<CatalogPage> GetPagesByParent(int parentId)
         {
             List<CatalogPage> childs = new List<CatalogPage>();
 
-            foreach (CatalogPage page in pages)
+            foreach (CatalogPage page in pages.Values)
             {
                 if (page.ParentId == parentId)
                     childs.Add(page);
@@ -36,7 +59,7 @@ namespace AuroraEmu.Game.Catalog
             IReadOnlyList<CatalogPage> categories = GetPagesByParent(0);
             composer.AppendVL64(categories.Count);
 
-            foreach (CatalogPage page in pages)
+            foreach (CatalogPage page in pages.Values)
             {
                 SerializePage(composer, page);
             }

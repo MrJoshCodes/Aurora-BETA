@@ -123,10 +123,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Database\DatabaseHelper.cs" />
+    <Compile Include="Database\Mappings\CatalogPageDataMap.cs" />
     <Compile Include="Database\Mappings\CatalogPageMap.cs" />
     <Compile Include="Database\Mappings\PlayerMap.cs" />
     <Compile Include="Game\Catalog\CatalogController.cs" />
     <Compile Include="Game\Catalog\CatalogPage.cs" />
+    <Compile Include="Game\Catalog\CatalogPageData.cs" />
     <Compile Include="Game\Clients\Client.cs" />
     <Compile Include="Game\Clients\ClientManager.cs" />
     <Compile Include="Game\Game.cs" />
@@ -136,6 +138,7 @@
     <Compile Include="Network\Game\GameNetworkHandler.cs" />
     <Compile Include="Network\Game\GameNetworkListener.cs" />
     <Compile Include="Network\Game\Packets\Events\Catalogue\GetCatalogIndexMessageEvent.cs" />
+    <Compile Include="Network\Game\Packets\Events\Catalogue\GetCatalogPageMessageEvent.cs" />
     <Compile Include="Network\Game\Packets\Events\Handshake\InitCryptoMessageEvent.cs" />
     <Compile Include="Network\Game\Packets\Events\Handshake\SSOTicketMessageEvent.cs" />
     <Compile Include="Network\Game\Packets\Events\Users\GetCreditsMessageEvent.cs" />
