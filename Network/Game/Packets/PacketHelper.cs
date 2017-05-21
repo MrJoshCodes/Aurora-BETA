@@ -10,7 +10,7 @@ namespace AuroraEmu.Network.Game.Packets
     public class PacketHelper
     {
         private readonly Dictionary<int, IPacketEvent> packetEvents;
-        private readonly Dictionary<string, int> packetNames;
+        private readonly Dictionary<int, string> packetNames;
         private static PacketHelper packetHelperInstance;
 
         public PacketHelper()
@@ -24,9 +24,13 @@ namespace AuroraEmu.Network.Game.Packets
                 { 415, new SSOTicketMessageEvent() }
             };
 
-            packetNames = new Dictionary<string, int>
+            packetNames = new Dictionary<int, string>
             {
-                { "GetCreditsMessageEvent", 8 }
+                { 8, "GetCreditsMessageEvent" },
+                { 101, "GetCatalogIndexMessageEvent" },
+                { 102, "GetCatalogPageMessageEvent" },
+                { 206, "InitCryptoMessageEvent" },
+                { 415, "SSOTicketMessageEvent" }
             };
 
             Engine.Logger.Info($"Loaded {packetEvents.Count} packet events.");
@@ -40,6 +44,10 @@ namespace AuroraEmu.Network.Game.Packets
 
             if (packetEvents.TryGetValue(msgEvent.HeaderId, out packetEvent))
             {
+                if (packetNames.ContainsKey(msgEvent.HeaderId))
+                {
+                    Engine.Logger.Info($"Handled incoming packet: {packetNames[msgEvent.HeaderId]}");
+                }
                 packetEvent.Run(client, msgEvent);
             }
             else
