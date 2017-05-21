@@ -9,7 +9,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>AuroraEmu</RootNamespace>
     <AssemblyName>AuroraEmu</AssemblyName>
-    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.6</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <TargetFrameworkProfile />
@@ -131,12 +131,17 @@
     <Compile Include="Game\Catalog\CatalogPageData.cs" />
     <Compile Include="Game\Clients\Client.cs" />
     <Compile Include="Game\Clients\ClientManager.cs" />
-    <Compile Include="Game\Game.cs" />
+    <Compile Include="Game\Aurora.cs" />
     <Compile Include="Game\Players\Player.cs" />
     <Compile Include="Game\Players\PlayerController.cs" />
     <Compile Include="Engine.cs" />
     <Compile Include="Network\Game\GameNetworkHandler.cs" />
     <Compile Include="Network\Game\GameNetworkListener.cs" />
+    <Compile Include="Network\Game\Packets\Composers\Catalogue\CatalogIndexMessageComposer.cs" />
+    <Compile Include="Network\Game\Packets\Composers\Catalogue\CatalogPageMessageComposer.cs" />
+    <Compile Include="Network\Game\Packets\Composers\Handshake\SessionParamsMessageComposer.cs" />
+    <Compile Include="Network\Game\Packets\Composers\Users\CreditBalanceMessageComposer.cs" />
+    <Compile Include="Network\Game\Packets\Composers\Users\HabboActivityPointNotificationMessageComposer.cs" />
     <Compile Include="Network\Game\Packets\Events\Catalogue\GetCatalogIndexMessageEvent.cs" />
     <Compile Include="Network\Game\Packets\Events\Catalogue\GetCatalogPageMessageEvent.cs" />
     <Compile Include="Network\Game\Packets\Events\Handshake\InitCryptoMessageEvent.cs" />

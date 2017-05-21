@@ -1,4 +1,5 @@
 ﻿using AuroraEmu.Game.Clients;
+using AuroraEmu.Network.Game.Packets.Composers.Handshake;
 
 namespace AuroraEmu.Network.Game.Packets.Events.Handshake
 {
@@ -6,9 +7,7 @@ namespace AuroraEmu.Network.Game.Packets.Events.Handshake
     {
         public void Run(Client client, MessageEvent msgEvent)
         {
-            MessageComposer composer = new MessageComposer(257);
-            composer.AppendString("RAHIIIKHJIPAIQAdd-MM-yyyy");
-            client.SendComposer(composer);
+            client.SendComposer(new SessionParamsMessageComposer());
         }
     }
 }

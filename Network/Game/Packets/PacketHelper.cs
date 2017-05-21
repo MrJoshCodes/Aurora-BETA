@@ -10,6 +10,7 @@ namespace AuroraEmu.Network.Game.Packets
     public class PacketHelper
     {
         private readonly Dictionary<int, IPacketEvent> packetEvents;
+        private static PacketHelper packetHelperInstance;
 
         public PacketHelper()
         {
@@ -39,6 +40,13 @@ namespace AuroraEmu.Network.Game.Packets
             {
                 Engine.Logger.Warn($"Unregistered packet event #{msgEvent.HeaderId}: {msgEvent.ToString()}");
             }
+        }
+
+        public static PacketHelper GetInstance()
+        {
+            if (packetHelperInstance == null)
+                packetHelperInstance = new PacketHelper();
+            return packetHelperInstance;
         }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using AuroraEmu.Game.Clients;
+using AuroraEmu.Network.Game.Packets;
 using AuroraEmu.Utilities.Encoding;
 using DotNetty.Buffers;
 using DotNetty.Transport.Channels;
@@ -16,7 +17,7 @@ namespace AuroraEmu.Network.Game
         {
             base.ChannelActive(ctx);
 
-            Engine.Game.Clients.AddClient(ctx.Channel);
+            ClientManager.GetInstance().AddClient(ctx.Channel);
 
             Engine.Logger.Debug($"Client connected to client: {ctx.Channel.RemoteAddress.ToString()}");
         }
@@ -25,7 +26,7 @@ namespace AuroraEmu.Network.Game
         {
             base.ChannelInactive(ctx);
 
-            Engine.Game.Clients.RemoveClient(ctx.Channel);
+            ClientManager.GetInstance().RemoveClient(ctx.Channel);
 
             Engine.Logger.Debug($"Client disconnected from client: {ctx.Channel.RemoteAddress.ToString()}");
         }
@@ -34,7 +35,7 @@ namespace AuroraEmu.Network.Game
 
         public override void ChannelRead(IChannelHandlerContext ctx, object msg)
         {
-            Client client = Engine.Game.Clients.GetClient(ctx.Channel);
+            Client client = ClientManager.GetInstance().GetClient(ctx.Channel);
             var message = msg as IByteBuffer;
 
             if (message.ReadByte() == 60)
@@ -47,7 +48,7 @@ namespace AuroraEmu.Network.Game
                 int length = Base64Encoding.DecodeInt32(message.ReadBytes(2).ToArray());
                 IByteBuffer packet = message.ReadBytes(length);
 
-                Engine.GameNetwork.Packets.Handle(client, packet);
+                PacketHelper.GetInstance().Handle(client, packet);
             }
 
             base.ChannelRead(ctx, msg);

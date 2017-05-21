@@ -1,4 +1,5 @@
-﻿using NHibernate;
+﻿using AuroraEmu.Database;
+using NHibernate;
 using NHibernate.Criterion;
 using System.Collections.Concurrent;
 
@@ -7,6 +8,7 @@ namespace AuroraEmu.Game.Players
     public class PlayerController
     {
         private readonly ConcurrentDictionary<int, Player> players;
+        private static PlayerController playerControllerInstance;
 
         public PlayerController()
         {
@@ -28,7 +30,7 @@ namespace AuroraEmu.Game.Players
             if (players.TryGetValue(id, out player))
                 return players[id];
 
-            using (ISession session = Engine.Database.SessionFactory.OpenSession())
+            using (ISession session = DatabaseHelper.GetInstance().SessionFactory.OpenSession())
             {
                 player = session.Get<Player>(id);
             }
@@ -45,7 +47,7 @@ namespace AuroraEmu.Game.Players
         {
             Player player;
 
-            using (ISession session = Engine.Database.SessionFactory.OpenSession())
+            using (ISession session = DatabaseHelper.GetInstance().SessionFactory.OpenSession())
             {
                 player = session.CreateCriteria<Player>().Add(Restrictions.Eq("SSO", sso)).UniqueResult<Player>();
             }
@@ -56,6 +58,13 @@ namespace AuroraEmu.Game.Players
             }
 
             return player;
+        }
+
+        public static PlayerController GetInstance()
+        {
+            if (playerControllerInstance == null)
+                playerControllerInstance = new PlayerController();
+            return playerControllerInstance;
         }
     }
 }
