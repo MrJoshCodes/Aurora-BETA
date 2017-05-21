@@ -6,6 +6,7 @@ namespace AuroraEmu.Game.Clients
     public class ClientManager
     {
         public readonly Dictionary<IChannelId, Client> clients;
+        private static ClientManager clientManagerInstance;
 
         public ClientManager()
         {
@@ -47,6 +48,13 @@ namespace AuroraEmu.Game.Clients
         public void RemoveClient(IChannel channel)
         {
             clients.Remove(channel.Id);
+        }
+
+        public static ClientManager GetInstance()
+        {
+            if (clientManagerInstance == null)
+                clientManagerInstance = new ClientManager();
+            return clientManagerInstance;
         }
     }
 }

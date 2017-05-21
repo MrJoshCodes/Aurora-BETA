@@ -8,10 +8,11 @@ namespace AuroraEmu.Database
 {
     public class DatabaseHelper
     {
+        private static DatabaseHelper databaseHelperInstance;
         private const string CONNECTION_STRING = "Server=127.0.0.1; " +
                                                  "Port=3306; " +
                                                  "Uid=root; " +
-                                                 "Password=123; " +
+                                                 "Password=; " +
                                                  "Database=aurora_beta; " +
                                                  "MinimumPoolSize=5; " +
                                                  "MaximumPoolSize=15";
@@ -36,6 +37,13 @@ namespace AuroraEmu.Database
             {
                 System.Diagnostics.Debugger.Break();
             }
+        }
+
+        public static DatabaseHelper GetInstance()
+        {
+            if (databaseHelperInstance == null)
+                databaseHelperInstance = new DatabaseHelper();
+            return databaseHelperInstance;
         }
     }
 }

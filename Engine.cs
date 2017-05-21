@@ -1,4 +1,5 @@
 ﻿using AuroraEmu.Database;
+using AuroraEmu.Game;
 using AuroraEmu.Network.Game;
 using log4net;
 
@@ -8,18 +9,12 @@ namespace AuroraEmu
     {
         public static ILog Logger { get; private set; }
 
-        public static DatabaseHelper Database { get; private set; }
-        public static Game.Game Game { get; private set; }
-        public static GameNetworkListener GameNetwork { get; private set; }
-
         static void Main(string[] args)
         {
             Logger = LogManager.GetLogger(typeof(Engine));
+            GameNetworkListener.GetInstance();
 
-            Database = new DatabaseHelper();
-            Game = new Game.Game();
-
-            GameNetwork = new GameNetworkListener();
+            Aurora.GetInstance();
 
             System.Console.ReadLine();
         }

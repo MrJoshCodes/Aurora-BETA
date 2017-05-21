@@ -1,4 +1,5 @@
-﻿using AuroraEmu.Network.Game.Packets;
+﻿using AuroraEmu.Database;
+using AuroraEmu.Network.Game.Packets;
 using NHibernate;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,10 +9,11 @@ namespace AuroraEmu.Game.Catalog
     public class CatalogController
     {
         private readonly IReadOnlyDictionary<int, CatalogPage> pages;
+        private static CatalogController catalogControllerInstance;
 
         public CatalogController()
         {
-            using (ISession session = Engine.Database.SessionFactory.OpenSession())
+            using (ISession session = DatabaseHelper.GetInstance().SessionFactory.OpenSession())
             {
                 pages = session.CreateCriteria<CatalogPage>().List<CatalogPage>().ToDictionary(x => x.Id);
                 
@@ -81,6 +83,13 @@ namespace AuroraEmu.Game.Catalog
             {
                 SerializePage(composer, child);
             }
+        }
+
+        public static CatalogController GetInstance()
+        {
+            if (catalogControllerInstance == null)
+                catalogControllerInstance = new CatalogController();
+            return catalogControllerInstance;
         }
     }
 }

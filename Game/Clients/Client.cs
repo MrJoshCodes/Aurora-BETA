@@ -23,12 +23,33 @@ namespace AuroraEmu.Game.Clients
 
         public void SendComposer(MessageComposer composer)
         {
-            channel.WriteAndFlushAsync(composer.GetBytes());
+            Send(composer, true);
+        }
+
+        public void QueueComposer(MessageComposer composer)
+        {
+            Send(composer, false);
+        }
+
+        public void Send(MessageComposer composer, bool flush)
+        {
+            if (flush)
+            {
+                channel.WriteAndFlushAsync(composer.GetBytes());
+            } else
+            {
+                channel.WriteAsync(composer.GetBytes());
+            }
+        }
+
+        public IChannel Flush()
+        {
+            return channel.Flush();
         }
 
         public void Login(string sso)
         {
-            Player = Engine.Game.Players.GetPlayerBySSO(sso);
+            Player = PlayerController.GetInstance().GetPlayerBySSO(sso);
 
             if (Player != null)
             {
