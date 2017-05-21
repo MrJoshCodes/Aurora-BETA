@@ -10,6 +10,7 @@ namespace AuroraEmu.Network.Game.Packets
     public class PacketHelper
     {
         private readonly Dictionary<int, IPacketEvent> packetEvents;
+        private readonly Dictionary<string, int> packetNames;
         private static PacketHelper packetHelperInstance;
 
         public PacketHelper()
@@ -21,6 +22,11 @@ namespace AuroraEmu.Network.Game.Packets
                 { 102, new GetCatalogPageMessageEvent() },
                 { 206, new InitCryptoMessageEvent() },
                 { 415, new SSOTicketMessageEvent() }
+            };
+
+            packetNames = new Dictionary<string, int>
+            {
+                { "GetCreditsMessageEvent", 8 }
             };
 
             Engine.Logger.Info($"Loaded {packetEvents.Count} packet events.");
