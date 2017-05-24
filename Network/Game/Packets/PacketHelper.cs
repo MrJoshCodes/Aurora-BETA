@@ -1,6 +1,7 @@
 ﻿using AuroraEmu.Game.Clients;
 using AuroraEmu.Network.Game.Packets.Events.Catalogue;
 using AuroraEmu.Network.Game.Packets.Events.Handshake;
+using AuroraEmu.Network.Game.Packets.Events.Navigator;
 using AuroraEmu.Network.Game.Packets.Events.Users;
 using DotNetty.Buffers;
 using System.Collections.Generic;
@@ -20,6 +21,7 @@ namespace AuroraEmu.Network.Game.Packets
                 { 8, new GetCreditsMessageEvent() },
                 { 101, new GetCatalogIndexMessageEvent() },
                 { 102, new GetCatalogPageMessageEvent() },
+                {380, new GetOfficialRoomsMessageEvent() },
                 { 206, new InitCryptoMessageEvent() },
                 { 415, new SSOTicketMessageEvent() }
             };

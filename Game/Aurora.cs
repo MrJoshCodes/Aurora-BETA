@@ -1,5 +1,6 @@
 ﻿using AuroraEmu.Game.Catalog;
 using AuroraEmu.Game.Clients;
+using AuroraEmu.Game.Navigator;
 using AuroraEmu.Game.Players;
 
 namespace AuroraEmu.Game
@@ -13,6 +14,7 @@ namespace AuroraEmu.Game
             PlayerController.GetInstance();
             ClientManager.GetInstance();
             CatalogController.GetInstance();
+            NavigatorController.GetInstance();
         }
 
         public static Aurora GetInstance()
