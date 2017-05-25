@@ -1,6 +1,7 @@
 ﻿using AuroraEmu.Game.Catalog;
 using AuroraEmu.Game.Clients;
 using AuroraEmu.Network.Game.Packets.Composers.Catalogue;
+using System.Collections.Generic;
 
 namespace AuroraEmu.Network.Game.Packets.Events.Catalogue
 {
@@ -12,7 +13,8 @@ namespace AuroraEmu.Network.Game.Packets.Events.Catalogue
             CatalogPage page = CatalogController.GetInstance().GetPage(pageId);
             if (page != null && !page.Development && page.HasContent)
             {
-                client.SendComposer(new CatalogPageMessageComposer(pageId, page));
+                List<CatalogProduct> products = CatalogController.GetInstance().GetProducts(pageId);
+                client.SendComposer(new CatalogPageMessageComposer(pageId, page, products));
             }
         }
     }

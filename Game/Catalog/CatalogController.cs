@@ -1,5 +1,4 @@
 ﻿using AuroraEmu.Database;
-using AuroraEmu.Network.Game.Packets;
 using NHibernate;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,6 +8,7 @@ namespace AuroraEmu.Game.Catalog
     public class CatalogController
     {
         private readonly IReadOnlyDictionary<int, CatalogPage> pages;
+        private readonly IReadOnlyDictionary<int, CatalogProduct> products;
         private static CatalogController catalogControllerInstance;
 
         public CatalogController()
@@ -28,9 +28,11 @@ namespace AuroraEmu.Game.Catalog
 
                     pages[pageData.PageId].PageData[pageData.Type].Add(pageData);
                 }
+
+                products = session.CreateCriteria<CatalogProduct>().List<CatalogProduct>().ToDictionary(x => x.Id);
             }
 
-             Engine.Logger.Info($"Loaded {pages.Count} catalog pages.");
+             Engine.Logger.Info($"Loaded {pages.Count} catalog pages and {products.Count} products.");
         }
 
         public CatalogPage GetPage(int id)
@@ -43,7 +45,7 @@ namespace AuroraEmu.Game.Catalog
             return null;
         }
 
-        private IReadOnlyList<CatalogPage> GetPagesByParent(int parentId)
+        public IReadOnlyList<CatalogPage> GetPagesByParent(int parentId)
         {
             List<CatalogPage> childs = new List<CatalogPage>();
 
@@ -56,33 +58,17 @@ namespace AuroraEmu.Game.Catalog
             return childs;
         }
 
-        public void SerializeIndex(MessageComposer composer)
+        public List<CatalogProduct> GetProducts(int page)
         {
-            IReadOnlyList<CatalogPage> categories = GetPagesByParent(0);
-            composer.AppendVL64(categories.Count);
+            List<CatalogProduct> productsInPage = new List<CatalogProduct>();
 
-            foreach (CatalogPage page in pages.Values)
+            foreach (CatalogProduct product in products.Values)
             {
-                SerializePage(composer, page);
+                if (product.PageId == page)
+                    productsInPage.Add(product);
             }
-        }
 
-        private void SerializePage(MessageComposer composer, CatalogPage page)
-        {
-            IReadOnlyList<CatalogPage> children = GetPagesByParent(page.Id);
-
-            composer.AppendVL64(page.Visible);
-            composer.AppendVL64(page.IconColor);
-            composer.AppendVL64(page.IconImage);
-            composer.AppendVL64(page.Id);
-            composer.AppendString(page.Name);
-            composer.AppendVL64(page.Development);
-            composer.AppendVL64(children.Count);
-
-            foreach (CatalogPage child in children)
-            {
-                SerializePage(composer, child);
-            }
+            return productsInPage;
         }
 
         public static CatalogController GetInstance()

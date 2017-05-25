@@ -1,15 +1,11 @@
 ﻿using AuroraEmu.Game.Catalog;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace AuroraEmu.Network.Game.Packets.Composers.Catalogue
 {
     public class CatalogPageMessageComposer : MessageComposer
     {
-        public CatalogPageMessageComposer(int pageId, CatalogPage page) : base(127)
+        public CatalogPageMessageComposer(int pageId, CatalogPage page, List<CatalogProduct> products) : base(127)
         {
             AppendVL64(pageId);
             AppendString(page.Layout);
@@ -28,7 +24,26 @@ namespace AuroraEmu.Network.Game.Packets.Composers.Catalogue
                 AppendString(image.Value);
             }
 
-            AppendVL64(0);
+            AppendVL64(products.Count);
+
+            foreach (CatalogProduct product in products)
+            {
+                SerializeProduct(product);
+            }
+        }
+
+        private void SerializeProduct(CatalogProduct product)
+        {
+            AppendVL64(product.Id);
+            AppendString(product.Name);
+            AppendVL64(product.PriceCoins);
+            AppendVL64(product.PricePixels);
+            AppendVL64(1); // deals soon
+            AppendString(product.Template.SpriteType.ToString());
+            AppendVL64(product.Template.SpriteId);
+            AppendString("");
+            AppendVL64(product.Amount);
+            AppendVL64(-1);
         }
     }
 }

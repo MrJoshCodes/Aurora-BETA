@@ -22,7 +22,11 @@ namespace AuroraEmu.Game.Catalog
             {
                 if (_pageData == null)
                 {
-                    _pageData = new Dictionary<string, IList<CatalogPageData>>();
+                    _pageData = new Dictionary<string, IList<CatalogPageData>>
+                    {
+                        { "image", new List<CatalogPageData>() },
+                        { "text", new List<CatalogPageData>() }
+                   };
                 }
 
                 return _pageData;
