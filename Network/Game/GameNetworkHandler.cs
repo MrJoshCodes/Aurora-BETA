@@ -4,6 +4,7 @@ using AuroraEmu.Utilities.Encoding;
 using DotNetty.Buffers;
 using DotNetty.Transport.Channels;
 using System.Text;
+using System;
 
 namespace AuroraEmu.Network.Game
 {
@@ -53,5 +54,7 @@ namespace AuroraEmu.Network.Game
 
             base.ChannelRead(ctx, msg);
         }
+
+        public override void ExceptionCaught(IChannelHandlerContext context, Exception exception) => Engine.Logger.Error(exception.ToString());
     }
 }
