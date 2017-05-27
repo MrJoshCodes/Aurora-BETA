@@ -1,6 +1,7 @@
 ﻿using AuroraEmu.Database;
 using System.Collections.Generic;
 using System.Data;
+using System;
 
 namespace AuroraEmu.Game.Catalog
 {
@@ -8,11 +9,13 @@ namespace AuroraEmu.Game.Catalog
     {
         private static CatalogController instance;
 
+        private Dictionary<int, List<CatalogDealItem>> deals;
         private Dictionary<int, CatalogPage> pages;
         private Dictionary<int, CatalogProduct> products;
 
         public CatalogController()
         {
+            deals = new Dictionary<int, List<Catalog.CatalogDealItem>>();
             pages = new Dictionary<int, CatalogPage>();
             products = new Dictionary<int, CatalogProduct>();
 
@@ -54,16 +57,30 @@ namespace AuroraEmu.Game.Catalog
             Engine.Logger.Info($"Loaded {pages.Count} catalogue pages.");
         }
 
+        public List<CatalogDealItem> GetDeal(int dealId)
+        {
+            List<CatalogDealItem> dealItems;
+
+            if (deals.TryGetValue(dealId, out dealItems))
+                return dealItems;
+
+            return null;
+        }
+
         public void ReloadProducts()
         {
+            deals = new Dictionary<int, List<CatalogDealItem>>();
             products.Clear();
 
             DataTable table;
+            DataTable table2;
 
             using (DatabaseConnection dbConnection = DatabaseManager.GetInstance().GetConnection())
             {
                 dbConnection.SetQuery("SELECT * FROM catalog_products;");
                 table = dbConnection.GetTable();
+                dbConnection.SetQuery("SELECT * FROM catalog_deals;");
+                table2 = dbConnection.GetTable();
             }
 
             if (table != null)
@@ -74,7 +91,22 @@ namespace AuroraEmu.Game.Catalog
                 }
             }
 
-            Engine.Logger.Info($"Loaded {products.Count} catalogue products.");
+            if (table2 != null)
+            {
+                foreach(DataRow row in table2.Rows)
+                {
+                    int dealId = (int)row["id"];
+
+                    List<CatalogDealItem> items;
+
+                    if (!deals.TryGetValue(dealId, out items))
+                        deals.Add(dealId, new List<CatalogDealItem>());
+
+                    deals[dealId].Add(new CatalogDealItem(row));
+                }
+            }
+
+            Engine.Logger.Info($"Loaded {products.Count} catalogue products and {deals.Count} deals.");
         }
 
         public CatalogPage GetPage(int id)
