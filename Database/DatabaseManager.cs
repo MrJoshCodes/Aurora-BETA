@@ -1,28 +1,30 @@
 ﻿using AuroraEmu.Database.Pool;
 using MySql.Data.MySqlClient;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace AuroraEmu.Database
 {
     public class DatabaseManager
     {
-        private string connectionString;
+        private const string CONNECTION_STRING = 
+            "Server=127.0.0.1; " +
+            "Port=3306; " +
+            "Uid=root; " +
+            "Password=123; " +
+            "Database=aurora_beta; " +
+            "MinimumPoolSize=5; " +
+            "MaximumPoolSize=15";
+        
         private ObjectPool<DatabaseConnection> connectionPool;
         private static DatabaseManager databaseManagerInstance;
 
         public DatabaseManager()
         {
-            this.Init(connectionString);
+            Init(CONNECTION_STRING);
         }
 
         public void Init(string connectionString)
         {
-            this.connectionString = connectionString;
-            connectionPool = new ObjectPool<DatabaseConnection>(() => new DatabaseConnection(this.connectionString, connectionPool));
+            connectionPool = new ObjectPool<DatabaseConnection>(() => new DatabaseConnection(CONNECTION_STRING, connectionPool));
         }
 
         public bool TryConnection()
@@ -32,8 +34,8 @@ namespace AuroraEmu.Database
                 using (var DbConnection = GetConnection())
                 {
                     DbConnection.Open();
-                    DbConnection.WriteQuery("SELECT 1+1;");
-                    DbConnection.ExecuteNonQuery();
+                    DbConnection.SetQuery("SELECT 1+1;");
+                    DbConnection.Execute();
                 }
             }
             catch (MySqlException)
@@ -45,7 +47,7 @@ namespace AuroraEmu.Database
 
         public DatabaseConnection GetConnection()
         {
-            return new DatabaseConnection(connectionString, connectionPool);
+            return new DatabaseConnection(CONNECTION_STRING, connectionPool);
         }
 
         public static DatabaseManager GetInstance()

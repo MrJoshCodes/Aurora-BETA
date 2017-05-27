@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Data;
 
 namespace AuroraEmu.Game.Catalog
 {
@@ -16,10 +11,10 @@ namespace AuroraEmu.Game.Catalog
         
         public CatalogPageData(DataRow row)
         {
-            this.Id = (int)row["id"];
-            this.PageId = (int)row["page_id"];
-            this.Type = (string)row["type"];
-            this.Value = (string)row["value"];
+            Id = (int)row["id"];
+            PageId = (int)row["page_id"];
+            Type = (string)row["type"];
+            Value = (string)row["value"];
         }
     }
 }

@@ -1,5 +1,8 @@
 ﻿using AuroraEmu.Database;
-using AuroraEmu.Game;
+using AuroraEmu.Game.Catalog;
+using AuroraEmu.Game.Items;
+using AuroraEmu.Game.Navigator;
+using AuroraEmu.Game.Players;
 using AuroraEmu.Network.Game;
 using log4net;
 
@@ -13,8 +16,14 @@ namespace AuroraEmu
         {
             Logger = LogManager.GetLogger(typeof(Engine));
 
+            DatabaseManager.GetInstance();
+
+            PlayerController.GetInstance();
+            ItemController.GetInstance();
+            CatalogController.GetInstance();
+            NavigatorController.GetInstance();
+
             GameNetworkListener.GetInstance();
-            Aurora.GetInstance();
 
             System.Console.ReadLine();
         }

@@ -1,11 +1,7 @@
 ﻿using AuroraEmu.Database.Pool;
 using MySql.Data.MySqlClient;
 using System;
-using System.Collections.Generic;
 using System.Data;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace AuroraEmu.Database
 {
@@ -17,7 +13,6 @@ namespace AuroraEmu.Database
         private MySqlCommand command;
 
         private MySqlTransaction transaction;
-        private List<MySqlParameter> parameters;
 
         public DatabaseConnection(string connectionString, ObjectPool<DatabaseConnection> pool)
         {
@@ -40,61 +35,131 @@ namespace AuroraEmu.Database
             return connection.State == ConnectionState.Open;
         }
 
+        /// <summary>
+        /// Adds a parameter to the MySqlCommand.
+        /// </summary>
+        /// <param name="parameter">The parameter with prefixed with an '@'</param>
+        /// <param name="value">The value of the parameter.</param>
         public void AddParameter(string parameter, object value)
         {
             command.Parameters.AddWithValue(parameter, value);
         }
-
-        public void WriteQuery(string query)
+        
+        public void SetQuery(string query)
         {
             command.CommandText = query;
         }
 
-        public int ExecuteNonQuery()
+        /// <summary>
+        /// Executes a query.
+        /// </summary>
+        /// <returns>The number of rows affected.</returns>
+        public int Execute()
         {
-            if (parameters != null && parameters.Count > 0)
-                parameters.AddRange(parameters.ToArray());
-
             try
             {
-                return this.command.ExecuteNonQuery();
+                return command.ExecuteNonQuery();
             }
             catch (MySqlException ex)
             {
                 Engine.Logger.Error("MySQL Error: ", ex);
-                throw ex;
+
+                return -1;
             }
             finally
             {
                 command.CommandText = string.Empty;
                 command.Parameters.Clear();
+            }
+        }
 
-                if (parameters != null && parameters.Count > 0)
-                    parameters.Clear();
+        public DataSet GetDataSet()
+        {
+            try
+            {
+                DataSet dataSet = new DataSet();
+
+                using (MySqlDataAdapter adapter = new MySqlDataAdapter(command))
+                {
+                    adapter.Fill(dataSet);
+                }
+
+                return dataSet;
+            }
+            catch (Exception ex)
+            {
+                Engine.Logger.Error("MySQL Error: ", ex);
+
+                return null;
+            }
+        }
+
+        public DataTable GetTable()
+        {
+            try
+            {
+                DataTable dataTable = new DataTable();
+
+                using (MySqlDataAdapter adapter = new MySqlDataAdapter(command))
+                {
+                    adapter.Fill(dataTable);
+                }
+
+                return dataTable;
+            }
+            catch (Exception ex)
+            {
+                Engine.Logger.Error("MySQL Error: ", ex);
+
+                return null;
             }
         }
 
         public DataRow GetRow()
         {
-            DataRow row = null;
             try
             {
-                DataSet dataSet = new DataSet();
-                using (MySqlDataAdapter adapter = new MySqlDataAdapter(command))
-                {
-                    adapter.Fill(dataSet);
-                }
-                if ((dataSet.Tables.Count > 0) && (dataSet.Tables[0].Rows.Count == 1))
+                DataRow row = null;
+                DataSet dataSet = GetDataSet();
+
+                if (dataSet != null && dataSet.Tables.Count > 0 && dataSet.Tables[0].Rows.Count == 1)
                 {
                     row = dataSet.Tables[0].Rows[0];
                 }
-            }
-            catch (Exception exception)
-            {
-                //TODO:
-            }
 
-            return row;
+                return row;
+            }
+            catch (Exception ex)
+            {
+                Engine.Logger.Error("MySQL Error: ", ex);
+
+                return null;
+            }
+        }
+
+        /// <summary>
+        /// Executes an 'insert'-query. Instead of 'Execute', it returns the inserted ID rather than the amount of affected rows.
+        /// </summary>
+        /// <returns>The inserted ID.</returns>
+        public int Insert()
+        {
+            try
+            {
+                command.ExecuteNonQuery();
+
+                return (int)command.LastInsertedId;
+            }
+            catch (MySqlException ex)
+            {
+                Engine.Logger.Error("MySQL Error: ", ex);
+
+                return -1;
+            }
+            finally
+            {
+                command.CommandText = string.Empty;
+                command.Parameters.Clear();
+            }
         }
 
         public void BeginTransaction()
@@ -118,14 +183,9 @@ namespace AuroraEmu.Database
 
         public void Dispose()
         {
-            if(connection.State == ConnectionState.Open)
+            if(IsOpen())
             {
                 connection.Close();
-            }
-
-            if(parameters != null)
-            {
-                parameters.Clear();
             }
 
             if(transaction != null)

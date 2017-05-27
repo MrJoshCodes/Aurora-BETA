@@ -1,9 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Data;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace AuroraEmu.Game.Catalog
 {
@@ -20,18 +16,21 @@ namespace AuroraEmu.Game.Catalog
         public string Layout { get; set; }
         public bool HasContent { get; set; }
 
+        public Dictionary<string, List<string>> Data { get; set; }
+
         public CatalogPage(DataRow row)
         {
-            this.Id = (int)row["id"];
-            this.Name = (string)row["name"];
-            this.IconColor = (int)row["icon_color"];
-            this.IconImage = (int)row["icon_image"];
-            this.Development = (bool)row["in_development"];
-            this.Visible = (bool)row["is_visible"];
-            this.ParentId = (int)row["parent_id"];
-            this.MinRank = (int)row["min_rank"];
-            this.Layout = (string)row["layout"];
-            this.HasContent = (bool)row["has_content"];
+            Id = (int)row["id"];
+            Name = (string)row["name"];
+            IconColor = (int)row["icon_color"];
+            IconImage = (int)row["icon_image"];
+            Development = (bool)row["in_development"];
+            Visible = (bool)row["is_visible"];
+            ParentId = (int)row["parent_id"];
+            MinRank = (int)row["min_rank"];
+            Layout = (string)row["layout"];
+            HasContent = (bool)row["has_content"];
+            Data = new Dictionary<string, List<string>> { { "image", new List<string>() }, { "text", new List<string>() } };
         }
     }
 }
