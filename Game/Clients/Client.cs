@@ -1,8 +1,6 @@
-﻿using System;
-using AuroraEmu.Game.Players;
+﻿using AuroraEmu.Game.Players;
 using AuroraEmu.Network.Game.Packets;
 using DotNetty.Transport.Channels;
-using AuroraEmu.Storage.Players;
 
 namespace AuroraEmu.Game.Clients
 {
@@ -50,7 +48,7 @@ namespace AuroraEmu.Game.Clients
 
         public void Login(string sso)
         {
-            Player = PlayerDao.GetPlayerBySSO(sso);
+            Player = PlayerController.GetInstance().GetPlayerBySSO(sso);
 
             if (Player != null)
             {

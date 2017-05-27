@@ -29,9 +29,9 @@ namespace AuroraEmu.Game.Catalog
 
             using (DatabaseConnection dbConnection = DatabaseManager.GetInstance().GetConnection())
             {
-                dbConnection.SetQuery("SELECT * FROM catalogue_pages;");
+                dbConnection.SetQuery("SELECT * FROM catalog_pages;");
                 result = dbConnection.GetTable();
-                dbConnection.SetQuery("SELECT page_id,type,value FROM catalogue_pages_data;");
+                dbConnection.SetQuery("SELECT page_id,type,value FROM catalog_pages_data;");
                 result2 = dbConnection.GetTable();
             }
 
@@ -62,7 +62,7 @@ namespace AuroraEmu.Game.Catalog
 
             using (DatabaseConnection dbConnection = DatabaseManager.GetInstance().GetConnection())
             {
-                dbConnection.SetQuery("SELECT * FROM catalogue_products;");
+                dbConnection.SetQuery("SELECT * FROM catalog_products;");
                 table = dbConnection.GetTable();
             }
 
@@ -98,6 +98,19 @@ namespace AuroraEmu.Game.Catalog
             }
 
             return pagesInParent;
+        }
+
+        public List<CatalogProduct> GetProducts(int pageId)
+        {
+            List<CatalogProduct> productsInPage = new List<CatalogProduct>();
+
+            foreach (CatalogProduct product in products.Values)
+            {
+                if (product.PageId == pageId)
+                    productsInPage.Add(product);
+            }
+
+            return productsInPage;
         }
 
         public static CatalogController GetInstance()

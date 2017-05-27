@@ -6,7 +6,7 @@ namespace AuroraEmu.Game.Items
     {
         public int Id { get; set; }
         public string SwfName { get; set; }
-        public char SpriteType { get; set; }
+        public string SpriteType { get; set; }
         public int SpriteId { get; set; }
         public int Length { get; set; }
         public int Width { get; set; }
@@ -23,7 +23,7 @@ namespace AuroraEmu.Game.Items
         {
             Id = (int)row["Id"];
             SwfName = (string)row["swf_name"];
-            SpriteType = (char)row["sprite_type"];
+            SpriteType = (string)row["sprite_type"];
             SpriteId = (int)row["sprite_id"];
             Length = (int)row["length"];
             Width = (int)row["width"];

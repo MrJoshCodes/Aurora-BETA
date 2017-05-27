@@ -77,7 +77,7 @@ namespace AuroraEmu.Database
         {
             try
             {
-                DataSet dataSet = null;
+                DataSet dataSet = new DataSet();
 
                 using (MySqlDataAdapter adapter = new MySqlDataAdapter(command))
                 {
@@ -98,7 +98,7 @@ namespace AuroraEmu.Database
         {
             try
             {
-                DataTable dataTable = null;
+                DataTable dataTable = new DataTable();
 
                 using (MySqlDataAdapter adapter = new MySqlDataAdapter(command))
                 {
