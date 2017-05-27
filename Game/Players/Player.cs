@@ -19,17 +19,17 @@ namespace AuroraEmu.Game.Players
 
         public Player(DataRow Row)
         {
-            this.Id = (int)Row["id"];
-            this.Username = (string)Row["username"];
-            this.Email = (string)Row["email"];
-            this.Gender = (string)Row["gender"];
-            this.Figure = (string)Row["figure"];
-            this.Motto = (string)Row["motto"];
-            this.Coins = (int)Row["coins"];
-            this.Pixels = (int)Row["pixels"];
-            this.Rank = (byte)Row["rank"];
-            this.HomeRoom = (int)Row["home_room"];
-            this.SSO = (string)Row["sso_ticket"];
+            Id = (int)Row["id"];
+            Username = (string)Row["username"];
+            Email = (string)Row["email"];
+            Gender = (string)Row["gender"];
+            Figure = (string)Row["figure"];
+            Motto = (string)Row["motto"];
+            Coins = (int)Row["coins"];
+            Pixels = (int)Row["pixels"];
+            Rank = (byte)Row["rank"];
+            HomeRoom = (int)Row["home_room"];
+            SSO = (string)Row["sso_ticket"];
         }
     }
 }

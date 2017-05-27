@@ -1,32 +1,40 @@
 ﻿using AuroraEmu.Game.Items;
-using System;
-using System.Collections.Generic;
 using System.Data;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace AuroraEmu.Game.Catalog
 {
     public class CatalogProduct
     {
+        private Item template;
+
         public int Id { get; set; }
         public string Name { get; set; }
         public int PriceCoins { get; set; }
         public int PricePixels { get; set; }
         public int Amount { get; set; }
         public int PageId { get; set; }
-        public Item Template { get; set; }
+        public int TemplateId { get; set; }
 
         public CatalogProduct(DataRow row)
         {
-            this.Id = (int)row["id"];
-            this.Name = (string)row["name"];
-            this.PriceCoins = (int)row["price_coins"];
-            this.PricePixels = (int)row["price_pixels"];
-            this.Amount = (int)row["amount"];
-            this.PageId = (int)row["page_id"];
-            this.Template = (Item)row["Template_id"];
+            Id = (int)row["id"];
+            Name = (string)row["name"];
+            PriceCoins = (int)row["price_coins"];
+            PricePixels = (int)row["price_pixels"];
+            Amount = (int)row["amount"];
+            PageId = (int)row["page_id"];
+            TemplateId = (int)row["Template_id"];
+        }
+
+        public Item Template
+        {
+            get
+            {
+                if (template == null)
+                    template = ItemController.GetInstance().GetTemplate(TemplateId);
+
+                return template;
+            }
         }
     }
 }

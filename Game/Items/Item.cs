@@ -21,20 +21,20 @@ namespace AuroraEmu.Game.Items
 
         public Item(DataRow row)
         {
-            this.Id = (int)row["Id"];
-            this.SwfName = (string)row["swf_name"];
-            this.SpriteType = (char)row["sprite_type"];
-            this.SpriteId = (int)row["sprite_id"];
-            this.Length = (int)row["length"];
-            this.Width = (int)row["width"];
-            this.Height = (double)row["height"];
-            this.CanStack = (bool)row["can_stack"];
-            this.ItemType = (string)row["item_type"];
-            this.CanGift = (bool)row["can_gift"];
-            this.CanRecycle = (bool)row["can_recycle"];
-            this.InteractorRightsRequired = (bool)row["interactor_requires_rights"];
-            this.InteractorType = (string)row["interactor_type"];
-            this.VendorIDs = (string)row["vendor_ids"];
+            Id = (int)row["Id"];
+            SwfName = (string)row["swf_name"];
+            SpriteType = (char)row["sprite_type"];
+            SpriteId = (int)row["sprite_id"];
+            Length = (int)row["length"];
+            Width = (int)row["width"];
+            Height = (double)row["height"];
+            CanStack = (bool)row["can_stack"];
+            ItemType = (string)row["item_type"];
+            CanGift = (bool)row["can_gift"];
+            CanRecycle = (bool)row["can_recycle"];
+            InteractorRightsRequired = (bool)row["interactor_requires_rights"];
+            InteractorType = (string)row["interactor_type"];
+            VendorIDs = (string)row["vendor_ids"];
         }
     }
 }

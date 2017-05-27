@@ -4,16 +4,18 @@ using System.Data;
 
 namespace AuroraEmu.Game.Players
 {
-    public class PlayerDao
+    public class PlayerController
     {
-        private static ConcurrentDictionary<int, Player> playersById;
+        private static PlayerController instance;
 
-        static PlayerDao()
+        private ConcurrentDictionary<int, Player> playersById;
+
+        public PlayerController()
         {
             playersById = new ConcurrentDictionary<int, Player>();
         }
 
-        public static Player GetPlayerById(int id)
+        public Player GetPlayerById(int id)
         {
             Player player;
 
@@ -24,7 +26,7 @@ namespace AuroraEmu.Game.Players
 
             using (DatabaseConnection dbClient = DatabaseManager.GetInstance().GetConnection())
             {
-                dbClient.WriteQuery("SELECT id, username, password, email, gender, figure, motto, coins, pixels, rank, home_room, sso_ticket FROM players WHERE id = @id;");
+                dbClient.SetQuery("SELECT id, username, password, email, gender, figure, motto, coins, pixels, rank, home_room, sso_ticket FROM players WHERE id = @id;");
                 dbClient.AddParameter("@id", id);
                 dbClient.Open();
 
@@ -42,13 +44,13 @@ namespace AuroraEmu.Game.Players
             return null;
         }
 
-        public static Player GetPlayerBySSO(string sso)
+        public Player GetPlayerBySSO(string sso)
         {
             DataRow result = null;
 
             using (var dbClient = DatabaseManager.GetInstance().GetConnection())
             {
-                dbClient.WriteQuery("SELECT id, username, password, email, gender, figure, motto, coins, pixels, rank, home_room, sso_ticket FROM players WHERE sso_ticket = @sso_ticket;");
+                dbClient.SetQuery("SELECT id, username, password, email, gender, figure, motto, coins, pixels, rank, home_room, sso_ticket FROM players WHERE sso_ticket = @sso_ticket;");
                 dbClient.AddParameter("@sso_ticket", sso);
                 dbClient.Open();
 
@@ -63,6 +65,14 @@ namespace AuroraEmu.Game.Players
             }
 
             return null;
+        }
+
+        public static PlayerController GetInstance()
+        {
+            if (instance == null)
+                instance = new PlayerController();
+
+            return instance;
         }
     }
 }

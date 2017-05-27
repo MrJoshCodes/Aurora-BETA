@@ -32,8 +32,8 @@ namespace AuroraEmu.Database
                 using (var DbConnection = GetConnection())
                 {
                     DbConnection.Open();
-                    DbConnection.WriteQuery("SELECT 1+1;");
-                    DbConnection.ExecuteNonQuery();
+                    DbConnection.SetQuery("SELECT 1+1;");
+                    DbConnection.Execute();
                 }
             }
             catch (MySqlException)
