@@ -1,4 +1,5 @@
 ﻿using AuroraEmu.Game.Clients;
+using AuroraEmu.Storage.Players;
 
 namespace AuroraEmu.Network.Game.Packets.Events.Handshake
 {

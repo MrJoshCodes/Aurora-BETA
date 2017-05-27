@@ -1,36 +1,37 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Data;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace AuroraEmu.Game.Catalog
 {
     public class CatalogPage
     {
-        private IDictionary<string, IList<CatalogPageData>> _pageData;
+        public int Id { get; set; }
+        public string Name { get; set; }
+        public int IconColor { get; set; }
+        public int IconImage { get; set; }
+        public bool Development { get; set; }
+        public bool Visible { get; set; }
+        public int ParentId { get; set; }
+        public int MinRank { get; set; }
+        public string Layout { get; set; }
+        public bool HasContent { get; set; }
 
-        public virtual int Id { get; set; }
-        public virtual string Name { get; set; }
-        public virtual int IconColor { get; set; }
-        public virtual int IconImage { get; set; }
-        public virtual bool Development { get; set; }
-        public virtual bool Visible { get; set; }
-        public virtual int ParentId { get; set; }
-        public virtual int MinRank { get; set; }
-        public virtual string Layout { get; set; }
-        public virtual bool HasContent { get; set; }
-        public virtual IDictionary<string, IList<CatalogPageData>> PageData
+        public CatalogPage(DataRow row)
         {
-            get
-            {
-                if (_pageData == null)
-                {
-                    _pageData = new Dictionary<string, IList<CatalogPageData>>
-                    {
-                        { "image", new List<CatalogPageData>() },
-                        { "text", new List<CatalogPageData>() }
-                   };
-                }
-
-                return _pageData;
-            }
+            this.Id = (int)row["id"];
+            this.Name = (string)row["name"];
+            this.IconColor = (int)row["icon_color"];
+            this.IconImage = (int)row["icon_image"];
+            this.Development = (bool)row["in_development"];
+            this.Visible = (bool)row["is_visible"];
+            this.ParentId = (int)row["parent_id"];
+            this.MinRank = (int)row["min_rank"];
+            this.Layout = (string)row["layout"];
+            this.HasContent = (bool)row["has_content"];
         }
     }
 }
