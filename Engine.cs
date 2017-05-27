@@ -12,8 +12,8 @@ namespace AuroraEmu
         static void Main(string[] args)
         {
             Logger = LogManager.GetLogger(typeof(Engine));
-            GameNetworkListener.GetInstance();
 
+            GameNetworkListener.GetInstance();
             Aurora.GetInstance();
 
             System.Console.ReadLine();

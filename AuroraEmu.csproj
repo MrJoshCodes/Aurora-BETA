@@ -122,33 +122,22 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Database\DatabaseHelper.cs" />
-    <Compile Include="Database\Mappings\CatalogPageDataMap.cs" />
-    <Compile Include="Database\Mappings\CatalogPageMap.cs" />
-    <Compile Include="Database\Mappings\CatalogProductMap.cs" />
-    <Compile Include="Database\Mappings\ItemMap.cs" />
-    <Compile Include="Database\Mappings\PlayerMap.cs" />
-    <Compile Include="Game\Catalog\CatalogController.cs" />
+    <Compile Include="Database\DatabaseConnection.cs" />
+    <Compile Include="Database\DatabaseManager.cs" />
+    <Compile Include="Database\Pool\ObjectPool.cs" />
     <Compile Include="Game\Catalog\CatalogPage.cs" />
     <Compile Include="Game\Catalog\CatalogPageData.cs" />
     <Compile Include="Game\Catalog\CatalogProduct.cs" />
     <Compile Include="Game\Clients\Client.cs" />
     <Compile Include="Game\Clients\ClientManager.cs" />
-    <Compile Include="Game\Aurora.cs" />
     <Compile Include="Game\Items\Item.cs" />
-    <Compile Include="Game\Items\ItemController.cs" />
     <Compile Include="Game\Players\Player.cs" />
-    <Compile Include="Game\Players\PlayerController.cs" />
     <Compile Include="Engine.cs" />
     <Compile Include="Network\Game\GameNetworkHandler.cs" />
     <Compile Include="Network\Game\GameNetworkListener.cs" />
-    <Compile Include="Network\Game\Packets\Composers\Catalogue\CatalogIndexMessageComposer.cs" />
-    <Compile Include="Network\Game\Packets\Composers\Catalogue\CatalogPageMessageComposer.cs" />
     <Compile Include="Network\Game\Packets\Composers\Handshake\SessionParamsMessageComposer.cs" />
     <Compile Include="Network\Game\Packets\Composers\Users\CreditBalanceMessageComposer.cs" />
     <Compile Include="Network\Game\Packets\Composers\Users\HabboActivityPointNotificationMessageComposer.cs" />
-    <Compile Include="Network\Game\Packets\Events\Catalogue\GetCatalogIndexMessageEvent.cs" />
-    <Compile Include="Network\Game\Packets\Events\Catalogue\GetCatalogPageMessageEvent.cs" />
     <Compile Include="Network\Game\Packets\Events\Handshake\InitCryptoMessageEvent.cs" />
     <Compile Include="Network\Game\Packets\Events\Handshake\SSOTicketMessageEvent.cs" />
     <Compile Include="Network\Game\Packets\Events\Users\GetCreditsMessageEvent.cs" />
@@ -157,6 +146,9 @@
     <Compile Include="Network\Game\Packets\MessageEvent.cs" />
     <Compile Include="Network\Game\Packets\PacketHelper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Storage\Catalog\CatalogDao.cs" />
+    <Compile Include="Storage\Items\ItemDao.cs" />
+    <Compile Include="Storage\Players\PlayerDao.cs" />
     <Compile Include="Utilities\Encoding\Base64Encoding.cs" />
     <Compile Include="Utilities\Encoding\WireEncoding.cs" />
   </ItemGroup>
