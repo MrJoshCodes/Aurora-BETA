@@ -38,12 +38,27 @@ namespace AuroraEmu.Network.Game.Packets.Composers.Catalogue
             AppendString(product.Name);
             AppendVL64(product.PriceCoins);
             AppendVL64(product.PricePixels);
-            AppendVL64(1); // deals soon
-            AppendString(product.Template.SpriteType.ToString());
-            AppendVL64(product.Template.SpriteId);
-            AppendString("");
-            AppendVL64(product.Amount);
-            AppendVL64(-1);
+            AppendVL64(product.IsDeal ? product.DealItems.Count : 1);
+
+            if (product.IsDeal)
+            {
+                foreach(CatalogDealItem item in product.DealItems)
+                {
+                    AppendString(item.Template.SpriteType.ToString());
+                    AppendVL64(item.Template.SpriteId);
+                    AppendString("");
+                    AppendVL64(item.Amount);
+                    AppendVL64(-1);
+                }
+            }
+            else
+            {
+                AppendString(product.Template.SpriteType.ToString());
+                AppendVL64(product.Template.SpriteId);
+                AppendString("");
+                AppendVL64(product.Amount);
+                AppendVL64(-1);
+            }
         }
     }
 }

@@ -166,6 +166,7 @@
     <Compile Include="Database\DatabaseConnection.cs" />
     <Compile Include="Database\DatabaseManager.cs" />
     <Compile Include="Database\Pool\ObjectPool.cs" />
+    <Compile Include="Game\Catalog\CatalogDealItem.cs" />
     <Compile Include="Game\Catalog\CatalogPage.cs" />
     <Compile Include="Game\Catalog\CatalogPageData.cs" />
     <Compile Include="Game\Catalog\CatalogProduct.cs" />

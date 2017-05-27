@@ -1,4 +1,5 @@
 ﻿using AuroraEmu.Game.Items;
+using System.Collections.Generic;
 using System.Data;
 
 namespace AuroraEmu.Game.Catalog
@@ -6,6 +7,7 @@ namespace AuroraEmu.Game.Catalog
     public class CatalogProduct
     {
         private Item template;
+        private List<CatalogDealItem> dealItems;
 
         public int Id { get; set; }
         public string Name { get; set; }
@@ -14,6 +16,8 @@ namespace AuroraEmu.Game.Catalog
         public int Amount { get; set; }
         public int PageId { get; set; }
         public int TemplateId { get; set; }
+        public bool IsDeal { get; set; }
+        public int DealId { get; set; }
 
         public CatalogProduct(DataRow row)
         {
@@ -21,9 +25,22 @@ namespace AuroraEmu.Game.Catalog
             Name = (string)row["name"];
             PriceCoins = (int)row["price_coins"];
             PricePixels = (int)row["price_pixels"];
-            Amount = (int)row["amount"];
             PageId = (int)row["page_id"];
-            TemplateId = (int)row["Template_id"];
+            IsDeal = (bool)row["is_deal"];
+            Amount = IsDeal ? -1 : (int)row["amount"];
+            TemplateId = IsDeal ? -1 : (int)row["Template_id"];
+            DealId = IsDeal ? (int)row["deal_id"] : -1;
+        }
+
+        public List<CatalogDealItem> DealItems
+        {
+            get
+            {
+                if (dealItems == null)
+                    dealItems = CatalogController.GetInstance().GetDeal(DealId);
+
+                return dealItems;
+            }
         }
 
         public Item Template
