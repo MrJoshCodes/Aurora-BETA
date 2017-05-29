@@ -1,6 +1,7 @@
 ﻿using AuroraEmu.Database;
 using AuroraEmu.Game.Catalog;
 using AuroraEmu.Game.Items;
+using AuroraEmu.Game.Messenger;
 using AuroraEmu.Game.Navigator;
 using AuroraEmu.Game.Players;
 using AuroraEmu.Network.Game;
@@ -22,6 +23,7 @@ namespace AuroraEmu
             ItemController.GetInstance();
             CatalogController.GetInstance();
             NavigatorController.GetInstance();
+            MessengerController.GetInstance();
 
             GameNetworkListener.GetInstance();
 

@@ -9,7 +9,7 @@ namespace AuroraEmu.Database
             "Server=127.0.0.1; " +
             "Port=3306; " +
             "Uid=root; " +
-            "Password=123; " +
+            "Password=; " +
             "Database=aurora_beta; " +
             "MinimumPoolSize=5; " +
             "MaximumPoolSize=15";

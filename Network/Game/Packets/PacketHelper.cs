@@ -1,6 +1,7 @@
 ﻿using AuroraEmu.Game.Clients;
 using AuroraEmu.Network.Game.Packets.Events.Catalogue;
 using AuroraEmu.Network.Game.Packets.Events.Handshake;
+using AuroraEmu.Network.Game.Packets.Events.Messenger;
 using AuroraEmu.Network.Game.Packets.Events.Navigator;
 using AuroraEmu.Network.Game.Packets.Events.Users;
 using DotNetty.Buffers;
@@ -23,7 +24,9 @@ namespace AuroraEmu.Network.Game.Packets
                 { 102, new GetCatalogPageMessageEvent() },
                 {380, new GetOfficialRoomsMessageEvent() },
                 { 206, new InitCryptoMessageEvent() },
-                { 415, new SSOTicketMessageEvent() }
+                { 415, new SSOTicketMessageEvent() },
+                { 12, new MessengerInitMessageEvent() },
+                { 41, new HabboSearchMessageEvent() }
             };
 
             packetNames = new Dictionary<int, string>
@@ -32,7 +35,9 @@ namespace AuroraEmu.Network.Game.Packets
                 { 101, "GetCatalogIndexMessageEvent" },
                 { 102, "GetCatalogPageMessageEvent" },
                 { 206, "InitCryptoMessageEvent" },
-                { 415, "SSOTicketMessageEvent" }
+                { 415, "SSOTicketMessageEvent" },
+                { 12, "MessengerInitMessageEvent" },
+                { 41, "HabboSearchMessageEvent" }
             };
 
             Engine.Logger.Info($"Loaded {packetEvents.Count} packet events.");
