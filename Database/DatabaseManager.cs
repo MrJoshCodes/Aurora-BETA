@@ -11,6 +11,7 @@ namespace AuroraEmu.Database
             "Uid=root; " +
             "Password=123; " +
             "Database=aurora_beta; " +
+            "Pooling=true;" +
             "MinimumPoolSize=5; " +
             "MaximumPoolSize=15";
         
