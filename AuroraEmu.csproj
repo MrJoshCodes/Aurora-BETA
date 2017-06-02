@@ -173,6 +173,10 @@
     <Compile Include="Game\Clients\Client.cs" />
     <Compile Include="Game\Clients\ClientManager.cs" />
     <Compile Include="Game\Items\Item.cs" />
+    <Compile Include="Game\Messenger\MessengerController.cs" />
+    <Compile Include="Game\Messenger\MessengerFriends.cs" />
+    <Compile Include="Game\Messenger\MessengerRequest.cs" />
+    <Compile Include="Game\Messenger\MessengerSearch.cs" />
     <Compile Include="Game\Navigator\FrontpageItem.cs" />
     <Compile Include="Game\Navigator\NavigatorController.cs" />
     <Compile Include="Game\Players\Player.cs" />
@@ -182,6 +186,9 @@
     <Compile Include="Network\Game\Packets\Composers\Catalogue\CatalogIndexMessageComposer.cs" />
     <Compile Include="Network\Game\Packets\Composers\Catalogue\CatalogPageMessageComposer.cs" />
     <Compile Include="Network\Game\Packets\Composers\Handshake\SessionParamsMessageComposer.cs" />
+    <Compile Include="Network\Game\Packets\Composers\Messenger\HabboSearchResultMessageComposer.cs" />
+    <Compile Include="Network\Game\Packets\Composers\Messenger\MessengerInitMessageComposer.cs" />
+    <Compile Include="Network\Game\Packets\Composers\Messenger\NewConsoleMessageComposer.cs" />
     <Compile Include="Network\Game\Packets\Composers\Navigator\OfficialRoomsComposer.cs" />
     <Compile Include="Network\Game\Packets\Composers\Users\CreditBalanceMessageComposer.cs" />
     <Compile Include="Network\Game\Packets\Composers\Users\HabboActivityPointNotificationMessageComposer.cs" />
@@ -189,6 +196,10 @@
     <Compile Include="Network\Game\Packets\Events\Catalogue\GetCatalogPageMessageEvent.cs" />
     <Compile Include="Network\Game\Packets\Events\Handshake\InitCryptoMessageEvent.cs" />
     <Compile Include="Network\Game\Packets\Events\Handshake\SSOTicketMessageEvent.cs" />
+    <Compile Include="Network\Game\Packets\Events\Messenger\HabboSearchMessageEvent.cs" />
+    <Compile Include="Network\Game\Packets\Events\Messenger\MessengerInitMessageEvent.cs" />
+    <Compile Include="Network\Game\Packets\Events\Messenger\RequestBuddyMessageEvent.cs" />
+    <Compile Include="Network\Game\Packets\Events\Messenger\SendMsgMessageEvent.cs" />
     <Compile Include="Network\Game\Packets\Events\Navigator\GetOfficialRoomsMessageEvent.cs" />
     <Compile Include="Network\Game\Packets\Events\Users\GetCreditsMessageEvent.cs" />
     <Compile Include="Network\Game\Packets\IPacketEvent.cs" />
