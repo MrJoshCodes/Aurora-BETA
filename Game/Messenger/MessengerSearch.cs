@@ -1,5 +1,4 @@
-﻿using AuroraEmu.Network.Game.Packets;
-using System.Data;
+﻿using System.Data;
 
 namespace AuroraEmu.Game.Messenger
 {

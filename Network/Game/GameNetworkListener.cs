@@ -17,7 +17,7 @@ namespace AuroraEmu.Network.Game
         {
             try
             {
-                this.port = 30000;
+                port = 30000;
                 bootstrap = new ServerBootstrap()
                     .Group(new MultithreadEventLoopGroup(1), new MultithreadEventLoopGroup(10))
                     .Channel<TcpServerSocketChannel>()

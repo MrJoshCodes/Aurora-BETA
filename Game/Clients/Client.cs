@@ -1,6 +1,8 @@
-﻿using AuroraEmu.Game.Players;
+﻿using AuroraEmu.Game.Messenger;
+using AuroraEmu.Game.Players;
 using AuroraEmu.Network.Game.Packets;
 using DotNetty.Transport.Channels;
+using System.Collections.Generic;
 
 namespace AuroraEmu.Game.Clients
 {
@@ -9,6 +11,7 @@ namespace AuroraEmu.Game.Clients
         private IChannel channel;
 
         public Player Player { get; private set; }
+        public Dictionary<int, MessengerFriends> Friends { get; set; }
 
         public Client(IChannel channel)
         {

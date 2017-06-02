@@ -44,9 +44,7 @@ namespace AuroraEmu.Game.Items
 
         public Item GetTemplate(int id)
         {
-            Item item;
-
-            if (items.TryGetValue(id, out item))
+            if (items.TryGetValue(id, out Item item))
                 return item;
 
             return null;

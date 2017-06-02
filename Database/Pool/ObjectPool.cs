@@ -10,15 +10,13 @@ namespace AuroraEmu.Database.Pool
 
         public ObjectPool(Func<T> objectGenerator)
         {
-            if (objectGenerator == null) throw new ArgumentNullException("objectGenerator");
             _objects = new ConcurrentBag<T>();
-            _objectGenerator = objectGenerator;
+            _objectGenerator = objectGenerator ?? throw new ArgumentNullException("objectGenerator");
         }
 
         public T GetObject()
         {
-            T item;
-            if (_objects.TryTake(out item)) return item;
+            if (_objects.TryTake(out T item)) return item;
             return _objectGenerator();
         }
 

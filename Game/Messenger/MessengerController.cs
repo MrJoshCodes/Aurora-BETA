@@ -1,6 +1,5 @@
 ﻿using AuroraEmu.Database;
 using AuroraEmu.Game.Clients;
-using AuroraEmu.Game.Players;
 using AuroraEmu.Network.Game.Packets;
 using AuroraEmu.Network.Game.Packets.Composers.Messenger;
 using System.Collections.Generic;
@@ -20,7 +19,7 @@ namespace AuroraEmu.Game.Messenger
 
             foreach(MessengerSearch searchResult in SearchForUsers(searchString))
             {
-                if(CheckIfFriends(client.Player.Id, searchResult.Id))
+                if(IsFriends(client, searchResult.Id))
                 {
                     friends.Add(searchResult);
                 }
@@ -45,30 +44,17 @@ namespace AuroraEmu.Game.Messenger
 
                 result = dbClient.GetTable();
 
-                foreach(DataRow Row in result.Rows)
+                foreach(DataRow row in result.Rows)
                 {
-                    searchResult.Add(new MessengerSearch(Row));
+                    searchResult.Add(new MessengerSearch(row));
                 }
             }
             return searchResult;
         }
 
-        public bool CheckIfFriends(int userOne, int userTwo)
+        public bool IsFriends(Client client, int userTwoID)
         {
-            using(DatabaseConnection dbClient = DatabaseManager.GetInstance().GetConnection())
-            {
-                dbClient.SetQuery("SELECT * FROM messenger_friends WHERE (user_one_id = @userOne AND user_two_id = @userTwo) OR (user_two_id = @userOne AND user_one_id = @userTwo);");
-                dbClient.AddParameter("@userOne", userOne);
-                dbClient.AddParameter("@userTwo", userTwo);
-
-                dbClient.Open();
-
-                if(dbClient.GetRow() != null)
-                {
-                    return true;
-                }
-            }
-            return false;
+            return client.Friends.TryGetValue(userTwoID, out MessengerFriends friend);
         }
 
         public Dictionary<int, MessengerFriends> GetFriendsById(int id)
@@ -84,9 +70,9 @@ namespace AuroraEmu.Game.Messenger
 
                 data = dbClient.GetTable();
 
-                foreach(DataRow Row in data.Rows)
+                foreach(DataRow row in data.Rows)
                 {
-                    friends.Add((int)Row["user_two_id"], new MessengerFriends(Row));
+                    friends.Add((int)row["user_two_id"], new MessengerFriends(row));
                 }
             }
             return friends;
@@ -94,8 +80,7 @@ namespace AuroraEmu.Game.Messenger
 
         public MessengerFriends GetFriendById(int id)
         {
-            MessengerFriends friend = null;
-            if (!friends.TryGetValue(id, out friend))
+            if (!friends.TryGetValue(id, out MessengerFriends friend))
                 return null;
 
             return friend;

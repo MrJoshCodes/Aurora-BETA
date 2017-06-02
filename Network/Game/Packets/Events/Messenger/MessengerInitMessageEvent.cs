@@ -8,7 +8,10 @@ namespace AuroraEmu.Network.Game.Packets.Events.Messenger
     {
         public void Run(Client client, MessageEvent msg)
         {
-            client.SendComposer(new MessengerInitMessageComposer(MessengerController.GetInstance().GetFriendsById(client.Player.Id)));
+            if (client.Friends == null)
+                client.Friends = MessengerController.GetInstance().GetFriendsById(client.Player.Id);
+
+            client.SendComposer(new MessengerInitMessageComposer(client.Friends));
         }
     }
 }
