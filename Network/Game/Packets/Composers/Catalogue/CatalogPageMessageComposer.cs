@@ -55,7 +55,7 @@ namespace AuroraEmu.Network.Game.Packets.Composers.Catalogue
             {
                 AppendString(product.Template.SpriteType.ToString());
                 AppendVL64(product.Template.SpriteId);
-                AppendString("");
+                AppendString(product.Data);
                 AppendVL64(product.Amount);
                 AppendVL64(-1);
             }

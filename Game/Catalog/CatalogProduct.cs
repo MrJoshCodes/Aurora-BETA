@@ -18,6 +18,7 @@ namespace AuroraEmu.Game.Catalog
         public int TemplateId { get; set; }
         public bool IsDeal { get; set; }
         public int DealId { get; set; }
+        public string Data { get; set; }
 
         public CatalogProduct(DataRow row)
         {
@@ -30,6 +31,7 @@ namespace AuroraEmu.Game.Catalog
             Amount = IsDeal ? -1 : (int)row["amount"];
             TemplateId = IsDeal ? -1 : (int)row["Template_id"];
             DealId = IsDeal ? (int)row["deal_id"] : -1;
+            Data = (string)row["data"];
         }
 
         public List<CatalogDealItem> DealItems
