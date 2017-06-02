@@ -5,12 +5,12 @@ namespace AuroraEmu.Database
 {
     public class DatabaseManager
     {
-        private const string CONNECTION_STRING = 
-            "Server=127.0.0.1; " +
+        private const string CONNECTION_STRING =
+            "Server=212.24.102.149; " +
             "Port=3306; " +
-            "Uid=root; " +
-            "Password=; " +
-            "Database=aurora_beta; " +
+            "Uid=admin_aurora; " +
+            "Password=SgquG9JLWX; " +
+            "Database=admin_aurora; " +
             "Pooling=true;" +
             "MinimumPoolSize=5; " +
             "MaximumPoolSize=15";

@@ -1,7 +1,6 @@
 ﻿using AuroraEmu.Database;
 using System.Collections.Generic;
 using System.Data;
-using System;
 
 namespace AuroraEmu.Game.Catalog
 {
@@ -59,9 +58,7 @@ namespace AuroraEmu.Game.Catalog
 
         public List<CatalogDealItem> GetDeal(int dealId)
         {
-            List<CatalogDealItem> dealItems;
-
-            if (deals.TryGetValue(dealId, out dealItems))
+            if (deals.TryGetValue(dealId, out List<CatalogDealItem> dealItems))
                 return dealItems;
 
             return null;
@@ -97,9 +94,7 @@ namespace AuroraEmu.Game.Catalog
                 {
                     int dealId = (int)row["id"];
 
-                    List<CatalogDealItem> items;
-
-                    if (!deals.TryGetValue(dealId, out items))
+                    if (!deals.TryGetValue(dealId, out List<CatalogDealItem> items))
                         deals.Add(dealId, new List<CatalogDealItem>());
 
                     deals[dealId].Add(new CatalogDealItem(row));
@@ -111,9 +106,7 @@ namespace AuroraEmu.Game.Catalog
 
         public CatalogPage GetPage(int id)
         {
-            CatalogPage page;
-
-            if (pages.TryGetValue(id, out page))
+            if (pages.TryGetValue(id, out CatalogPage page))
                 return page;
 
             return null;

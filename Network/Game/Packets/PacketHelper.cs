@@ -22,7 +22,7 @@ namespace AuroraEmu.Network.Game.Packets
                 { 8, new GetCreditsMessageEvent() },
                 { 101, new GetCatalogIndexMessageEvent() },
                 { 102, new GetCatalogPageMessageEvent() },
-                {380, new GetOfficialRoomsMessageEvent() },
+                { 380, new GetOfficialRoomsMessageEvent() },
                 { 206, new InitCryptoMessageEvent() },
                 { 415, new SSOTicketMessageEvent() },
                 { 12, new MessengerInitMessageEvent() },
@@ -45,11 +45,9 @@ namespace AuroraEmu.Network.Game.Packets
 
         public void Handle(Client client, IByteBuffer buffer)
         {
-            IPacketEvent packetEvent;
-
             MessageEvent msgEvent = new MessageEvent(buffer);
 
-            if (packetEvents.TryGetValue(msgEvent.HeaderId, out packetEvent))
+            if (packetEvents.TryGetValue(msgEvent.HeaderId, out IPacketEvent packetEvent))
             {
                 if (packetNames.ContainsKey(msgEvent.HeaderId))
                 {

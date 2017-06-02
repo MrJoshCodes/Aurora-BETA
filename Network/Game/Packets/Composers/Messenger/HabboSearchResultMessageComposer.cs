@@ -1,4 +1,5 @@
-﻿using AuroraEmu.Game.Messenger;
+﻿using AuroraEmu.Game.Clients;
+using AuroraEmu.Game.Messenger;
 using System.Collections.Generic;
 
 namespace AuroraEmu.Network.Game.Packets.Composers.Messenger
@@ -22,15 +23,15 @@ namespace AuroraEmu.Network.Game.Packets.Composers.Messenger
         }
         public void Serialize(MessengerSearch search)
         {
-            base.AppendVL64(search.Id);
-            base.AppendString(search.Username);
-            base.AppendString(search.Motto);
-            base.AppendVL64(true); // is online
-            base.AppendVL64(false);
-            base.AppendString("");
-            base.AppendVL64(0);
-            base.AppendString(search.Figure);
-            base.AppendString("1970-01-01");
+            AppendVL64(search.Id);
+            AppendString(search.Username);
+            AppendString(search.Motto);
+            AppendVL64(ClientManager.GetInstance().PlayerIsOnline(search.Id)); // is online
+            AppendVL64(false);
+            AppendString("");
+            AppendVL64(0);
+            AppendString(search.Figure);
+            AppendString("1970-01-01");
         }
     }
 }

@@ -1,6 +1,5 @@
 ﻿using AuroraEmu.Database;
 using System.Collections.Concurrent;
-using System.Collections.Generic;
 using System.Data;
 
 namespace AuroraEmu.Game.Players
@@ -16,17 +15,9 @@ namespace AuroraEmu.Game.Players
             playersById = new ConcurrentDictionary<int, Player>();
         }
 
-        public bool PlayerIsOnline(int playerId)
-        {
-            Player player = null;
-            return playersById.TryGetValue(playerId, out player);
-        }
-
         public Player GetPlayerById(int id)
         {
-            Player player;
-
-            if (playersById.TryGetValue(id, out player))
+            if (playersById.TryGetValue(id, out Player player))
                 return player;
 
             DataRow result = null;

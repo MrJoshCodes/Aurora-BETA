@@ -1,4 +1,5 @@
-﻿using DotNetty.Transport.Channels;
+﻿using AuroraEmu.Game.Players;
+using DotNetty.Transport.Channels;
 using System.Collections.Generic;
 
 namespace AuroraEmu.Game.Clients
@@ -15,9 +16,7 @@ namespace AuroraEmu.Game.Clients
 
         public void AddClient(IChannel channel)
         {
-            Client client;
-
-            if (clients.TryGetValue(channel.Id, out client))
+            if (clients.TryGetValue(channel.Id, out Client client))
             {
                 client.Disconnect();
             }
@@ -31,9 +30,7 @@ namespace AuroraEmu.Game.Clients
 
         public Client GetClient(IChannel channel)
         {
-            Client client;
-
-            if (clients.TryGetValue(channel.Id, out client))
+            if (clients.TryGetValue(channel.Id, out Client client))
             {
                 return client;
             }
@@ -48,6 +45,28 @@ namespace AuroraEmu.Game.Clients
         public void RemoveClient(IChannel channel)
         {
             clients.Remove(channel.Id);
+        }
+
+        public bool PlayerIsOnline(int playerId)
+        {
+            return TryGetPlayer(playerId, out Player player);
+        }
+
+        public bool TryGetPlayer(int playerId, out Player player)
+        {
+            foreach (Client client in clients.Values)
+            {
+                if (client.Player.Id == playerId)
+                {
+                    player = client.Player;
+
+                    return true;
+                }
+            }
+
+            player = null;
+
+            return false;
         }
 
         public static ClientManager GetInstance()

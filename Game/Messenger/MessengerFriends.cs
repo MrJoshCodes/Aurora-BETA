@@ -17,10 +17,5 @@ namespace AuroraEmu.Game.Messenger
             Motto = (string)Row["motto"];
             Figure = (string)Row["figure"];
         }
-
-        public bool IfOnline()
-        {
-            return PlayerController.GetInstance().PlayerIsOnline(UserTwoId);
-        }
     }
 }

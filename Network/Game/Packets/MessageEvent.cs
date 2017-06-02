@@ -39,8 +39,7 @@ namespace AuroraEmu.Network.Game.Packets
 
         public int ReadVL64()
         {
-            int totalBytes;
-            int value = WireEncoding.DecodeInt32(GetBytes(buffer.ReadableBytes), out totalBytes);
+            int value = WireEncoding.DecodeInt32(GetBytes(buffer.ReadableBytes), out int totalBytes);
 
             ReadBytes(totalBytes);
 
