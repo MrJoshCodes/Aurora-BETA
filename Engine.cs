@@ -1,4 +1,5 @@
-﻿using AuroraEmu.Database;
+﻿using AuroraEmu.Config;
+using AuroraEmu.Database;
 using AuroraEmu.Game.Catalog;
 using AuroraEmu.Game.Items;
 using AuroraEmu.Game.Messenger;
@@ -16,6 +17,8 @@ namespace AuroraEmu
         static void Main(string[] args)
         {
             Logger = LogManager.GetLogger(typeof(Engine));
+
+            ConfigLoader.GetInstance();
 
             DatabaseManager.GetInstance();
 
