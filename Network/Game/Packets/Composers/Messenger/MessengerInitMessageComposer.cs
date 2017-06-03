@@ -11,21 +11,24 @@ namespace AuroraEmu.Network.Game.Packets.Composers.Messenger
             AppendVL64(600);
             AppendVL64(200);
             AppendVL64(600);
-            AppendVL64(false);
+            AppendVL64(0);
 
             AppendVL64(friends.Count);
-            foreach (KeyValuePair<int, MessengerFriends> friend in friends)
+            foreach (MessengerFriends friend in friends.Values)
             {
-                AppendVL64(friend.Value.UserTwoId);
-                AppendString(friend.Value.Username);
-                AppendVL64(true);
-                AppendVL64(ClientManager.GetInstance().PlayerIsOnline(friend.Value.UserTwoId));
+                AppendVL64(friend.UserTwoId);
+                AppendString(friend.Username);
+                AppendVL64(1);
+                AppendVL64(ClientManager.GetInstance().PlayerIsOnline(friend.UserTwoId));
                 AppendVL64(false); //Check if in room.
-                AppendString(friend.Value.Figure);
-                AppendVL64(false);
-                AppendString(friend.Value.Motto);
-                AppendString("1970/01/29");
+                AppendString(friend.Figure);
+                AppendVL64(0);
+                AppendString(friend.Motto);
+                AppendString("");
             }
+
+            AppendVL64(0);
+            AppendVL64(0);
         }
     }
 }

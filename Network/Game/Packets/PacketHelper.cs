@@ -12,32 +12,21 @@ namespace AuroraEmu.Network.Game.Packets
     public class PacketHelper
     {
         private readonly Dictionary<int, IPacketEvent> packetEvents;
-        private readonly Dictionary<int, string> packetNames;
         private static PacketHelper packetHelperInstance;
 
         public PacketHelper()
         {
             packetEvents = new Dictionary<int, IPacketEvent>
             {
+                { 7, new InfoRetrieveMessageEvent() },
                 { 8, new GetCreditsMessageEvent() },
                 { 101, new GetCatalogIndexMessageEvent() },
                 { 102, new GetCatalogPageMessageEvent() },
                 { 380, new GetOfficialRoomsMessageEvent() },
                 { 206, new InitCryptoMessageEvent() },
                 { 415, new SSOTicketMessageEvent() },
-                { 12, new MessengerInitMessageEvent() },
+                //{ 12, new MessengerInitMessageEvent() },
                 { 41, new HabboSearchMessageEvent() }
-            };
-
-            packetNames = new Dictionary<int, string>
-            {
-                { 8, "GetCreditsMessageEvent" },
-                { 101, "GetCatalogIndexMessageEvent" },
-                { 102, "GetCatalogPageMessageEvent" },
-                { 206, "InitCryptoMessageEvent" },
-                { 415, "SSOTicketMessageEvent" },
-                { 12, "MessengerInitMessageEvent" },
-                { 41, "HabboSearchMessageEvent" }
             };
 
             Engine.Logger.Info($"Loaded {packetEvents.Count} packet events.");
@@ -49,11 +38,8 @@ namespace AuroraEmu.Network.Game.Packets
 
             if (packetEvents.TryGetValue(msgEvent.HeaderId, out IPacketEvent packetEvent))
             {
-                if (packetNames.ContainsKey(msgEvent.HeaderId))
-                {
-                    Engine.Logger.Info($"Handled incoming packet: {packetNames[msgEvent.HeaderId]}");
-                }
                 packetEvent.Run(client, msgEvent);
+                Engine.Logger.Info($"Handled incoming packet {packetEvent.GetType().Name}.");
             }
             else
             {
