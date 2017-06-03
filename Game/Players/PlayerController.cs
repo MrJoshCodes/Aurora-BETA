@@ -78,6 +78,8 @@ namespace AuroraEmu.Game.Players
             {
                 dbClient.SetQuery("SELECT username FROM players WHERE id = @id LIMIT 1");
                 dbClient.AddParameter("@id", id);
+                dbClient.Open();
+
                 name = dbClient.GetString();
             }
 
