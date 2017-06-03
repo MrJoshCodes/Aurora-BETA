@@ -13,6 +13,8 @@ namespace AuroraEmu.Game.Clients
         public Player Player { get; private set; }
         public Dictionary<int, MessengerFriends> Friends { get; set; }
 
+        public int? RoomCount { get; set; }
+
         public Client(IChannel channel)
         {
             this.channel = channel;

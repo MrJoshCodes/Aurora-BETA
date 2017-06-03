@@ -42,6 +42,22 @@ namespace AuroraEmu.Game.Rooms
             return null;
         }
 
+        public int GetUserRoomCount(int userId)
+        {
+            int roomCount = 0;
+
+            using (DatabaseConnection dbConnection = DatabaseManager.GetInstance().GetConnection())
+            {
+                dbConnection.SetQuery("SELECT COUNT(*) FROM rooms WHERE owner_id = @ownerId");
+                dbConnection.AddParameter("@ownerId", userId);
+                dbConnection.Open();
+
+                roomCount = int.Parse(dbConnection.GetString());
+            }
+
+            return roomCount;
+        }
+
         public static RoomController GetInstance()
         {
             if (instance == null)

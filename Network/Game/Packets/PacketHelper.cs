@@ -28,7 +28,8 @@ namespace AuroraEmu.Network.Game.Packets
                 //{ 12, new MessengerInitMessageEvent() },
                 { 41, new HabboSearchMessageEvent() },
                 { 434, new MyRoomsSearchMessageEvent() },
-                { 151, new GetUserFlatCatsMessageEvent() }
+                { 151, new GetUserFlatCatsMessageEvent() },
+                { 387, new CanCreateRoomMessageEvent() }
             };
 
             Engine.Logger.Info($"Loaded {packetEvents.Count} packet events.");
