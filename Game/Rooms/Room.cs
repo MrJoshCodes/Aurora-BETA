@@ -6,15 +6,15 @@ namespace AuroraEmu.Game.Rooms
 {
     public class Room
     {
-        public int Id { get; private set; }
-        public int OwnerId { get; private set; }
+        public int Id { get; set; }
+        public int OwnerId { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
         public RoomState State { get; set; }
         public int PlayersIn { get; set; }
         public int PlayersMax { get; set; }
         public int CategoryId { get; set; }
-        public string Model { get; private set; }
+        public string Model { get; set; }
         public string CCTs { get; private set; }
         public bool ShowOwner { get; set; }
         public bool AllPlayerRights { get; set; }
@@ -23,7 +23,15 @@ namespace AuroraEmu.Game.Rooms
         public int Wallpaper { get; set; }
         public double Landscape { get; set; }
 
-        public Room() { }
+        public Room()
+        {
+            State = RoomState.open;
+            PlayersMax = 25;
+            ShowOwner = true;
+            AllPlayerRights = false;
+            Icon = "HHIPAI";
+            Landscape = 0.0;
+        }
         public Room(DataRow row)
         {
             Id = (int)row["id"];

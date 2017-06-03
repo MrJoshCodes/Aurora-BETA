@@ -6,6 +6,7 @@ using AuroraEmu.Game.Messenger;
 using AuroraEmu.Game.Navigator;
 using AuroraEmu.Game.Players;
 using AuroraEmu.Network.Game;
+using AuroraEmu.Network.Game.Packets;
 using log4net;
 
 namespace AuroraEmu
@@ -30,7 +31,15 @@ namespace AuroraEmu
 
             GameNetworkListener.GetInstance();
 
-            System.Console.ReadLine();
+            while (true) 
+            {
+                switch (System.Console.ReadLine())
+                {
+                    case "reload_packets":
+                        PacketHelper.GetInstance().LoadPackets();
+                        break;
+                }
+            }
         }
     }
 }

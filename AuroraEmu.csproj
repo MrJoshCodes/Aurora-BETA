@@ -204,6 +204,7 @@
     <Compile Include="Network\Game\Packets\Composers\Messenger\MessengerInitMessageComposer.cs" />
     <Compile Include="Network\Game\Packets\Composers\Messenger\NewConsoleMessageComposer.cs" />
     <Compile Include="Network\Game\Packets\Composers\Navigator\CanCreateRoomComposer.cs" />
+    <Compile Include="Network\Game\Packets\Composers\Navigator\FlatCreatedComposer.cs" />
     <Compile Include="Network\Game\Packets\Composers\Navigator\GuestRoomSearchResultComposer.cs" />
     <Compile Include="Network\Game\Packets\Composers\Navigator\OfficialRoomsComposer.cs" />
     <Compile Include="Network\Game\Packets\Composers\Users\CreditBalanceMessageComposer.cs" />
@@ -218,6 +219,7 @@
     <Compile Include="Network\Game\Packets\Events\Messenger\RequestBuddyMessageEvent.cs" />
     <Compile Include="Network\Game\Packets\Events\Messenger\SendMsgMessageEvent.cs" />
     <Compile Include="Network\Game\Packets\Events\Navigator\CanCreateRoomMessageEvent.cs" />
+    <Compile Include="Network\Game\Packets\Events\Navigator\CreateFlatMessageEvent.cs" />
     <Compile Include="Network\Game\Packets\Events\Navigator\GetOfficialRoomsMessageEvent.cs" />
     <Compile Include="Network\Game\Packets\Events\Navigator\GetUserFlatCatsMessageEvent.cs" />
     <Compile Include="Network\Game\Packets\Events\Navigator\MyRoomsSearchMessageEvent.cs" />

@@ -11,10 +11,17 @@ namespace AuroraEmu.Network.Game.Packets
 {
     public class PacketHelper
     {
-        private readonly Dictionary<int, IPacketEvent> packetEvents;
+        private Dictionary<int, IPacketEvent> packetEvents;
         private static PacketHelper packetHelperInstance;
 
         public PacketHelper()
+        {
+            LoadPackets();
+
+            Engine.Logger.Info($"Loaded {packetEvents.Count} packet events.");
+        }
+
+        public void LoadPackets()
         {
             packetEvents = new Dictionary<int, IPacketEvent>
             {
@@ -29,10 +36,9 @@ namespace AuroraEmu.Network.Game.Packets
                 { 41, new HabboSearchMessageEvent() },
                 { 434, new MyRoomsSearchMessageEvent() },
                 { 151, new GetUserFlatCatsMessageEvent() },
-                { 387, new CanCreateRoomMessageEvent() }
+                { 387, new CanCreateRoomMessageEvent() },
+                { 29, new CreateFlatMessageEvent() }
             };
-
-            Engine.Logger.Info($"Loaded {packetEvents.Count} packet events.");
         }
 
         public void Handle(Client client, IByteBuffer buffer)
