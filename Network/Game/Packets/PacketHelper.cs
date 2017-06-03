@@ -26,7 +26,9 @@ namespace AuroraEmu.Network.Game.Packets
                 { 206, new InitCryptoMessageEvent() },
                 { 415, new SSOTicketMessageEvent() },
                 //{ 12, new MessengerInitMessageEvent() },
-                { 41, new HabboSearchMessageEvent() }
+                { 41, new HabboSearchMessageEvent() },
+                { 434, new MyRoomsSearchMessageEvent() },
+                { 151, new GetUserFlatCatsMessageEvent() }
             };
 
             Engine.Logger.Info($"Loaded {packetEvents.Count} packet events.");

@@ -191,6 +191,9 @@
     <Compile Include="Game\Navigator\NavigatorController.cs" />
     <Compile Include="Game\Players\Player.cs" />
     <Compile Include="Engine.cs" />
+    <Compile Include="Game\Rooms\Room.cs" />
+    <Compile Include="Game\Rooms\RoomController.cs" />
+    <Compile Include="Game\Rooms\RoomState.cs" />
     <Compile Include="Network\Game\GameNetworkHandler.cs" />
     <Compile Include="Network\Game\GameNetworkListener.cs" />
     <Compile Include="Network\Game\Packets\Composers\Catalogue\CatalogIndexMessageComposer.cs" />
@@ -199,6 +202,7 @@
     <Compile Include="Network\Game\Packets\Composers\Messenger\HabboSearchResultMessageComposer.cs" />
     <Compile Include="Network\Game\Packets\Composers\Messenger\MessengerInitMessageComposer.cs" />
     <Compile Include="Network\Game\Packets\Composers\Messenger\NewConsoleMessageComposer.cs" />
+    <Compile Include="Network\Game\Packets\Composers\Navigator\GuestRoomSearchResultComposer.cs" />
     <Compile Include="Network\Game\Packets\Composers\Navigator\OfficialRoomsComposer.cs" />
     <Compile Include="Network\Game\Packets\Composers\Users\CreditBalanceMessageComposer.cs" />
     <Compile Include="Network\Game\Packets\Composers\Users\HabboActivityPointNotificationMessageComposer.cs" />
@@ -212,6 +216,8 @@
     <Compile Include="Network\Game\Packets\Events\Messenger\RequestBuddyMessageEvent.cs" />
     <Compile Include="Network\Game\Packets\Events\Messenger\SendMsgMessageEvent.cs" />
     <Compile Include="Network\Game\Packets\Events\Navigator\GetOfficialRoomsMessageEvent.cs" />
+    <Compile Include="Network\Game\Packets\Events\Navigator\GetUserFlatCatsMessageEvent.cs" />
+    <Compile Include="Network\Game\Packets\Events\Navigator\MyRoomsSearchMessageEvent.cs" />
     <Compile Include="Network\Game\Packets\Events\Users\GetCreditsMessageEvent.cs" />
     <Compile Include="Network\Game\Packets\Events\Users\InfoRetrieveMessageEvent.cs" />
     <Compile Include="Network\Game\Packets\IPacketEvent.cs" />
