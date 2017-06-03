@@ -137,6 +137,11 @@ namespace AuroraEmu.Database
             }
         }
 
+        public string GetString()
+        {
+            return command.ExecuteScalar().ToString();
+        }
+
         /// <summary>
         /// Executes an 'insert'-query. Instead of 'Execute', it returns the inserted ID rather than the amount of affected rows.
         /// </summary>

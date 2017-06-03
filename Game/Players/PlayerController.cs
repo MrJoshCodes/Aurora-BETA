@@ -9,10 +9,12 @@ namespace AuroraEmu.Game.Players
         private static PlayerController instance;
 
         private ConcurrentDictionary<int, Player> playersById;
+        private ConcurrentDictionary<int, string> playerNamesById;
 
         public PlayerController()
         {
             playersById = new ConcurrentDictionary<int, Player>();
+            playerNamesById = new ConcurrentDictionary<int, string>();
         }
 
         public Player GetPlayerById(int id)
@@ -35,6 +37,7 @@ namespace AuroraEmu.Game.Players
             {
                 player = new Player(result);
                 playersById.TryAdd(player.Id, player);
+                playerNamesById.TryAdd(player.Id, player.Username);
 
                 return player;
             }
@@ -59,10 +62,26 @@ namespace AuroraEmu.Game.Players
             {
                 Player player = new Player(result);
                 playersById.AddOrUpdate(player.Id, player, (oldkey, oldvalue) => player);
+                playerNamesById.AddOrUpdate(player.Id, player.Username, (oldkey, oldvalue) => player.Username);
                 return player;
             }
 
             return null;
+        }
+
+        public string GetPlayerNameById(int id)
+        {
+            if (playerNamesById.TryGetValue(id, out string name))
+                return name;
+
+            using (DatabaseConnection dbClient = DatabaseManager.GetInstance().GetConnection())
+            {
+                dbClient.SetQuery("SELECT username FROM players WHERE id = @id LIMIT 1");
+                dbClient.AddParameter("@id", id);
+                name = dbClient.GetString();
+            }
+
+            return name;
         }
 
         public static PlayerController GetInstance()

@@ -197,6 +197,7 @@
     <Compile Include="Network\Game\Packets\Composers\Navigator\OfficialRoomsComposer.cs" />
     <Compile Include="Network\Game\Packets\Composers\Users\CreditBalanceMessageComposer.cs" />
     <Compile Include="Network\Game\Packets\Composers\Users\HabboActivityPointNotificationMessageComposer.cs" />
+    <Compile Include="Network\Game\Packets\Composers\Users\UserObjectComposer.cs" />
     <Compile Include="Network\Game\Packets\Events\Catalogue\GetCatalogIndexMessageEvent.cs" />
     <Compile Include="Network\Game\Packets\Events\Catalogue\GetCatalogPageMessageEvent.cs" />
     <Compile Include="Network\Game\Packets\Events\Handshake\InitCryptoMessageEvent.cs" />
@@ -207,6 +208,7 @@
     <Compile Include="Network\Game\Packets\Events\Messenger\SendMsgMessageEvent.cs" />
     <Compile Include="Network\Game\Packets\Events\Navigator\GetOfficialRoomsMessageEvent.cs" />
     <Compile Include="Network\Game\Packets\Events\Users\GetCreditsMessageEvent.cs" />
+    <Compile Include="Network\Game\Packets\Events\Users\InfoRetrieveMessageEvent.cs" />
     <Compile Include="Network\Game\Packets\IPacketEvent.cs" />
     <Compile Include="Network\Game\Packets\MessageComposer.cs" />
     <Compile Include="Network\Game\Packets\MessageEvent.cs" />
