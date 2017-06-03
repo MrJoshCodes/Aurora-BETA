@@ -1,16 +1,17 @@
-﻿using AuroraEmu.Database.Pool;
+﻿using AuroraEmu.Config;
+using AuroraEmu.Database.Pool;
 using MySql.Data.MySqlClient;
 
 namespace AuroraEmu.Database
 {
     public class DatabaseManager
     {
-        private const string CONNECTION_STRING =
-            "Server=212.24.102.149; " +
+        private readonly string connectionString =
+            $"Server={ConfigLoader.GetInstance().DbConfig.Server};" +
             "Port=3306; " +
-            "Uid=admin_aurora; " +
-            "Password=SgquG9JLWX; " +
-            "Database=admin_aurora; " +
+            $"Uid={ConfigLoader.GetInstance().DbConfig.User}; " +
+            $"Password={ConfigLoader.GetInstance().DbConfig.Password}; " +
+            $"Database={ConfigLoader.GetInstance().DbConfig.Database}; " +
             "Pooling=true;" +
             "MinimumPoolSize=5; " +
             "MaximumPoolSize=15";
@@ -20,12 +21,12 @@ namespace AuroraEmu.Database
 
         public DatabaseManager()
         {
-            Init(CONNECTION_STRING);
+            Init(connectionString);
         }
 
         public void Init(string connectionString)
         {
-            connectionPool = new ObjectPool<DatabaseConnection>(() => new DatabaseConnection(CONNECTION_STRING, connectionPool));
+            connectionPool = new ObjectPool<DatabaseConnection>(() => new DatabaseConnection(connectionString, connectionPool));
         }
 
         public bool TryConnection()
@@ -48,7 +49,7 @@ namespace AuroraEmu.Database
 
         public DatabaseConnection GetConnection()
         {
-            return new DatabaseConnection(CONNECTION_STRING, connectionPool);
+            return new DatabaseConnection(connectionString, connectionPool);
         }
 
         public static DatabaseManager GetInstance()
