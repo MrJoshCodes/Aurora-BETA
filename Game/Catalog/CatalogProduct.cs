@@ -6,7 +6,7 @@ namespace AuroraEmu.Game.Catalog
 {
     public class CatalogProduct
     {
-        private Item template;
+        private ItemDefinition template;
         private List<CatalogDealItem> dealItems;
 
         public int Id { get; set; }
@@ -45,7 +45,7 @@ namespace AuroraEmu.Game.Catalog
             }
         }
 
-        public Item Template
+        public ItemDefinition Template
         {
             get
             {

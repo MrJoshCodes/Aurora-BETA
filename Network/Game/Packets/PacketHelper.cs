@@ -3,6 +3,7 @@ using AuroraEmu.Network.Game.Packets.Events.Catalogue;
 using AuroraEmu.Network.Game.Packets.Events.Handshake;
 using AuroraEmu.Network.Game.Packets.Events.Messenger;
 using AuroraEmu.Network.Game.Packets.Events.Navigator;
+using AuroraEmu.Network.Game.Packets.Events.Rooms;
 using AuroraEmu.Network.Game.Packets.Events.Users;
 using DotNetty.Buffers;
 using System.Collections.Generic;
@@ -11,10 +12,17 @@ namespace AuroraEmu.Network.Game.Packets
 {
     public class PacketHelper
     {
-        private readonly Dictionary<int, IPacketEvent> packetEvents;
+        private Dictionary<int, IPacketEvent> packetEvents;
         private static PacketHelper packetHelperInstance;
 
         public PacketHelper()
+        {
+            LoadPackets();
+
+            Engine.Logger.Info($"Loaded {packetEvents.Count} packet events.");
+        }
+
+        public void LoadPackets()
         {
             packetEvents = new Dictionary<int, IPacketEvent>
             {
@@ -28,10 +36,18 @@ namespace AuroraEmu.Network.Game.Packets
                 //{ 12, new MessengerInitMessageEvent() },
                 { 41, new HabboSearchMessageEvent() },
                 { 434, new MyRoomsSearchMessageEvent() },
-                { 151, new GetUserFlatCatsMessageEvent() }
+                { 151, new GetUserFlatCatsMessageEvent() },
+                { 387, new CanCreateRoomMessageEvent() },
+                { 29, new CreateFlatMessageEvent() },
+                { 391, new OpenFlatConnectionMessageEvent() },
+                { 230, new GetHabboGroupBadgesMessageEvent() },
+                { 215, new GetFurnitureAliasesMessageEvent() },
+                { 60, new GetHeightMapMessageEvent() },
+                { 390, new GetRoomEntryDataMessageEvent() },
+                { 126, new GetRoomAdMessageEvent() },
+                { 382, new GetPopularRoomTagsMessageEvent() },
+                { 52, new ChatMessageEvent() },
             };
-
-            Engine.Logger.Info($"Loaded {packetEvents.Count} packet events.");
         }
 
         public void Handle(Client client, IByteBuffer buffer)

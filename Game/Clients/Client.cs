@@ -3,6 +3,7 @@ using AuroraEmu.Game.Players;
 using AuroraEmu.Network.Game.Packets;
 using DotNetty.Transport.Channels;
 using System.Collections.Generic;
+using AuroraEmu.Game.Rooms;
 
 namespace AuroraEmu.Game.Clients
 {
@@ -12,6 +13,11 @@ namespace AuroraEmu.Game.Clients
 
         public Player Player { get; private set; }
         public Dictionary<int, MessengerFriends> Friends { get; set; }
+
+        public int? RoomCount { get; set; }
+        public Room LoadingRoom { get; set; }
+        public Room CurrentRoom { get; set; }
+        public RoomActor RoomActor { get; set; }
 
         public Client(IChannel channel)
         {
@@ -35,6 +41,7 @@ namespace AuroraEmu.Game.Clients
 
         public void Send(MessageComposer composer, bool flush)
         {
+            Engine.Logger.Info($"{System.Text.Encoding.Default.GetString(composer.GetBytes().Array).Replace("\r", "{13}")}");
             if (flush)
             {
                 channel.WriteAndFlushAsync(composer.GetBytes());

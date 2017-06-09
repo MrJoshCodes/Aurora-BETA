@@ -161,6 +161,9 @@
     <Reference Include="System.Security.Cryptography.X509Certificates, Version=4.1.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>..\packages\System.Security.Cryptography.X509Certificates.4.3.0\lib\net461\System.Security.Cryptography.X509Certificates.dll</HintPath>
     </Reference>
+    <Reference Include="System.ValueTuple, Version=4.0.1.1, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.ValueTuple.4.3.1\lib\netstandard1.0\System.ValueTuple.dll</HintPath>
+    </Reference>
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -173,6 +176,7 @@
   <ItemGroup>
     <Compile Include="Config\ConfigLoader.cs" />
     <Compile Include="Config\DatabaseConfig.cs" />
+    <Compile Include="Config\HabboHotelConfig.cs" />
     <Compile Include="Database\DatabaseConnection.cs" />
     <Compile Include="Database\DatabaseManager.cs" />
     <Compile Include="Database\Pool\ObjectPool.cs" />
@@ -183,6 +187,7 @@
     <Compile Include="Game\Clients\Client.cs" />
     <Compile Include="Game\Clients\ClientManager.cs" />
     <Compile Include="Game\Items\Item.cs" />
+    <Compile Include="Game\Items\ItemDefinition.cs" />
     <Compile Include="Game\Messenger\MessengerController.cs" />
     <Compile Include="Game\Messenger\MessengerFriends.cs" />
     <Compile Include="Game\Messenger\MessengerRequest.cs" />
@@ -192,7 +197,10 @@
     <Compile Include="Game\Players\Player.cs" />
     <Compile Include="Engine.cs" />
     <Compile Include="Game\Rooms\Room.cs" />
+    <Compile Include="Game\Rooms\RoomActor.cs" />
+    <Compile Include="Game\Rooms\RoomCategory.cs" />
     <Compile Include="Game\Rooms\RoomController.cs" />
+    <Compile Include="Game\Rooms\RoomMap.cs" />
     <Compile Include="Game\Rooms\RoomState.cs" />
     <Compile Include="Network\Game\GameNetworkHandler.cs" />
     <Compile Include="Network\Game\GameNetworkListener.cs" />
@@ -202,8 +210,22 @@
     <Compile Include="Network\Game\Packets\Composers\Messenger\HabboSearchResultMessageComposer.cs" />
     <Compile Include="Network\Game\Packets\Composers\Messenger\MessengerInitMessageComposer.cs" />
     <Compile Include="Network\Game\Packets\Composers\Messenger\NewConsoleMessageComposer.cs" />
+    <Compile Include="Network\Game\Packets\Composers\Navigator\CanCreateRoomComposer.cs" />
+    <Compile Include="Network\Game\Packets\Composers\Navigator\FlatCreatedComposer.cs" />
     <Compile Include="Network\Game\Packets\Composers\Navigator\GuestRoomSearchResultComposer.cs" />
     <Compile Include="Network\Game\Packets\Composers\Navigator\OfficialRoomsComposer.cs" />
+    <Compile Include="Network\Game\Packets\Composers\Navigator\PopularRoomTagsResultComposer.cs" />
+    <Compile Include="Network\Game\Packets\Composers\Rooms\ChatMessageComposer.cs" />
+    <Compile Include="Network\Game\Packets\Composers\Rooms\FloorHeightMapMessageComposer.cs" />
+    <Compile Include="Network\Game\Packets\Composers\Rooms\FurnitureAliasesMessageComposer.cs" />
+    <Compile Include="Network\Game\Packets\Composers\Rooms\GetGuestRoomResultComposer.cs" />
+    <Compile Include="Network\Game\Packets\Composers\Rooms\HabboGroupBadgesMessageComposer.cs" />
+    <Compile Include="Network\Game\Packets\Composers\Rooms\HeightMapMessageComposer.cs" />
+    <Compile Include="Network\Game\Packets\Composers\Rooms\OpenConnectionMessageComposer.cs" />
+    <Compile Include="Network\Game\Packets\Composers\Rooms\RoomAdMessageComposer.cs" />
+    <Compile Include="Network\Game\Packets\Composers\Rooms\RoomEntryInfoMessageComposer.cs" />
+    <Compile Include="Network\Game\Packets\Composers\Rooms\RoomReadyMessageComposer.cs" />
+    <Compile Include="Network\Game\Packets\Composers\Rooms\UsersMessageComposer.cs" />
     <Compile Include="Network\Game\Packets\Composers\Users\CreditBalanceMessageComposer.cs" />
     <Compile Include="Network\Game\Packets\Composers\Users\HabboActivityPointNotificationMessageComposer.cs" />
     <Compile Include="Network\Game\Packets\Composers\Users\UserObjectComposer.cs" />
@@ -215,9 +237,19 @@
     <Compile Include="Network\Game\Packets\Events\Messenger\MessengerInitMessageEvent.cs" />
     <Compile Include="Network\Game\Packets\Events\Messenger\RequestBuddyMessageEvent.cs" />
     <Compile Include="Network\Game\Packets\Events\Messenger\SendMsgMessageEvent.cs" />
+    <Compile Include="Network\Game\Packets\Events\Navigator\CanCreateRoomMessageEvent.cs" />
+    <Compile Include="Network\Game\Packets\Events\Navigator\CreateFlatMessageEvent.cs" />
     <Compile Include="Network\Game\Packets\Events\Navigator\GetOfficialRoomsMessageEvent.cs" />
+    <Compile Include="Network\Game\Packets\Events\Navigator\GetPopularRoomTagsMessageEvent.cs" />
     <Compile Include="Network\Game\Packets\Events\Navigator\GetUserFlatCatsMessageEvent.cs" />
     <Compile Include="Network\Game\Packets\Events\Navigator\MyRoomsSearchMessageEvent.cs" />
+    <Compile Include="Network\Game\Packets\Events\Rooms\ChatMessageEvent.cs" />
+    <Compile Include="Network\Game\Packets\Events\Rooms\GetFurnitureAliasesMessageEvent.cs" />
+    <Compile Include="Network\Game\Packets\Events\Rooms\GetHabboGroupBadgesMessageEvent.cs" />
+    <Compile Include="Network\Game\Packets\Events\Rooms\GetHeightMapMessageEvent.cs" />
+    <Compile Include="Network\Game\Packets\Events\Rooms\GetRoomAdMessageEvent.cs" />
+    <Compile Include="Network\Game\Packets\Events\Rooms\GetRoomEntryDataMessageEvent.cs" />
+    <Compile Include="Network\Game\Packets\Events\Rooms\OpenFlatConnectionMessageEvent.cs" />
     <Compile Include="Network\Game\Packets\Events\Users\GetCreditsMessageEvent.cs" />
     <Compile Include="Network\Game\Packets\Events\Users\InfoRetrieveMessageEvent.cs" />
     <Compile Include="Network\Game\Packets\IPacketEvent.cs" />
