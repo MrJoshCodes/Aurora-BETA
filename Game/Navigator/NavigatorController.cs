@@ -10,12 +10,15 @@ namespace AuroraEmu.Game.Navigator
         private static NavigatorController instance;
 
         public List<FrontpageItem> FrontpageItems { get; private set; }
+        public Dictionary<int, RoomCategory> Categories { get; private set; }
 
         public NavigatorController()
         {
             FrontpageItems = new List<FrontpageItem>();
+            Categories = new Dictionary<int, RoomCategory>();
 
             ReloadFrontpageItems();
+            ReloadCategories();
         }
 
         public void ReloadFrontpageItems()
@@ -38,6 +41,28 @@ namespace AuroraEmu.Game.Navigator
             }
 
             Engine.Logger.Info($"Loaded {FrontpageItems.Count} navigator frontpage items.");
+        }
+
+        public void ReloadCategories()
+        {
+            Categories.Clear();
+
+            DataTable result;
+
+            using (DatabaseConnection dbConnection = DatabaseManager.GetInstance().GetConnection())
+            {
+                dbConnection.SetQuery("SELECT * FROM room_categories");
+                dbConnection.Open();
+
+                result = dbConnection.GetTable();
+            }
+
+            foreach(DataRow row in result.Rows)
+            {
+                Categories.Add((int)row["id"], new RoomCategory(row));
+            }
+
+            Engine.Logger.Info($"Loaded {Categories.Count} room categories.");
         }
 
         public List<Room> GetRoomsByOwner(int ownerId)

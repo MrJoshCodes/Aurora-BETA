@@ -8,11 +8,11 @@ namespace AuroraEmu.Game.Items
     {
         private static ItemController instance;
 
-        private Dictionary<int, Item> items;
+        private Dictionary<int, ItemDefinition> items;
 
         public ItemController()
         {
-            items = new Dictionary<int, Item>();
+            items = new Dictionary<int, ItemDefinition>();
 
             ReloadTemplates();
         }
@@ -25,7 +25,7 @@ namespace AuroraEmu.Game.Items
 
             using (DatabaseConnection dbConnection = DatabaseManager.GetInstance().GetConnection())
             {
-                dbConnection.SetQuery("SELECT * FROM items;");
+                dbConnection.SetQuery("SELECT * FROM item_definitions;");
                 dbConnection.Open();
 
                 result = dbConnection.GetTable();
@@ -35,19 +35,41 @@ namespace AuroraEmu.Game.Items
             {
                 foreach (DataRow row in result.Rows)
                 {
-                    items.Add((int)row["id"], new Item(row));
+                    items.Add((int)row["id"], new ItemDefinition(row));
                 }
             }
 
             Engine.Logger.Info($"Loaded {items.Count} item templates.");
         }
 
-        public Item GetTemplate(int id)
+        public ItemDefinition GetTemplate(int id)
         {
-            if (items.TryGetValue(id, out Item item))
+            if (items.TryGetValue(id, out ItemDefinition item))
                 return item;
 
             return null;
+        }
+
+        public Dictionary<int, Item> GetItemsInRoom(int roomId)
+        {
+            Dictionary<int, Item> items = new Dictionary<int, Item>();
+
+            DataTable result;
+
+            using (DatabaseConnection dbConnection = DatabaseManager.GetInstance().GetConnection())
+            {
+                dbConnection.SetQuery("SELECT * FROM items WHERE room_id = @roomId");
+                dbConnection.AddParameter("@roomId", roomId);
+
+                result = dbConnection.GetTable();
+            }
+
+            foreach (DataRow row in result.Rows)
+            {
+                items.Add((int)row["id"], new Item(row));
+            }
+
+            return items;
         }
 
         public static ItemController GetInstance()

@@ -1,5 +1,6 @@
 ﻿using AuroraEmu.Database;
 using System.Collections.Concurrent;
+using System.Collections.Generic;
 using System.Data;
 
 namespace AuroraEmu.Game.Rooms
@@ -9,10 +10,34 @@ namespace AuroraEmu.Game.Rooms
         private static RoomController instance;
 
         public ConcurrentDictionary<int, Room> Rooms { get; private set; }
+        public Dictionary<string, RoomMap> RoomMaps { get; private set; }
 
         public RoomController()
         {
             Rooms = new ConcurrentDictionary<int, Room>();
+            RoomMaps = new Dictionary<string, RoomMap>();
+        }
+
+        public void LoadRoomMaps()
+        {
+            RoomMaps.Clear();
+
+            DataTable table;
+
+            using (DatabaseConnection dbConnection = DatabaseManager.GetInstance().GetConnection())
+            {
+                dbConnection.SetQuery("SELECT * FROM room_maps");
+                dbConnection.Open();
+
+                table = dbConnection.GetTable();
+            }
+
+            foreach(DataRow row in table.Rows)
+            {
+                RoomMaps.Add((string)row["name"], new RoomMap(row));
+            }
+
+            Engine.Logger.Info($"Loaded {RoomMaps.Count} room maps.");
         }
 
         public Room GetRoom(int id)

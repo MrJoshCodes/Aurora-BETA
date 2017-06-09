@@ -1,11 +1,17 @@
-﻿using AuroraEmu.Game.Players;
+﻿using AuroraEmu.Game.Clients;
+using AuroraEmu.Game.Navigator;
+using AuroraEmu.Game.Players;
+using AuroraEmu.Network.Game.Packets;
 using System;
+using System.Collections.Concurrent;
 using System.Data;
 
 namespace AuroraEmu.Game.Rooms
 {
     public class Room
     {
+        private int virtualId = 0;
+
         public int Id { get; set; }
         public int OwnerId { get; set; }
         public string Name { get; set; }
@@ -22,6 +28,10 @@ namespace AuroraEmu.Game.Rooms
         public int Floor { get; set; }
         public int Wallpaper { get; set; }
         public double Landscape { get; set; }
+
+        public RoomMap Map { get; private set; }
+
+        public ConcurrentDictionary<int, RoomActor> Actors { get; private set; }
 
         public Room()
         {
@@ -50,6 +60,47 @@ namespace AuroraEmu.Game.Rooms
             Floor = (int)row["floor"];
             Wallpaper = (int)row["wallpaper"];
             Landscape = (double)row["landscape"];
+            Map = RoomController.GetInstance().RoomMaps[Model];
+            Actors = new ConcurrentDictionary<int, RoomActor>();
+        }
+
+        public void AddActor(Client client)
+        {
+            int newVirtualId = virtualId++;
+
+            RoomActor actor = new RoomActor(client, newVirtualId);
+            Actors.TryAdd(newVirtualId, actor);
+
+            client.CurrentRoom = this;
+            client.LoadingRoom = null;
+            client.RoomActor = actor;
+            client.CurrentRoom.PlayersIn++;
+
+            NavigatorController.GetInstance().Categories[client.CurrentRoom.CategoryId].PlayersInside++;
+        }
+
+        public void SendComposer(MessageComposer composer)
+        {
+            foreach (RoomActor actor in Actors.Values)
+            {
+                actor.Client.SendComposer(composer);
+            }
+        }
+
+        public void QueueComposer(MessageComposer composer)
+        {
+            foreach (RoomActor actor in Actors.Values)
+            {
+                actor.Client.QueueComposer(composer);
+            }
+        }
+
+        public void FlushComposer(MessageComposer composer)
+        {
+            foreach (RoomActor actor in Actors.Values)
+            {
+                actor.Client.Flush();
+            }
         }
 
         public string Owner
