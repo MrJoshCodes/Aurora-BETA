@@ -7,8 +7,8 @@ namespace AuroraEmu.Network.Game.Packets.Events.Users
     {
         public void Run(Client client, MessageEvent msgEvent)
         {
-            client.QueueComposer(new CreditBalanceMessageComposer(client));
-            client.QueueComposer(new HabboActivityPointNotificationMessageComposer(client));
+            client.QueueComposer(new CreditBalanceMessageComposer(client.Player.Coins));
+            client.QueueComposer(new HabboActivityPointNotificationMessageComposer(client.Player.Pixels, 0));
             client.Flush();
         }
     }

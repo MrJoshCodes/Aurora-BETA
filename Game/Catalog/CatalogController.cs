@@ -1,6 +1,7 @@
 ﻿using AuroraEmu.Database;
 using System.Collections.Generic;
 using System.Data;
+using System;
 
 namespace AuroraEmu.Game.Catalog
 {
@@ -56,6 +57,17 @@ namespace AuroraEmu.Game.Catalog
             Engine.Logger.Info($"Loaded {pages.Count} catalogue pages.");
         }
 
+        public string GenerateExtraData(CatalogProduct product, string extraData)
+        {
+            switch (product.Template.SpriteType)
+            {
+                case "poster":
+                    return product.Data;
+                default:
+                    return "";
+            }
+        }
+
         public List<CatalogDealItem> GetDeal(int dealId)
         {
             if (deals.TryGetValue(dealId, out List<CatalogDealItem> dealItems))
@@ -108,6 +120,14 @@ namespace AuroraEmu.Game.Catalog
         {
             if (pages.TryGetValue(id, out CatalogPage page))
                 return page;
+
+            return null;
+        }
+
+        public CatalogProduct GetProduct(int id)
+        {
+            if (products.TryGetValue(id, out CatalogProduct product))
+                return product;
 
             return null;
         }

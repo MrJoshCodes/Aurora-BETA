@@ -4,6 +4,7 @@ using AuroraEmu.Network.Game.Packets;
 using DotNetty.Transport.Channels;
 using System.Collections.Generic;
 using AuroraEmu.Game.Rooms;
+using AuroraEmu.Game.Items;
 
 namespace AuroraEmu.Game.Clients
 {
@@ -18,6 +19,8 @@ namespace AuroraEmu.Game.Clients
         public Room LoadingRoom { get; set; }
         public Room CurrentRoom { get; set; }
         public RoomActor RoomActor { get; set; }
+
+        public Dictionary<int, Item> Items { get; set; }
 
         public Client(IChannel channel)
         {

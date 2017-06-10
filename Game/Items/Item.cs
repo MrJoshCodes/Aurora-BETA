@@ -18,6 +18,14 @@ namespace AuroraEmu.Game.Items
         public string Data { get; set; }
         public string Wallposition { get; set; }
 
+        public Item(int id, int ownerId, int definitionId, string data)
+        {
+            Id = id;
+            OwnerId = ownerId;
+            DefinitionId = definitionId;
+            Data = data;
+        }
+
         public Item(DataRow row)
         {
             Id = (int)row["id"];

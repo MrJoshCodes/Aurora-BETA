@@ -206,7 +206,11 @@
     <Compile Include="Network\Game\GameNetworkListener.cs" />
     <Compile Include="Network\Game\Packets\Composers\Catalogue\CatalogIndexMessageComposer.cs" />
     <Compile Include="Network\Game\Packets\Composers\Catalogue\CatalogPageMessageComposer.cs" />
+    <Compile Include="Network\Game\Packets\Composers\Catalogue\NotEnoughBalanceMessageComposer.cs" />
+    <Compile Include="Network\Game\Packets\Composers\Catalogue\PurchaseOKMessageComposer.cs" />
     <Compile Include="Network\Game\Packets\Composers\Handshake\SessionParamsMessageComposer.cs" />
+    <Compile Include="Network\Game\Packets\Composers\Inventory\FurniListComposer.cs" />
+    <Compile Include="Network\Game\Packets\Composers\Inventory\FurniListUpdateComposer.cs" />
     <Compile Include="Network\Game\Packets\Composers\Messenger\HabboSearchResultMessageComposer.cs" />
     <Compile Include="Network\Game\Packets\Composers\Messenger\MessengerInitMessageComposer.cs" />
     <Compile Include="Network\Game\Packets\Composers\Messenger\NewConsoleMessageComposer.cs" />
@@ -236,8 +240,10 @@
     <Compile Include="Network\Game\Packets\Composers\Users\UserObjectComposer.cs" />
     <Compile Include="Network\Game\Packets\Events\Catalogue\GetCatalogIndexMessageEvent.cs" />
     <Compile Include="Network\Game\Packets\Events\Catalogue\GetCatalogPageMessageEvent.cs" />
+    <Compile Include="Network\Game\Packets\Events\Catalogue\PurchaseFromCatalogEvent.cs" />
     <Compile Include="Network\Game\Packets\Events\Handshake\InitCryptoMessageEvent.cs" />
     <Compile Include="Network\Game\Packets\Events\Handshake\SSOTicketMessageEvent.cs" />
+    <Compile Include="Network\Game\Packets\Events\Inventory\RequestFurniInventoryEvent.cs" />
     <Compile Include="Network\Game\Packets\Events\Messenger\HabboSearchMessageEvent.cs" />
     <Compile Include="Network\Game\Packets\Events\Messenger\MessengerInitMessageEvent.cs" />
     <Compile Include="Network\Game\Packets\Events\Messenger\RequestBuddyMessageEvent.cs" />

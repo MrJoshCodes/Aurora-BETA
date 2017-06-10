@@ -1,13 +1,11 @@
-﻿using AuroraEmu.Game.Clients;
-
-namespace AuroraEmu.Network.Game.Packets.Composers.Users
+﻿namespace AuroraEmu.Network.Game.Packets.Composers.Users
 {
     public class HabboActivityPointNotificationMessageComposer : MessageComposer
     {
-        public HabboActivityPointNotificationMessageComposer(Client client) : base(438)
+        public HabboActivityPointNotificationMessageComposer(int pixels, int notification) : base(438)
         {
-            AppendVL64(client.Player.Pixels);
-            AppendVL64(0);
+            AppendVL64(pixels);
+            AppendVL64(notification);
         }
     }
 }

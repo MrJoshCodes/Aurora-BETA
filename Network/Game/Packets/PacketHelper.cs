@@ -1,6 +1,7 @@
 ﻿using AuroraEmu.Game.Clients;
 using AuroraEmu.Network.Game.Packets.Events.Catalogue;
 using AuroraEmu.Network.Game.Packets.Events.Handshake;
+using AuroraEmu.Network.Game.Packets.Events.Inventory;
 using AuroraEmu.Network.Game.Packets.Events.Messenger;
 using AuroraEmu.Network.Game.Packets.Events.Navigator;
 using AuroraEmu.Network.Game.Packets.Events.Rooms;
@@ -47,6 +48,8 @@ namespace AuroraEmu.Network.Game.Packets
                 { 126, new GetRoomAdMessageEvent() },
                 { 382, new GetPopularRoomTagsMessageEvent() },
                 { 52, new ChatMessageEvent() },
+                {404, new RequestFurniInventoryEvent() },
+                {100, new PurchaseFromCatalogEvent() },
             };
         }
 
