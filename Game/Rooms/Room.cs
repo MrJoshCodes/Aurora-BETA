@@ -1,4 +1,5 @@
 ﻿using AuroraEmu.Game.Clients;
+using AuroraEmu.Game.Items;
 using AuroraEmu.Game.Navigator;
 using AuroraEmu.Game.Players;
 using AuroraEmu.Network.Game.Packets;
@@ -11,6 +12,7 @@ namespace AuroraEmu.Game.Rooms
     public class Room
     {
         private int virtualId = 0;
+        private ConcurrentDictionary<int, Item> _items;
 
         public int Id { get; set; }
         public int OwnerId { get; set; }
@@ -30,6 +32,17 @@ namespace AuroraEmu.Game.Rooms
         public double Landscape { get; set; }
 
         public RoomMap Map { get; private set; }
+
+        public ConcurrentDictionary<int, Item> Items
+        {
+            get
+            {
+                if (_items == null)
+                    _items = ItemController.GetInstance().GetItemsInRoom(Id);
+
+                return _items;
+            }
+        }
 
         public ConcurrentDictionary<int, RoomActor> Actors { get; private set; }
 
@@ -114,6 +127,32 @@ namespace AuroraEmu.Game.Rooms
         public int GetStateNumber()
         {
             return (int)State;
+        }
+
+        public ConcurrentBag<Item> GetFloorItems()
+        {
+            ConcurrentBag<Item> items = new ConcurrentBag<Item>();
+
+            foreach (Item item in Items.Values)
+            {
+                if (item.Definition.SpriteType.ToLower().Equals("s"))
+                    items.Add(item);
+            }
+
+            return items;
+        }
+
+        public ConcurrentBag<Item> GetWallItems()
+        {
+            ConcurrentBag<Item> items = new ConcurrentBag<Item>();
+
+            foreach (Item item in Items.Values)
+            {
+                if (item.Definition.SpriteType.ToLower().Equals("i"))
+                    items.Add(item);
+            }
+
+            return items;
         }
     }
 }

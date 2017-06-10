@@ -221,11 +221,16 @@
     <Compile Include="Network\Game\Packets\Composers\Rooms\GetGuestRoomResultComposer.cs" />
     <Compile Include="Network\Game\Packets\Composers\Rooms\HabboGroupBadgesMessageComposer.cs" />
     <Compile Include="Network\Game\Packets\Composers\Rooms\HeightMapMessageComposer.cs" />
+    <Compile Include="Network\Game\Packets\Composers\Rooms\ItemsMessageComposer.cs" />
+    <Compile Include="Network\Game\Packets\Composers\Rooms\ObjectsMessageComposer.cs" />
     <Compile Include="Network\Game\Packets\Composers\Rooms\OpenConnectionMessageComposer.cs" />
     <Compile Include="Network\Game\Packets\Composers\Rooms\RoomAdMessageComposer.cs" />
     <Compile Include="Network\Game\Packets\Composers\Rooms\RoomEntryInfoMessageComposer.cs" />
     <Compile Include="Network\Game\Packets\Composers\Rooms\RoomReadyMessageComposer.cs" />
     <Compile Include="Network\Game\Packets\Composers\Rooms\UsersMessageComposer.cs" />
+    <Compile Include="Network\Game\Packets\Composers\Rooms\YouAreControllerMessageComposer.cs" />
+    <Compile Include="Network\Game\Packets\Composers\Rooms\YouAreNotControllerMessageComposer.cs" />
+    <Compile Include="Network\Game\Packets\Composers\Rooms\YouAreOwnerMessageComposer.cs" />
     <Compile Include="Network\Game\Packets\Composers\Users\CreditBalanceMessageComposer.cs" />
     <Compile Include="Network\Game\Packets\Composers\Users\HabboActivityPointNotificationMessageComposer.cs" />
     <Compile Include="Network\Game\Packets\Composers\Users\UserObjectComposer.cs" />
