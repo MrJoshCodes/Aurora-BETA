@@ -1,4 +1,5 @@
 ﻿using AuroraEmu.Database;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Data;
 
@@ -50,9 +51,9 @@ namespace AuroraEmu.Game.Items
             return null;
         }
 
-        public Dictionary<int, Item> GetItemsInRoom(int roomId)
+        public ConcurrentDictionary<int, Item> GetItemsInRoom(int roomId)
         {
-            Dictionary<int, Item> items = new Dictionary<int, Item>();
+            ConcurrentDictionary<int, Item> items = new ConcurrentDictionary<int, Item>();
 
             DataTable result;
 
@@ -66,7 +67,7 @@ namespace AuroraEmu.Game.Items
 
             foreach (DataRow row in result.Rows)
             {
-                items.Add((int)row["id"], new Item(row));
+                items.TryAdd((int)row["id"], new Item(row));
             }
 
             return items;
