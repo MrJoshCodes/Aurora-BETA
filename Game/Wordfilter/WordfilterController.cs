@@ -30,6 +30,7 @@ namespace AuroraEmu.Game.Wordfilter
                     filteredWords.Add(new Wordfilter(row));
                 }
             }
+            Engine.Logger.Info($"Loaded {filteredWords.Count} filtered words.");
         }
 
         public string CheckString(string message)

@@ -6,6 +6,7 @@ using AuroraEmu.Game.Messenger;
 using AuroraEmu.Game.Navigator;
 using AuroraEmu.Game.Players;
 using AuroraEmu.Game.Rooms;
+using AuroraEmu.Game.Wordfilter;
 using AuroraEmu.Network.Game;
 using AuroraEmu.Network.Game.Packets;
 using log4net;
@@ -30,6 +31,7 @@ namespace AuroraEmu
             NavigatorController.GetInstance();
             MessengerController.GetInstance();
             RoomController.GetInstance().LoadRoomMaps();
+            WordfilterController.GetInstance();
 
             GameNetworkListener.GetInstance();
 
