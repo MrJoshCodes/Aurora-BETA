@@ -34,7 +34,15 @@ namespace AuroraEmu.Network.Game.Packets
                 { 380, new GetOfficialRoomsMessageEvent() },
                 { 206, new InitCryptoMessageEvent() },
                 { 415, new SSOTicketMessageEvent() },
-                //{ 12, new MessengerInitMessageEvent() },
+
+                { 12, new MessengerInitMessageEvent() },
+                { 33, new SendMsgMessageEvent() },
+                { 39, new RequestBuddyMessageEvent() },
+                { 15, new FriendListUpdateMessageEvent() },
+                { 37, new AcceptBuddyMessageEvent() },
+                { 38, new DeclineBuddyMessageEvent() },
+                { 40, new RemoveBuddyMessageEvent() },
+
                 { 41, new HabboSearchMessageEvent() },
                 { 434, new MyRoomsSearchMessageEvent() },
                 { 151, new GetUserFlatCatsMessageEvent() },

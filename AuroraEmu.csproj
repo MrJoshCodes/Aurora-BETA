@@ -9,7 +9,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>AuroraEmu</RootNamespace>
     <AssemblyName>AuroraEmu</AssemblyName>
-    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.6</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <TargetFrameworkProfile />
@@ -202,6 +202,8 @@
     <Compile Include="Game\Rooms\RoomController.cs" />
     <Compile Include="Game\Rooms\RoomMap.cs" />
     <Compile Include="Game\Rooms\RoomState.cs" />
+    <Compile Include="Game\Wordfilter\Wordfilter.cs" />
+    <Compile Include="Game\Wordfilter\WordfilterController.cs" />
     <Compile Include="Network\Game\GameNetworkHandler.cs" />
     <Compile Include="Network\Game\GameNetworkListener.cs" />
     <Compile Include="Network\Game\Packets\Composers\Catalogue\CatalogIndexMessageComposer.cs" />
@@ -211,8 +213,12 @@
     <Compile Include="Network\Game\Packets\Composers\Handshake\SessionParamsMessageComposer.cs" />
     <Compile Include="Network\Game\Packets\Composers\Inventory\FurniListComposer.cs" />
     <Compile Include="Network\Game\Packets\Composers\Inventory\FurniListUpdateComposer.cs" />
+    <Compile Include="Network\Game\Packets\Composers\Messenger\BuddyRequestsMessageComposer.cs" />
+    <Compile Include="Network\Game\Packets\Composers\Messenger\FriendListUpdateMessageComposer.cs" />
     <Compile Include="Network\Game\Packets\Composers\Messenger\HabboSearchResultMessageComposer.cs" />
+    <Compile Include="Network\Game\Packets\Composers\Messenger\MessengerErrorMessageComposer.cs" />
     <Compile Include="Network\Game\Packets\Composers\Messenger\MessengerInitMessageComposer.cs" />
+    <Compile Include="Network\Game\Packets\Composers\Messenger\NewBuddyRequestMessageComposer.cs" />
     <Compile Include="Network\Game\Packets\Composers\Messenger\NewConsoleMessageComposer.cs" />
     <Compile Include="Network\Game\Packets\Composers\Navigator\CanCreateRoomComposer.cs" />
     <Compile Include="Network\Game\Packets\Composers\Navigator\FlatCreatedComposer.cs" />
@@ -230,6 +236,7 @@
     <Compile Include="Network\Game\Packets\Composers\Rooms\OpenConnectionMessageComposer.cs" />
     <Compile Include="Network\Game\Packets\Composers\Rooms\RoomAdMessageComposer.cs" />
     <Compile Include="Network\Game\Packets\Composers\Rooms\RoomEntryInfoMessageComposer.cs" />
+    <Compile Include="Network\Game\Packets\Composers\Rooms\RoomForwardMessageComposer.cs" />
     <Compile Include="Network\Game\Packets\Composers\Rooms\RoomReadyMessageComposer.cs" />
     <Compile Include="Network\Game\Packets\Composers\Rooms\UsersMessageComposer.cs" />
     <Compile Include="Network\Game\Packets\Composers\Rooms\YouAreControllerMessageComposer.cs" />
@@ -244,8 +251,12 @@
     <Compile Include="Network\Game\Packets\Events\Handshake\InitCryptoMessageEvent.cs" />
     <Compile Include="Network\Game\Packets\Events\Handshake\SSOTicketMessageEvent.cs" />
     <Compile Include="Network\Game\Packets\Events\Inventory\RequestFurniInventoryEvent.cs" />
+    <Compile Include="Network\Game\Packets\Events\Messenger\AcceptBuddyMessageEvent.cs" />
+    <Compile Include="Network\Game\Packets\Events\Messenger\DeclineBuddyMessageEvent.cs" />
+    <Compile Include="Network\Game\Packets\Events\Messenger\FriendListUpdateMessageEvent.cs" />
     <Compile Include="Network\Game\Packets\Events\Messenger\HabboSearchMessageEvent.cs" />
     <Compile Include="Network\Game\Packets\Events\Messenger\MessengerInitMessageEvent.cs" />
+    <Compile Include="Network\Game\Packets\Events\Messenger\RemoveBuddyMessageEvent.cs" />
     <Compile Include="Network\Game\Packets\Events\Messenger\RequestBuddyMessageEvent.cs" />
     <Compile Include="Network\Game\Packets\Events\Messenger\SendMsgMessageEvent.cs" />
     <Compile Include="Network\Game\Packets\Events\Navigator\CanCreateRoomMessageEvent.cs" />

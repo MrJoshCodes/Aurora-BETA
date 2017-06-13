@@ -4,17 +4,16 @@ using System.Collections.Generic;
 
 namespace AuroraEmu.Network.Game.Packets.Composers.Messenger
 {
-    public class MessengerInitMessageComposer : MessageComposer
+    public class FriendListUpdateMessageComposer : MessageComposer
     {
-        public MessengerInitMessageComposer(Dictionary<int, MessengerFriends> friends) : base(12)
+        public FriendListUpdateMessageComposer(int updateCount, Dictionary<int, MessengerFriends> updatedFriends)
+            : base(13)
         {
-            AppendVL64(600);
-            AppendVL64(200);
-            AppendVL64(600);
+            AppendVL64(0);
+            AppendVL64(updateCount);
             AppendVL64(0);
 
-            AppendVL64(friends.Count);
-            foreach (MessengerFriends friend in friends.Values)
+            foreach (MessengerFriends friend in updatedFriends.Values)
             {
                 AppendVL64(friend.UserTwoId);
                 AppendString(friend.Username);
@@ -25,10 +24,18 @@ namespace AuroraEmu.Network.Game.Packets.Composers.Messenger
                 AppendVL64(0);
                 AppendString(friend.Motto);
                 AppendString("");
-            }
 
+                AppendVL64(false);
+            }
+        }
+
+        public FriendListUpdateMessageComposer(int friendId)
+            : base(13)
+        {
             AppendVL64(0);
-            AppendVL64(0);
+            AppendVL64(1);
+            AppendVL64(-1);
+            AppendVL64(friendId);
         }
     }
 }

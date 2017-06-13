@@ -12,6 +12,7 @@ namespace AuroraEmu.Network.Game.Packets.Events.Messenger
                 client.Friends = MessengerController.GetInstance().GetFriendsById(client.Player.Id);
 
             client.SendComposer(new MessengerInitMessageComposer(client.Friends));
+            client.SendComposer(new BuddyRequestsMessageComposer(MessengerController.GetInstance().GetRequestsByPlayerId(client.Player.Id)));
         }
     }
 }
