@@ -43,5 +43,14 @@ namespace AuroraEmu
                 }
             }
         }
+
+        public static bool EnumToBool(string Enum)
+        {
+            if (Enum == "1")
+            {
+                return true;
+            }
+            return false;
+        }
     }
 }

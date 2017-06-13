@@ -69,6 +69,31 @@ namespace AuroraEmu.Game.Clients
             return false;
         }
 
+        public Client GetClientByHabbo(int HabboId)
+        {
+            lock (this.clients)
+            {
+                Dictionary<IChannelId, Client>.Enumerator eClients = this.clients.GetEnumerator();
+
+                while (eClients.MoveNext())
+                {
+                    Client Client = eClients.Current.Value;
+
+                    if (Client.Player == null)
+                    {
+                        continue;
+                    }
+
+                    if (Client.Player.Id == HabboId)
+                    {
+                        return Client;
+                    }
+                }
+            }
+
+            return null;
+        }
+
         public static ClientManager GetInstance()
         {
             if (clientManagerInstance == null)

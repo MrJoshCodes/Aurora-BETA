@@ -16,6 +16,7 @@ namespace AuroraEmu.Game.Players
         public byte Rank { get; set; }
         public int HomeRoom { get; set; }
         public string SSO { get; set; }
+        public int BlockNewFriends { get; set; }
 
         public Player(DataRow Row)
         {
@@ -30,6 +31,7 @@ namespace AuroraEmu.Game.Players
             Rank = (byte)Row["rank"];
             HomeRoom = (int)Row["home_room"];
             SSO = (string)Row["sso_ticket"];
+            BlockNewFriends = (int)Row["block_friendrequests"];
         }
     }
 }

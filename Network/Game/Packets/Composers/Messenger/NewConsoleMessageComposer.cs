@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace AuroraEmu.Network.Game.Packets.Composers.Messenger
+﻿namespace AuroraEmu.Network.Game.Packets.Composers.Messenger
 {
     public class NewConsoleMessageComposer : MessageComposer
     {
