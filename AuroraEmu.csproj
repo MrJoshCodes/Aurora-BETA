@@ -254,6 +254,7 @@
     <Compile Include="Network\Game\Packets\Events\Navigator\GetPopularRoomTagsMessageEvent.cs" />
     <Compile Include="Network\Game\Packets\Events\Navigator\GetUserFlatCatsMessageEvent.cs" />
     <Compile Include="Network\Game\Packets\Events\Navigator\MyRoomsSearchMessageEvent.cs" />
+    <Compile Include="Network\Game\Packets\Events\Navigator\RoomTextSearchMessageEvent.cs" />
     <Compile Include="Network\Game\Packets\Events\Rooms\ChatMessageEvent.cs" />
     <Compile Include="Network\Game\Packets\Events\Rooms\GetFurnitureAliasesMessageEvent.cs" />
     <Compile Include="Network\Game\Packets\Events\Rooms\GetHabboGroupBadgesMessageEvent.cs" />
