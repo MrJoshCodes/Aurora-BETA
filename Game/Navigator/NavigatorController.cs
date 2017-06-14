@@ -2,6 +2,7 @@
 using AuroraEmu.Game.Rooms;
 using System.Collections.Generic;
 using System.Data;
+using System;
 
 namespace AuroraEmu.Game.Navigator
 {
@@ -81,6 +82,30 @@ namespace AuroraEmu.Game.Navigator
             }
 
             foreach(DataRow row in result.Rows)
+            {
+                Room room = new Room(row);
+                rooms.Add(room);
+                RoomController.GetInstance().Rooms.AddOrUpdate(room.Id, room, (old_key, old_value) => room);
+            }
+
+            return rooms;
+        }
+
+        public List<Room> SearchRooms(string search)
+        {
+            List<Room> rooms = new List<Room>();
+            DataTable result;
+
+            using (DatabaseConnection dbConnection = DatabaseManager.GetInstance().GetConnection())
+            {
+                dbConnection.SetQuery("SELECT * FROM rooms WHERE name LIKE @search OR owner_id IN (SELECT id FROM players WHERE username LIKE @search)");
+                dbConnection.AddParameter("@search", "%" + search + "%");
+                dbConnection.Open();
+
+                result = dbConnection.GetTable();
+            }
+
+            foreach (DataRow row in result.Rows)
             {
                 Room room = new Room(row);
                 rooms.Add(room);
