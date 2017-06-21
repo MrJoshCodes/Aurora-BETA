@@ -2,6 +2,7 @@
 using MySql.Data.MySqlClient;
 using System;
 using System.Data;
+using System.Collections.Generic;
 
 namespace AuroraEmu.Database
 {
@@ -44,7 +45,12 @@ namespace AuroraEmu.Database
         {
             command.Parameters.AddWithValue(parameter, value);
         }
-        
+
+        public void AddParameters(MySqlParameter[] parameters)
+        {
+            command.Parameters.AddRange(parameters);
+        }
+
         public void SetQuery(string query)
         {
             command.CommandText = query;

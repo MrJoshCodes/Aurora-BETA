@@ -115,6 +115,19 @@ namespace AuroraEmu.Game.Navigator
             return rooms;
         }
 
+        public List<RoomCategory> GetUserCategories(byte rank)
+        {
+            List<RoomCategory> categories = new List<RoomCategory>();
+
+            foreach (RoomCategory category in Categories.Values)
+            {
+                if (category.MinRank <= rank)
+                    categories.Add(category);
+            }
+
+            return categories;
+        }
+
         public static NavigatorController GetInstance()
         {
             if (instance == null)
