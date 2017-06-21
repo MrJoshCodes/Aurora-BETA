@@ -225,6 +225,7 @@
     <Compile Include="Network\Game\Packets\Composers\Navigator\GuestRoomSearchResultComposer.cs" />
     <Compile Include="Network\Game\Packets\Composers\Navigator\OfficialRoomsComposer.cs" />
     <Compile Include="Network\Game\Packets\Composers\Navigator\PopularRoomTagsResultComposer.cs" />
+    <Compile Include="Network\Game\Packets\Composers\Navigator\UserFlatCatsComposer.cs" />
     <Compile Include="Network\Game\Packets\Composers\Rooms\ChatMessageComposer.cs" />
     <Compile Include="Network\Game\Packets\Composers\Rooms\FloorHeightMapMessageComposer.cs" />
     <Compile Include="Network\Game\Packets\Composers\Rooms\FurnitureAliasesMessageComposer.cs" />
@@ -238,6 +239,7 @@
     <Compile Include="Network\Game\Packets\Composers\Rooms\RoomEntryInfoMessageComposer.cs" />
     <Compile Include="Network\Game\Packets\Composers\Rooms\RoomForwardMessageComposer.cs" />
     <Compile Include="Network\Game\Packets\Composers\Rooms\RoomReadyMessageComposer.cs" />
+    <Compile Include="Network\Game\Packets\Composers\Rooms\RoomSettingsDataComposer.cs" />
     <Compile Include="Network\Game\Packets\Composers\Rooms\UsersMessageComposer.cs" />
     <Compile Include="Network\Game\Packets\Composers\Rooms\YouAreControllerMessageComposer.cs" />
     <Compile Include="Network\Game\Packets\Composers\Rooms\YouAreNotControllerMessageComposer.cs" />
@@ -272,6 +274,7 @@
     <Compile Include="Network\Game\Packets\Events\Rooms\GetHeightMapMessageEvent.cs" />
     <Compile Include="Network\Game\Packets\Events\Rooms\GetRoomAdMessageEvent.cs" />
     <Compile Include="Network\Game\Packets\Events\Rooms\GetRoomEntryDataMessageEvent.cs" />
+    <Compile Include="Network\Game\Packets\Events\Rooms\GetRoomSettingsMessageEvent.cs" />
     <Compile Include="Network\Game\Packets\Events\Rooms\OpenFlatConnectionMessageEvent.cs" />
     <Compile Include="Network\Game\Packets\Events\Users\GetCreditsMessageEvent.cs" />
     <Compile Include="Network\Game\Packets\Events\Users\InfoRetrieveMessageEvent.cs" />

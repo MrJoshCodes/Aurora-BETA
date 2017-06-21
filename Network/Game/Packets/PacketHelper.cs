@@ -59,6 +59,7 @@ namespace AuroraEmu.Network.Game.Packets
                 {404, new RequestFurniInventoryEvent() },
                 {100, new PurchaseFromCatalogEvent() },
                 {437, new RoomTextSearchMessageEvent() },
+                {400, new GetRoomSettingsMessageEvent() },
             };
         }
 
