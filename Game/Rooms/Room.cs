@@ -1,10 +1,13 @@
-﻿using AuroraEmu.Game.Clients;
+﻿using AuroraEmu.Database;
+using AuroraEmu.Game.Clients;
 using AuroraEmu.Game.Items;
 using AuroraEmu.Game.Navigator;
 using AuroraEmu.Game.Players;
 using AuroraEmu.Network.Game.Packets;
+using MySql.Data.MySqlClient;
 using System;
 using System.Collections.Concurrent;
+using System.Collections.Generic;
 using System.Data;
 
 namespace AuroraEmu.Game.Rooms
@@ -153,6 +156,38 @@ namespace AuroraEmu.Game.Rooms
             }
 
             return items;
+        }
+
+        public void Save(string[] columns, object[] values)
+        {
+            if (columns.Length < 1 || columns.Length != values.Length)
+            {
+                return;
+            }
+
+            string query = "UPDATE rooms SET ";
+            MySqlParameter[] parameters = new MySqlParameter[columns.Length + 1];
+
+            for (int i = 0; i < columns.Length && i < values.Length; i++)
+            {
+                if (i > 0)
+                    query += ", ";
+
+                query += $"{columns[i]} = @{columns[i]}";
+                parameters[i] = new MySqlParameter($"@{columns[i]}", values[i]);
+            }
+
+            query += " WHERE id = @roomId";
+            parameters[parameters.Length - 1] = new MySqlParameter("@roomId", Id);
+
+            using (DatabaseConnection dbConnection = DatabaseManager.GetInstance().GetConnection())
+            {
+                dbConnection.SetQuery(query);
+                dbConnection.AddParameters(parameters);
+                dbConnection.Open();
+
+                dbConnection.Execute();
+            }
         }
     }
 }

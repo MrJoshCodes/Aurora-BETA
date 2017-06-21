@@ -60,6 +60,7 @@ namespace AuroraEmu.Network.Game.Packets
                 {100, new PurchaseFromCatalogEvent() },
                 {437, new RoomTextSearchMessageEvent() },
                 {400, new GetRoomSettingsMessageEvent() },
+                {386, new UpdateRoomThumbnailMessageEvent() },
             };
         }
 
