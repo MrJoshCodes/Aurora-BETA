@@ -37,7 +37,7 @@ namespace AuroraEmu.Network.Game
         public override void ChannelRead(IChannelHandlerContext ctx, object msg)
         {
             Client client = ClientManager.GetInstance().GetClient(ctx.Channel);
-            var message = msg as IByteBuffer;
+            IByteBuffer message = msg as IByteBuffer;
 
             if (message.ReadByte() == 60)
             {
