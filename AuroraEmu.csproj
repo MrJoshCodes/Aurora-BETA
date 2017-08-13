@@ -161,6 +161,10 @@
     <Reference Include="System.Security.Cryptography.X509Certificates, Version=4.1.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>..\packages\System.Security.Cryptography.X509Certificates.4.3.0\lib\net461\System.Security.Cryptography.X509Certificates.dll</HintPath>
     </Reference>
+    <Reference Include="System.Threading.Tasks.Dataflow, Version=4.5.24.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>packages\Microsoft.Tpl.Dataflow.4.5.24\lib\portable-net45+win8+wpa81\System.Threading.Tasks.Dataflow.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System.ValueTuple, Version=4.0.1.1, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
       <HintPath>..\packages\System.ValueTuple.4.3.1\lib\netstandard1.0\System.ValueTuple.dll</HintPath>
     </Reference>
@@ -180,6 +184,7 @@
     <Compile Include="Database\DatabaseConnection.cs" />
     <Compile Include="Database\DatabaseManager.cs" />
     <Compile Include="Database\Pool\ObjectPool.cs" />
+    <Compile Include="Game\AuroraTask.cs" />
     <Compile Include="Game\Catalog\CatalogDealItem.cs" />
     <Compile Include="Game\Catalog\CatalogPage.cs" />
     <Compile Include="Game\Catalog\CatalogPageData.cs" />
@@ -196,12 +201,21 @@
     <Compile Include="Game\Navigator\NavigatorController.cs" />
     <Compile Include="Game\Players\Player.cs" />
     <Compile Include="Engine.cs" />
+    <Compile Include="Game\Rooms\ActorType.cs" />
+    <Compile Include="Game\Rooms\Components\ProcessComponent.cs" />
+    <Compile Include="Game\Rooms\Pathfinder\BinaryHeap.cs" />
+    <Compile Include="Game\Rooms\Pathfinder\Node.cs" />
+    <Compile Include="Game\Rooms\Pathfinder\Pathfinder.cs" />
+    <Compile Include="Game\Rooms\Pathfinder\Point2D.cs" />
     <Compile Include="Game\Rooms\Room.cs" />
     <Compile Include="Game\Rooms\RoomActor.cs" />
     <Compile Include="Game\Rooms\RoomCategory.cs" />
     <Compile Include="Game\Rooms\RoomController.cs" />
     <Compile Include="Game\Rooms\RoomMap.cs" />
     <Compile Include="Game\Rooms\RoomState.cs" />
+    <Compile Include="Game\Rooms\User\UserActor.cs" />
+    <Compile Include="Game\TaskController.cs" />
+    <Compile Include="Game\Tasks\DiceTask.cs" />
     <Compile Include="Game\Wordfilter\Wordfilter.cs" />
     <Compile Include="Game\Wordfilter\WordfilterController.cs" />
     <Compile Include="Network\Game\GameNetworkHandler.cs" />
@@ -248,7 +262,9 @@
     <Compile Include="Network\Game\Packets\Composers\Rooms\YouAreOwnerMessageComposer.cs" />
     <Compile Include="Network\Game\Packets\Composers\Users\CreditBalanceMessageComposer.cs" />
     <Compile Include="Network\Game\Packets\Composers\Users\HabboActivityPointNotificationMessageComposer.cs" />
+    <Compile Include="Network\Game\Packets\Composers\Users\UserChatlogMessageComposer.cs" />
     <Compile Include="Network\Game\Packets\Composers\Users\UserObjectComposer.cs" />
+    <Compile Include="Network\Game\Packets\Composers\Users\UserUpdateMessageComposer.cs" />
     <Compile Include="Network\Game\Packets\Events\Catalogue\GetCatalogIndexMessageEvent.cs" />
     <Compile Include="Network\Game\Packets\Events\Catalogue\GetCatalogPageMessageEvent.cs" />
     <Compile Include="Network\Game\Packets\Events\Catalogue\PurchaseFromCatalogEvent.cs" />
@@ -281,6 +297,7 @@
     <Compile Include="Network\Game\Packets\Events\Rooms\UpdateRoomThumbnailMessageEvent.cs" />
     <Compile Include="Network\Game\Packets\Events\Users\GetCreditsMessageEvent.cs" />
     <Compile Include="Network\Game\Packets\Events\Users\InfoRetrieveMessageEvent.cs" />
+    <Compile Include="Network\Game\Packets\Events\Users\MoveAvatarMessageEvent.cs" />
     <Compile Include="Network\Game\Packets\IPacketEvent.cs" />
     <Compile Include="Network\Game\Packets\MessageComposer.cs" />
     <Compile Include="Network\Game\Packets\MessageEvent.cs" />

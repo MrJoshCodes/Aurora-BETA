@@ -3,6 +3,8 @@ using AuroraEmu.Game.Clients;
 using AuroraEmu.Game.Items;
 using AuroraEmu.Game.Navigator;
 using AuroraEmu.Game.Players;
+using AuroraEmu.Game.Rooms.Components;
+using AuroraEmu.Game.Rooms.User;
 using AuroraEmu.Network.Game.Packets;
 using MySql.Data.MySqlClient;
 using System;
@@ -36,6 +38,8 @@ namespace AuroraEmu.Game.Rooms
 
         public RoomMap Map { get; private set; }
 
+        public bool DiagEnabled { get; set; } = true;
+
         public ConcurrentDictionary<int, Item> Items
         {
             get
@@ -48,6 +52,7 @@ namespace AuroraEmu.Game.Rooms
         }
 
         public ConcurrentDictionary<int, RoomActor> Actors { get; private set; }
+        private ProcessComponent ProcessComponent { get; set; }
 
         public Room()
         {
@@ -78,13 +83,16 @@ namespace AuroraEmu.Game.Rooms
             Landscape = (double)row["landscape"];
             Map = RoomController.GetInstance().RoomMaps[Model];
             Actors = new ConcurrentDictionary<int, RoomActor>();
+
+            ProcessComponent = new ProcessComponent(this);
+            ProcessComponent.SetupRoomLoop();
         }
 
-        public void AddActor(Client client)
+        public void AddUserActor(Client client)
         {
             int newVirtualId = virtualId++;
-
-            RoomActor actor = new RoomActor(client, newVirtualId);
+            
+            UserActor actor = new UserActor(client, newVirtualId);
             Actors.TryAdd(newVirtualId, actor);
 
             client.CurrentRoom = this;
@@ -188,6 +196,11 @@ namespace AuroraEmu.Game.Rooms
 
                 dbConnection.Execute();
             }
+        }
+
+        public void Loop()
+        {
+
         }
     }
 }

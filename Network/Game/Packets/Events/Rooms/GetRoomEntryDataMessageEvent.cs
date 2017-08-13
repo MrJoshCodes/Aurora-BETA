@@ -8,7 +8,7 @@ namespace AuroraEmu.Network.Game.Packets.Events.Rooms
         public void Run(Client client, MessageEvent msgEvent)
         {
             client.QueueComposer(new UsersMessageComposer(client.LoadingRoom.Actors.Values));
-            client.LoadingRoom.AddActor(client);
+            client.LoadingRoom.AddUserActor(client);
             client.CurrentRoom.SendComposer(new UsersMessageComposer(client.RoomActor));
 
             client.QueueComposer(new RoomEntryInfoMessageComposer(true, client.CurrentRoom.Id, true));

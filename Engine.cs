@@ -1,11 +1,13 @@
 ﻿using AuroraEmu.Config;
 using AuroraEmu.Database;
+using AuroraEmu.Game;
 using AuroraEmu.Game.Catalog;
 using AuroraEmu.Game.Items;
 using AuroraEmu.Game.Messenger;
 using AuroraEmu.Game.Navigator;
 using AuroraEmu.Game.Players;
 using AuroraEmu.Game.Rooms;
+using AuroraEmu.Game.Tasks;
 using AuroraEmu.Game.Wordfilter;
 using AuroraEmu.Network.Game;
 using AuroraEmu.Network.Game.Packets;
@@ -34,7 +36,6 @@ namespace AuroraEmu
             WordfilterController.GetInstance();
 
             GameNetworkListener.GetInstance();
-
             while (true) 
             {
                 switch (System.Console.ReadLine())

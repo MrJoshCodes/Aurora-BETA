@@ -56,11 +56,12 @@ namespace AuroraEmu.Network.Game.Packets
                 { 126, new GetRoomAdMessageEvent() },
                 { 382, new GetPopularRoomTagsMessageEvent() },
                 { 52, new ChatMessageEvent() },
-                {404, new RequestFurniInventoryEvent() },
-                {100, new PurchaseFromCatalogEvent() },
-                {437, new RoomTextSearchMessageEvent() },
-                {400, new GetRoomSettingsMessageEvent() },
-                {386, new UpdateRoomThumbnailMessageEvent() },
+                { 404, new RequestFurniInventoryEvent() },
+                { 100, new PurchaseFromCatalogEvent() },
+                { 437, new RoomTextSearchMessageEvent() },
+                { 400, new GetRoomSettingsMessageEvent() },
+                { 386, new UpdateRoomThumbnailMessageEvent() },
+                { 75, new MoveAvatarMessageEvent() }
             };
         }
 
