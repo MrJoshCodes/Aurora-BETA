@@ -1,5 +1,4 @@
 ﻿using AuroraEmu.Game.Clients;
-using AuroraEmu.Game.Messenger;
 using AuroraEmu.Network.Game.Packets.Composers.Messenger;
 
 namespace AuroraEmu.Network.Game.Packets.Events.Messenger
@@ -13,11 +12,12 @@ namespace AuroraEmu.Network.Game.Packets.Events.Messenger
             for (int i = 0; i < requests; i++)
             {
                 int request = msg.ReadVL64();
-
-                MessengerController.GetInstance().DestroyFriendship(request, client.Player.Id);
+                
+                Engine.MainDI.MessengerDao.DestroyFriendship(request, client.Player.Id);
+                client.Player.MessengerComponent.RemoveFriend(request);
                 client.SendComposer(new FriendListUpdateMessageComposer(request));
 
-                Client targetClient = ClientManager.GetInstance().GetClientByHabbo(request);
+                Client targetClient = Engine.MainDI.ClientController.GetClientByHabbo(request);
                 if (targetClient != null)
                 {
                     targetClient.SendComposer(new FriendListUpdateMessageComposer(client.Player.Id));

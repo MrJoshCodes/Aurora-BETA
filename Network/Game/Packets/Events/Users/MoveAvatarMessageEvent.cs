@@ -11,9 +11,9 @@ namespace AuroraEmu.Network.Game.Packets.Events.Users
             int x = msg.ReadVL64();
             int y = msg.ReadVL64();
 
-            RoomActor actor = client.RoomActor;
-            actor.TargetX = x;
-            actor.TargetY = y;
+            RoomActor actor = client.UserActor;
+            actor.TargetPoint.X = x;
+            actor.TargetPoint.Y = y;
             actor.CalcPath = true;
         }
     }

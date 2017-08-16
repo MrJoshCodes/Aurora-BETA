@@ -9,8 +9,8 @@ namespace AuroraEmu.Game.Wordfilter
 
         public Wordfilter(DataRow row)
         {
-            Word = (string)row["not_allowed_message"];
-            ReplacementWord = (string)row["replace_message"];
+            Word = (string) row["not_allowed_message"];
+            ReplacementWord = (string) row["replace_message"];
         }
     }
 }

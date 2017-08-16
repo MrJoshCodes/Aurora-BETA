@@ -9,7 +9,7 @@ namespace AuroraEmu.Network.Game.Packets.Events.Rooms
         {
             client.QueueComposer(new UsersMessageComposer(client.LoadingRoom.Actors.Values));
             client.LoadingRoom.AddUserActor(client);
-            client.CurrentRoom.SendComposer(new UsersMessageComposer(client.RoomActor));
+            client.CurrentRoom.SendComposer(new UsersMessageComposer(client.UserActor));
 
             client.QueueComposer(new RoomEntryInfoMessageComposer(true, client.CurrentRoom.Id, true));
             client.QueueComposer(new GetGuestRoomResultComposer(client.CurrentRoom));

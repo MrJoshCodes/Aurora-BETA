@@ -4,14 +4,14 @@ namespace AuroraEmu.Game.Rooms.User
 {
     public class UserActor : RoomActor
     {
-        public Client client { get; private set; }
-        public int virtualId { get; private set; }
+        public Client UserClient;
+        public int UserVirtualId;
 
         public UserActor(Client client, int virtualId)
             : base(client, virtualId)
         {
-            this.client = client;
-            this.virtualId = virtualId;
+            UserClient = client;
+            UserVirtualId = virtualId;
         }
     }
 }

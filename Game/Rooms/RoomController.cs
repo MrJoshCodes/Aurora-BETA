@@ -1,40 +1,31 @@
-﻿using AuroraEmu.Database;
+﻿using AuroraEmu.DI.Game.Rooms;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Data;
 
 namespace AuroraEmu.Game.Rooms
 {
-    public class RoomController
+    public class RoomController : IRoomController
     {
-        private static RoomController instance;
-
-        public ConcurrentDictionary<int, Room> Rooms { get; private set; }
-        public Dictionary<string, RoomMap> RoomMaps { get; private set; }
+        public ConcurrentDictionary<int, Room> Rooms { get; set; }
+        public Dictionary<string, RoomMap> RoomMaps { get; set; }
 
         public RoomController()
         {
             Rooms = new ConcurrentDictionary<int, Room>();
             RoomMaps = new Dictionary<string, RoomMap>();
+            LoadRoomMaps();
         }
 
         public void LoadRoomMaps()
         {
             RoomMaps.Clear();
 
-            DataTable table;
+            DataTable table = Engine.MainDI.RoomDao.LoadRoomMaps();
 
-            using (DatabaseConnection dbConnection = DatabaseManager.GetInstance().GetConnection())
+            foreach (DataRow row in table.Rows)
             {
-                dbConnection.SetQuery("SELECT * FROM room_maps");
-                dbConnection.Open();
-
-                table = dbConnection.GetTable();
-            }
-
-            foreach(DataRow row in table.Rows)
-            {
-                RoomMaps.Add((string)row["name"], new RoomMap(row));
+                RoomMaps.Add((string) row["name"], new RoomMap(row));
             }
 
             Engine.Logger.Info($"Loaded {RoomMaps.Count} room maps.");
@@ -45,16 +36,7 @@ namespace AuroraEmu.Game.Rooms
             if (Rooms.TryGetValue(id, out Room room))
                 return room;
 
-            DataRow row;
-
-            using (DatabaseConnection dbConnection = DatabaseManager.GetInstance().GetConnection())
-            {
-                dbConnection.SetQuery("SELECT * FROM rooms WHERE id = @id LIMIT 1");
-                dbConnection.AddParameter("@id", id);
-                dbConnection.Open();
-
-                row = dbConnection.GetRow();
-            }
+            DataRow row = Engine.MainDI.RoomDao.GetRoom(id);
 
             if (row != null)
             {
@@ -69,57 +51,29 @@ namespace AuroraEmu.Game.Rooms
 
         public int GetUserRoomCount(int userId)
         {
-            int roomCount = 0;
-
-            using (DatabaseConnection dbConnection = DatabaseManager.GetInstance().GetConnection())
-            {
-                dbConnection.SetQuery("SELECT COUNT(*) FROM rooms WHERE owner_id = @ownerId");
-                dbConnection.AddParameter("@ownerId", userId);
-                dbConnection.Open();
-
-                roomCount = int.Parse(dbConnection.GetString());
-            }
-
-            return roomCount;
+            return Engine.MainDI.RoomDao.GetUserRoomCount(userId);
         }
 
         public bool TryCreateRoom(string name, string model, int ownerId, out Room room)
         {
-            Room tmp_room = new Room()
+            Room tmpRoom = new Room()
             {
                 Name = name,
                 Model = model,
                 OwnerId = ownerId
             };
 
-            using (DatabaseConnection dbConnection = DatabaseManager.GetInstance().GetConnection())
-            {
-                dbConnection.SetQuery("INSERT INTO rooms (owner_id,name,model) VALUES (@ownerId, @name, @model)");
-                dbConnection.AddParameter("@ownerId", ownerId);
-                dbConnection.AddParameter("@name", name);
-                dbConnection.AddParameter("@model", model);
-                dbConnection.Open();
+            tmpRoom.Id = Engine.MainDI.RoomDao.GetRoomId(name, model, ownerId);
 
-                tmp_room.Id = dbConnection.Insert();
-            }
-
-            if (tmp_room.Id > 0)
+            if (tmpRoom.Id > 0)
             {
-                Rooms.TryAdd(tmp_room.Id, tmp_room);
-                room = tmp_room;
+                Rooms.TryAdd(tmpRoom.Id, tmpRoom);
+                room = tmpRoom;
                 return true;
             }
 
             room = null;
             return false;
-        }
-
-        public static RoomController GetInstance()
-        {
-            if (instance == null)
-                instance = new RoomController();
-
-            return instance;
         }
     }
 }

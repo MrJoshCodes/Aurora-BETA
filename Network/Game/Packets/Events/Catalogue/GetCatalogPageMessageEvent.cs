@@ -10,10 +10,10 @@ namespace AuroraEmu.Network.Game.Packets.Events.Catalogue
         public void Run(Client client, MessageEvent msgEvent)
         {
             int pageId = msgEvent.ReadVL64();
-            CatalogPage page = CatalogController.GetInstance().GetPage(pageId);
+            CatalogPage page = Engine.MainDI.CatalogController.GetPage(pageId);
             if (page != null && !page.Development && page.HasContent)
             {
-                List<CatalogProduct> products = CatalogController.GetInstance().GetProducts(pageId);
+                List<CatalogProduct> products = Engine.MainDI.CatalogController.GetProducts(pageId);
                 client.SendComposer(new CatalogPageMessageComposer(pageId, page, products));
             }
         }

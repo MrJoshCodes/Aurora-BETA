@@ -53,6 +53,13 @@
     <ApplicationIcon>favicon.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Autofac, Version=4.6.1.0, Culture=neutral, PublicKeyToken=17863af14b0044da, processorArchitecture=MSIL">
+      <HintPath>..\packages\Autofac.4.6.1\lib\net45\Autofac.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Threading.Tasks.Dataflow, Version=4.5.24.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Tpl.Dataflow.4.5.24\lib\portable-net45+win8+wpa81\System.Threading.Tasks.Dataflow.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="DotNetty.Buffers, Version=0.4.5.0, Culture=neutral, PublicKeyToken=bc13ca065fa06c29, processorArchitecture=MSIL">
       <HintPath>..\packages\DotNetty.Buffers.0.4.5\lib\net45\DotNetty.Buffers.dll</HintPath>
       <Private>True</Private>
@@ -178,32 +185,65 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Config\ConfigLoader.cs" />
+    <Compile Include="Config\ConfigController.cs" />
     <Compile Include="Config\DatabaseConfig.cs" />
     <Compile Include="Config\HabboHotelConfig.cs" />
+    <Compile Include="Database\DAO\CatalogDao.cs" />
+    <Compile Include="Database\DAO\ItemDao.cs" />
+    <Compile Include="Database\DAO\MessengerDao.cs" />
+    <Compile Include="Database\DAO\NavigatorDao.cs" />
+    <Compile Include="Database\DAO\PlayerDao.cs" />
+    <Compile Include="Database\DAO\RoomDao.cs" />
+    <Compile Include="Database\DAO\WordfilterDao.cs" />
     <Compile Include="Database\DatabaseConnection.cs" />
-    <Compile Include="Database\DatabaseManager.cs" />
+    <Compile Include="Database\DatabaseController.cs" />
     <Compile Include="Database\Pool\ObjectPool.cs" />
-    <Compile Include="Game\AuroraTask.cs" />
+    <Compile Include="DI\Config\IConfigController.cs" />
+    <Compile Include="DI\Database\DAO\ICatalogDao.cs" />
+    <Compile Include="DI\Database\DAO\IItemDao.cs" />
+    <Compile Include="DI\Database\DAO\IMessengerDao.cs" />
+    <Compile Include="DI\Database\DAO\INavigatorDao.cs" />
+    <Compile Include="DI\Database\DAO\IPlayerDao.cs" />
+    <Compile Include="DI\Database\DAO\IRoomDao.cs" />
+    <Compile Include="DI\Database\DAO\IWordfilterDao.cs" />
+    <Compile Include="DI\Database\IDatabaseController.cs" />
+    <Compile Include="DI\Game\Catalog\ICatalogController.cs" />
+    <Compile Include="DI\Game\Clients\IClientController.cs" />
+    <Compile Include="DI\Game\ITaskController.cs" />
+    <Compile Include="DI\Game\Items\IItemController.cs" />
+    <Compile Include="DI\Game\Messenger\IMessengerController.cs" />
+    <Compile Include="DI\Game\Navigator\INavigatorController.cs" />
+    <Compile Include="DI\Game\Players\IPlayerController.cs" />
+    <Compile Include="DI\Game\Rooms\IRoomController.cs" />
+    <Compile Include="DI\Game\Wordfilter\IWordfilterController.cs" />
+    <Compile Include="DI\Locator\DependencyLocator.cs" />
+    <Compile Include="DI\Locator\IDependencyLocator.cs" />
+    <Compile Include="DI\Network\Game\IGameNetworkListener.cs" />
+    <Compile Include="DI\Network\Game\Packets\IPacketController.cs" />
+    <Compile Include="Game\IAuroraTask.cs" />
     <Compile Include="Game\Catalog\CatalogDealItem.cs" />
     <Compile Include="Game\Catalog\CatalogPage.cs" />
     <Compile Include="Game\Catalog\CatalogPageData.cs" />
     <Compile Include="Game\Catalog\CatalogProduct.cs" />
     <Compile Include="Game\Clients\Client.cs" />
-    <Compile Include="Game\Clients\ClientManager.cs" />
+    <Compile Include="Game\Clients\ClientController.cs" />
     <Compile Include="Game\Items\Item.cs" />
     <Compile Include="Game\Items\ItemDefinition.cs" />
+    <Compile Include="Game\MainDI.cs" />
     <Compile Include="Game\Messenger\MessengerController.cs" />
-    <Compile Include="Game\Messenger\MessengerFriends.cs" />
+    <Compile Include="Game\Messenger\MessengerFriend.cs" />
     <Compile Include="Game\Messenger\MessengerRequest.cs" />
     <Compile Include="Game\Messenger\MessengerSearch.cs" />
     <Compile Include="Game\Navigator\FrontpageItem.cs" />
     <Compile Include="Game\Navigator\NavigatorController.cs" />
+    <Compile Include="Game\Players\Components\MessengerComponent.cs" />
     <Compile Include="Game\Players\Player.cs" />
     <Compile Include="Engine.cs" />
     <Compile Include="Game\Rooms\ActorType.cs" />
     <Compile Include="Game\Rooms\Components\ProcessComponent.cs" />
     <Compile Include="Game\Rooms\Pathfinder\BinaryHeap.cs" />
+    <Compile Include="Game\Rooms\Pathfinder\Grid.cs" />
+    <Compile Include="Game\Rooms\Pathfinder\MovementPatterns.cs" />
     <Compile Include="Game\Rooms\Pathfinder\Node.cs" />
     <Compile Include="Game\Rooms\Pathfinder\Pathfinder.cs" />
     <Compile Include="Game\Rooms\Pathfinder\Point2D.cs" />
@@ -301,7 +341,7 @@
     <Compile Include="Network\Game\Packets\IPacketEvent.cs" />
     <Compile Include="Network\Game\Packets\MessageComposer.cs" />
     <Compile Include="Network\Game\Packets\MessageEvent.cs" />
-    <Compile Include="Network\Game\Packets\PacketHelper.cs" />
+    <Compile Include="Network\Game\Packets\PacketController.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Game\Catalog\CatalogController.cs" />
     <Compile Include="Game\Items\ItemController.cs" />

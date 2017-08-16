@@ -29,10 +29,10 @@ namespace AuroraEmu.Network.Game.Packets.Composers.Rooms
             AppendString(actor.Client.Player.Username);
             AppendString(actor.Client.Player.Motto);
             AppendString(actor.Client.Player.Figure);
-            AppendVL64(actor.VirtualID);
-            AppendVL64(actor.X);
-            AppendVL64(actor.Y);
-            AppendString(actor.Z.ToString());
+            AppendVL64(actor.VirtualId);
+            AppendVL64(actor.Position.X);
+            AppendVL64(actor.Position.Y);
+            AppendString(actor.Position.Z.ToString());
             AppendVL64(actor.Rotation);
             AppendVL64(1); // TODO: BOTs, PETs etc.
             AppendString(actor.Client.Player.Gender);

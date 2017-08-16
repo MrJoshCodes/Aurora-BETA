@@ -10,22 +10,19 @@ namespace AuroraEmu.Network.Game.Packets.Events.Messenger
         public void Run(Client client, MessageEvent msg)
         {
             string username = msg.ReadString();
-            Player targetPlayer = PlayerController.GetInstance().GetPlayerByName(username);
+            Player targetPlayer = Engine.MainDI.PlayerController.GetPlayerByName(username);
 
-            if (Engine.EnumToBool(targetPlayer.BlockNewFriends.ToString()))
-            {
-                client.SendComposer(new MessengerErrorMessageComposer());
-                return;
-            }
+            Engine.MainDI.MessengerDao.CreateRequest(targetPlayer.Id, client);
+            client.Player.MessengerComponent.AddRequest(targetPlayer.Id,
+                new MessengerRequest(client.Player.Id, targetPlayer.Id));
 
-            MessengerController.GetInstance().CreateRequest(targetPlayer.Id, client);
+            MessengerRequest messengerRequest = client.Player.MessengerComponent.GetRequest(targetPlayer.Id);
 
-            MessengerRequest request = MessengerController.GetInstance().GetRequest(client.Player.Id, targetPlayer.Id);
-            Client targetClient = ClientManager.GetInstance().GetClientByHabbo(targetPlayer.Id);
-            if (targetClient != null)
-            {
-                targetClient.SendComposer(new NewBuddyRequestMessageComposer(request, client.Player.Username));
-            }
+            Client targetClient = Engine.MainDI.ClientController.GetClientByHabbo(targetPlayer.Id);
+
+            if (targetClient != null && messengerRequest != null)
+                targetClient.SendComposer(
+                    new NewBuddyRequestMessageComposer(messengerRequest, client.Player.Username));
         }
     }
 }

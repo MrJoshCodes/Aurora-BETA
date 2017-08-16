@@ -11,7 +11,7 @@ namespace AuroraEmu.Network.Game.Packets.Events.Rooms
             int roomId = msgEvent.ReadVL64();
             string password = msgEvent.ReadString();
 
-            Room room = RoomController.GetInstance().GetRoom(roomId);
+            Room room = Engine.MainDI.RoomController.GetRoom(roomId);
 
             if (room == null)
                 return;

@@ -1,5 +1,4 @@
 ﻿using AuroraEmu.Game.Clients;
-using AuroraEmu.Game.Navigator;
 using AuroraEmu.Network.Game.Packets.Composers.Navigator;
 
 namespace AuroraEmu.Network.Game.Packets.Events.Navigator
@@ -8,7 +7,7 @@ namespace AuroraEmu.Network.Game.Packets.Events.Navigator
     {
         public void Run(Client client, MessageEvent msgEvent)
         {
-            client.SendComposer(new OfficialRoomsComposer(NavigatorController.GetInstance().FrontpageItems));
+            client.SendComposer(new OfficialRoomsComposer(Engine.MainDI.NavigatorController.FrontpageItems));
         }
     }
 }

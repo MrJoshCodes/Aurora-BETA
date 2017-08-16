@@ -1,4 +1,4 @@
-﻿using AuroraEmu.Network.Game.Packets;
+﻿using AuroraEmu.DI.Network.Game;
 using DotNetty.Buffers;
 using DotNetty.Transport.Bootstrapping;
 using DotNetty.Transport.Channels;
@@ -7,9 +7,8 @@ using System;
 
 namespace AuroraEmu.Network.Game
 {
-    public class GameNetworkListener
+    public class GameNetworkListener : IGameNetworkListener
     {
-        private static GameNetworkListener gameNetworkListenerInstance;
         private readonly ServerBootstrap bootstrap;
         private int port;
 
@@ -37,13 +36,6 @@ namespace AuroraEmu.Network.Game
             {
                 Engine.Logger.Error($"Failed to setup network listener... {e}");
             }
-        }
-
-        public static GameNetworkListener GetInstance()
-        {
-            if (gameNetworkListenerInstance == null)
-                gameNetworkListenerInstance = new GameNetworkListener();
-            return gameNetworkListenerInstance;
         }
     }
 }

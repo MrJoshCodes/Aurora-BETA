@@ -1,5 +1,4 @@
 ﻿using AuroraEmu.Game.Clients;
-using AuroraEmu.Game.Items;
 using AuroraEmu.Network.Game.Packets.Composers.Inventory;
 
 namespace AuroraEmu.Network.Game.Packets.Events.Inventory
@@ -9,7 +8,7 @@ namespace AuroraEmu.Network.Game.Packets.Events.Inventory
         public void Run(Client client, MessageEvent msgEvent)
         {
             if (client.Items == null)
-                client.Items = ItemController.GetInstance().GetItemsFromOwner(client.Player.Id);
+                client.Items = Engine.MainDI.ItemController.GetItemsFromOwner(client.Player.Id);
 
             // HH <- unk?
 

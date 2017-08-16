@@ -6,8 +6,8 @@ namespace AuroraEmu.Game.Catalog
 {
     public class CatalogProduct
     {
-        private ItemDefinition template;
-        private List<CatalogDealItem> dealItems;
+        private ItemDefinition _template;
+        private List<CatalogDealItem> _dealItems;
 
         public int Id { get; set; }
         public string Name { get; set; }
@@ -38,10 +38,10 @@ namespace AuroraEmu.Game.Catalog
         {
             get
             {
-                if (dealItems == null)
-                    dealItems = CatalogController.GetInstance().GetDeal(DealId);
+                if (_dealItems == null)
+                    _dealItems = Engine.MainDI.CatalogController.GetDeal(DealId);
 
-                return dealItems;
+                return _dealItems;
             }
         }
 
@@ -49,10 +49,10 @@ namespace AuroraEmu.Game.Catalog
         {
             get
             {
-                if (template == null)
-                    template = ItemController.GetInstance().GetTemplate(TemplateId);
+                if (_template == null)
+                    _template = Engine.MainDI.ItemController.GetTemplate(TemplateId);
 
-                return template;
+                return _template;
             }
         }
     }

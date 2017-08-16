@@ -1,67 +1,36 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace AuroraEmu.Game.Rooms.Pathfinder
 {
-    public class Pathfinder
+    internal static class PathFinder
     {
-        public static List<Point2D> FindPath(Room room, RoomMap roomMap, Point2D start, Point2D end)
+        public static Node FindReversePath(RoomMap map, Grid grid, Point2D start, Point2D end,
+            Point2D[] movementPattern)
         {
-            List<Point2D> path = new List<Point2D>();
+            var head = new Node(start);
+            var open = new BinaryHeap();
+            open.Push(head);
+            bool[,] walkableTiles = map.PassableTiles;
 
-            Node nodes = FindReversedPath(room, roomMap, start, end);
-
-            if (nodes != null)
+            while (open.HasNext())
             {
-                while (nodes.Next != null)
+                var current = open.Pop();
+
+                if (current.Position.Equals(end))
                 {
-                    path.Add(nodes.Next.Position);
-                    nodes = nodes.Next;
-                }
-            }
-
-            return path;
-        }
-
-        private static Node FindReversedPath(Room room, RoomMap roomMap, Point2D start, Point2D end)
-        {
-            Node startNode = new Node(start, 0, 0, null);
-
-            Node[,] map = new Node[roomMap.MapSize.Item1, roomMap.MapSize.Item2];
-
-            BinaryHeap openList = new BinaryHeap();
-            openList.Add(startNode);
-
-            while (openList.HasNext())
-            {
-                Node current = openList.ExtractFirst();
-
-                if (current.Position.GetSquaredDistance(end) <= 3)
-                {
-                    return new Node(end, current.PathCost + 1, current.Cost + 1, current);
+                    return current;
                 }
 
-                for (int i = 0; i < (room.DiagEnabled ? surroundingDiag.Length : surroundingNoDiag.Length); i++)
+                foreach (var p in GetNeighbours(current.Position, grid.X, grid.Y, movementPattern))
                 {
-                    Surrounding surr = (room.DiagEnabled ? surroundingDiag[i] : surroundingNoDiag[i]);
-                    Point2D tmp = new Point2D(current.Position, surr.Point);
-
-                    try
+                    var cellCost = grid.GetCellCostUnchecked(p);
+                    if (walkableTiles[current.Position.X, current.Position.Y] && !float.IsInfinity(cellCost))
                     {
-                        if (map[tmp.X, tmp.Y] == null)
-                        {
-                            int pathCost = current.PathCost + surr.Cost;
-                            int cost = pathCost + tmp.GetSquaredDistance(end);
-                            Node node = new Node(tmp, cost, pathCost, current);
-                            openList.Add(node);
-                        }
-                    }
-                    catch (IndexOutOfRangeException ex)
-                    {
+                        var costSoFar = current.CostSoFar + cellCost;
+                        var expectedCost = costSoFar + GetSquaredDistance(end, p);
 
+                        open.Push(new Node(p, expectedCost, costSoFar) {Next = current});
                     }
                 }
             }
@@ -69,19 +38,25 @@ namespace AuroraEmu.Game.Rooms.Pathfinder
             return null;
         }
 
-        public class Surrounding
+        private static IEnumerable<Point2D> GetNeighbours(
+            Point2D position,
+            int dimX,
+            int dimY,
+            IEnumerable<Point2D> movementPattern)
         {
-            public Point2D Point;
-            public int Cost;
-
-            public Surrounding(int x, int y)
-            {
-                Point = new Point2D(x, y);
-                Cost = x * x + y * y;
-            }
+            return movementPattern.Select(n => new Point2D(position.X + n.X, position.Y + n.Y))
+                .Where(p => p.X >= 0 && p.X < dimX && p.Y >= 0 && p.Y < dimY);
         }
 
-        public static int CalculateRotation(int x, int y, int newX, int newY, bool reversed)
+        private static float GetSquaredDistance(Point2D point, Point2D p1)
+        {
+            int dx = p1.X - point.X;
+            int dy = p1.Y - point.Y;
+
+            return (dx * dx) + (dy * dy);
+        }
+
+        public static int CalculateRotation(int x, int y, int newX, int newY, bool reversed = false)
         {
             int rotation = 0;
 
@@ -116,26 +91,5 @@ namespace AuroraEmu.Game.Rooms.Pathfinder
 
             return rotation;
         }
-
-        private static Surrounding[] surroundingDiag = new Surrounding[]
-        {
-            new Surrounding(1, 0),
-            new Surrounding(0, 1),
-            new Surrounding(-1, 0),
-            new Surrounding(0, -1),
-
-            new Surrounding(1, 1),
-            new Surrounding(-1, -1),
-            new Surrounding(1, -1),
-            new Surrounding(-1, 1)
-        };
-
-        private static Surrounding[] surroundingNoDiag = new Surrounding[]
-        {
-            new Surrounding(1, 0),
-            new Surrounding(0, 1),
-            new Surrounding(-1, 0),
-            new Surrounding(0, -1),
-        };
     }
 }

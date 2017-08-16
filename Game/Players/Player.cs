@@ -1,4 +1,5 @@
 ﻿using System.Data;
+using AuroraEmu.Game.Players.Components;
 
 namespace AuroraEmu.Game.Players
 {
@@ -18,20 +19,23 @@ namespace AuroraEmu.Game.Players
         public string SSO { get; set; }
         public int BlockNewFriends { get; set; }
 
-        public Player(DataRow Row)
+        public MessengerComponent MessengerComponent { get; set; }
+
+        public Player(DataRow row)
         {
-            Id = (int)Row["id"];
-            Username = (string)Row["username"];
-            Email = (string)Row["email"];
-            Gender = (string)Row["gender"];
-            Figure = (string)Row["figure"];
-            Motto = (string)Row["motto"];
-            Coins = (int)Row["coins"];
-            Pixels = (int)Row["pixels"];
-            Rank = (byte)Row["rank"];
-            HomeRoom = (int)Row["home_room"];
-            SSO = (string)Row["sso_ticket"];
-            BlockNewFriends = (int)Row["block_friendrequests"];
+            Id = (int) row["id"];
+            Username = (string) row["username"];
+            Email = (string) row["email"];
+            Gender = (string) row["gender"];
+            Figure = (string) row["figure"];
+            Motto = (string) row["motto"];
+            Coins = (int) row["coins"];
+            Pixels = (int) row["pixels"];
+            Rank = (byte) row["rank"];
+            HomeRoom = (int) row["home_room"];
+            SSO = (string) row["sso_ticket"];
+            BlockNewFriends = (int) row["block_friendrequests"];
+            MessengerComponent = new MessengerComponent(this);
         }
     }
 }

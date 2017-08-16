@@ -2,38 +2,37 @@
 using MySql.Data.MySqlClient;
 using System;
 using System.Data;
-using System.Collections.Generic;
 
 namespace AuroraEmu.Database
 {
     public class DatabaseConnection : IDisposable
     {
-        private readonly ObjectPool<DatabaseConnection> objectPool;
+        private readonly ObjectPool<DatabaseConnection> _objectPool;
 
-        private MySqlConnection connection;
-        private MySqlCommand command;
+        private readonly MySqlConnection _connection;
+        private readonly MySqlCommand _command;
 
-        private MySqlTransaction transaction;
+        private MySqlTransaction _transaction;
 
         public DatabaseConnection(string connectionString, ObjectPool<DatabaseConnection> pool)
         {
-            objectPool = pool;
-            connection = new MySqlConnection(connectionString);
-            command = connection.CreateCommand();
+            _objectPool = pool;
+            _connection = new MySqlConnection(connectionString);
+            _command = _connection.CreateCommand();
         }
 
         public void Open()
         {
-            if(connection.State == ConnectionState.Open)
+            if (_connection.State == ConnectionState.Open)
             {
                 throw new InvalidOperationException("Connection is already opened...");
             }
-            connection.Open();
+            _connection.Open();
         }
 
         public bool IsOpen()
         {
-            return connection.State == ConnectionState.Open;
+            return _connection.State == ConnectionState.Open;
         }
 
         /// <summary>
@@ -43,17 +42,17 @@ namespace AuroraEmu.Database
         /// <param name="value">The value of the parameter.</param>
         public void AddParameter(string parameter, object value)
         {
-            command.Parameters.AddWithValue(parameter, value);
+            _command.Parameters.AddWithValue(parameter, value);
         }
 
         public void AddParameters(MySqlParameter[] parameters)
         {
-            command.Parameters.AddRange(parameters);
+            _command.Parameters.AddRange(parameters);
         }
 
         public void SetQuery(string query)
         {
-            command.CommandText = query;
+            _command.CommandText = query;
         }
 
         /// <summary>
@@ -64,7 +63,7 @@ namespace AuroraEmu.Database
         {
             try
             {
-                return command.ExecuteNonQuery();
+                return _command.ExecuteNonQuery();
             }
             catch (MySqlException ex)
             {
@@ -74,8 +73,8 @@ namespace AuroraEmu.Database
             }
             finally
             {
-                command.CommandText = string.Empty;
-                command.Parameters.Clear();
+                _command.CommandText = string.Empty;
+                _command.Parameters.Clear();
             }
         }
 
@@ -85,7 +84,7 @@ namespace AuroraEmu.Database
             {
                 DataSet dataSet = new DataSet();
 
-                using (MySqlDataAdapter adapter = new MySqlDataAdapter(command))
+                using (MySqlDataAdapter adapter = new MySqlDataAdapter(_command))
                 {
                     adapter.Fill(dataSet);
                 }
@@ -106,7 +105,7 @@ namespace AuroraEmu.Database
             {
                 DataTable dataTable = new DataTable();
 
-                using (MySqlDataAdapter adapter = new MySqlDataAdapter(command))
+                using (MySqlDataAdapter adapter = new MySqlDataAdapter(_command))
                 {
                     adapter.Fill(dataTable);
                 }
@@ -145,12 +144,12 @@ namespace AuroraEmu.Database
 
         public string GetString()
         {
-            return command.ExecuteScalar().ToString();
+            return _command.ExecuteScalar().ToString();
         }
 
         public int GetInt()
         {
-            return (int)command.ExecuteScalar();
+            return (int) _command.ExecuteScalar();
         }
 
         /// <summary>
@@ -161,9 +160,9 @@ namespace AuroraEmu.Database
         {
             try
             {
-                command.ExecuteNonQuery();
+                _command.ExecuteNonQuery();
 
-                return (int)command.LastInsertedId;
+                return (int) _command.LastInsertedId;
             }
             catch (MySqlException ex)
             {
@@ -173,46 +172,39 @@ namespace AuroraEmu.Database
             }
             finally
             {
-                command.CommandText = string.Empty;
-                command.Parameters.Clear();
+                _command.CommandText = string.Empty;
+                _command.Parameters.Clear();
             }
         }
 
         public void BeginTransaction()
         {
-            transaction = connection.BeginTransaction();
+            _transaction = _connection.BeginTransaction();
         }
 
         public void Commit()
         {
-            if (transaction == null)
+            if (_transaction == null)
                 throw new InvalidOperationException("Transaction hasn't started yet.");
-            transaction.Commit();
+            _transaction.Commit();
         }
 
         public void Rollback()
         {
-            if (transaction == null)
+            if (_transaction == null)
                 throw new InvalidOperationException("Transaction hasn't started yet.");
-            transaction.Rollback();
+            _transaction.Rollback();
         }
 
         public void Dispose()
         {
-            if(IsOpen())
-            {
-                connection.Close();
-            }
+            if (IsOpen())
+                _connection.Close();
 
-            if(transaction != null)
-            {
-                transaction.Dispose();
-            }
-
-            if(command != null)
-            {
-                command.Dispose();
-            }
+            _command?.Parameters?.Clear();
+            _transaction?.Dispose();
+            _command?.Dispose();
+            _objectPool.PutObject(this);
         }
     }
 }

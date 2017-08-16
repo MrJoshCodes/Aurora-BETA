@@ -1,19 +1,24 @@
 ﻿namespace AuroraEmu.Game.Rooms.Pathfinder
 {
-    public class Node
+    internal sealed class Node
     {
-        public Point2D Position;
-        public int Cost;
-        public int PathCost;
-        public Node Next;
-        public Node NextListElement;
+        public Point2D Position { get; }
+        public float ExpectedCost { get; set; }
+        public float CostSoFar { get; set; }
 
-        public Node(Point2D position, int cost, int pathCost, Node next)
+        public Node Next { get; set; }
+        public Node NextListElement { get; set; }
+
+        public Node(Point2D position)
+            : this(position, 0, 0)
+        {
+        }
+
+        public Node(Point2D position, float expectedCost, float costSoFar)
         {
             Position = position;
-            Cost = cost;
-            PathCost = pathCost;
-            Next = next;
+            ExpectedCost = expectedCost;
+            CostSoFar = costSoFar;
         }
     }
 }

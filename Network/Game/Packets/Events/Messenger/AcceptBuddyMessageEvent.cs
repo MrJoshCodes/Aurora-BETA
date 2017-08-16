@@ -1,4 +1,5 @@
-﻿using AuroraEmu.Game.Clients;
+﻿using System;
+using AuroraEmu.Game.Clients;
 using AuroraEmu.Game.Messenger;
 
 namespace AuroraEmu.Network.Game.Packets.Events.Messenger
@@ -8,23 +9,22 @@ namespace AuroraEmu.Network.Game.Packets.Events.Messenger
         public void Run(Client client, MessageEvent msg)
         {
             int amount = msg.ReadVL64();
-            System.Console.WriteLine(amount);
             for (int i = 0; i < amount; i++)
             {
                 int requestId = msg.ReadVL64();
 
-                Client targetClient = ClientManager.GetInstance().GetClientByHabbo(requestId);
+                Client targetClient = Engine.MainDI.ClientController.GetClientByHabbo(requestId);
 
-                if (MessengerController.GetInstance().IsFriends(client, requestId))
+                if (client.Player.MessengerComponent.IsFriends(requestId))
                     return;
-                MessengerController.GetInstance().CreateFriendship(requestId, client.Player.Id);
-
-                client.SendComposer(MessengerController.GetInstance().UpdateFriendlist(client.Player.Id));
+                Engine.MainDI.MessengerDao.CreateFriendship(client.Player, requestId);
+                Engine.MainDI.MessengerDao.DestroyRequest(client.Player.Id, requestId);
+                Console.WriteLine(client.Player.Id + " " + requestId);
+                client.Player.MessengerComponent.AddFriend(requestId, new MessengerFriend(requestId));
+                client.SendComposer(client.Player.MessengerComponent.UpdateFriendList());
 
                 if (targetClient != null)
-                {
-                    targetClient.SendComposer(MessengerController.GetInstance().UpdateFriendlist(targetClient.Player.Id));
-                }
+                    targetClient.SendComposer(targetClient.Player.MessengerComponent.UpdateFriendList());
             }
         }
     }

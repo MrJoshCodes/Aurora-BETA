@@ -14,11 +14,11 @@ namespace AuroraEmu.Network.Game.Packets.Events.Messenger
             {
                 int requestId = msg.ReadVL64();
 
-                MessengerController.GetInstance().DestroyRequest(requestId, client.Player.Id);
+                Engine.MainDI.MessengerDao.DestroyRequest(requestId, client.Player.Id);
             }
             else if(mode == 1)
             {
-                MessengerController.GetInstance().DestroyAllRequests(client.Player.Id);
+                Engine.MainDI.MessengerDao.DestroyAllRequests(client.Player.Id);
             }
         }
     }

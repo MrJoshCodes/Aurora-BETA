@@ -4,42 +4,44 @@ namespace AuroraEmu.Game.Rooms
 {
     public class RoomMap
     {
-        public string Name { get; private set; }
-        public int DoorX { get; private set; }
-        public int DoorY { get; private set; }
-        public double DoorZ { get; private set; }
-        public int DoorRotation { get; private set; }
-        public string RawMap { get; private set; }
+        public string Name { get; }
+        public int DoorX { get; }
+        public int DoorY { get; }
+        public double DoorZ { get; }
+        public int DoorRotation { get; }
+        public string RawMap { get; }
 
-        private string[] splitMap;
+        private string[] _splitMap;
 
-        public (int,int) MapSize { get; private set; }
+        public (int, int) MapSize { get; }
 
-        public bool[,] PassableTiles { get; private set; }
-        public double[,] TileHeights { get; private set; }
+        public bool[,] PassableTiles { get; }
+        public double[,] TileHeights { get; }
 
-        public char[,] HeightMap { get; private set; }
+        public char[,] HeightMap { get; }
 
         public string RelativeHeightMap { get; private set; }
+        public bool DisableDiagonal { get; }
 
         public RoomMap(DataRow row)
         {
-            Name = (string)row["name"];
-            DoorX = (int)row["door_x"];
-            DoorY = (int)row["door_y"];
-            DoorZ = (double)row["door_z"];
-            DoorRotation = (int)row["door_rotation"];
-            RawMap = (string)row["raw_map"];
+            Name = (string) row["name"];
+            DoorX = (int) row["door_x"];
+            DoorY = (int) row["door_y"];
+            DoorZ = (double) row["door_z"];
+            DoorRotation = (int) row["door_rotation"];
+            RawMap = (string) row["raw_map"];
 
-            splitMap = RawMap.Split('|');
+            _splitMap = RawMap.Split('|');
 
-            MapSize = (splitMap[0].Length, splitMap.Length);
+            MapSize = (_splitMap[0].Length, _splitMap.Length);
 
             PassableTiles = new bool[MapSize.Item1, MapSize.Item2];
             TileHeights = new double[MapSize.Item1, MapSize.Item2];
             HeightMap = new char[MapSize.Item1, MapSize.Item2];
 
             Generate();
+            DisableDiagonal = false;
         }
 
         public void Generate()
@@ -51,10 +53,10 @@ namespace AuroraEmu.Game.Rooms
 
                 for (int x = 0; x < MapSize.Item1; x++)
                 {
-                    string square = splitMap[y].Substring(x, 1).Trim().ToLower();
+                    string square = _splitMap[y].Substring(x, 1).Trim().ToLower();
 
                     if (x == DoorX && y == DoorY)
-                        square = (int)DoorZ + "";
+                        square = (int) DoorZ + "";
 
                     if (double.TryParse(square, out double height))
                     {
@@ -71,7 +73,7 @@ namespace AuroraEmu.Game.Rooms
                     RelativeHeightMap += square;
                 }
 
-                RelativeHeightMap += (char)13;
+                RelativeHeightMap += (char) 13;
             }
         }
     }

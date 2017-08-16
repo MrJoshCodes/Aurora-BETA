@@ -1,5 +1,4 @@
-﻿using AuroraEmu.Game.Clients;
-using AuroraEmu.Game.Messenger;
+﻿using AuroraEmu.Game.Messenger;
 using System.Collections.Generic;
 
 namespace AuroraEmu.Network.Game.Packets.Composers.Messenger
@@ -26,7 +25,7 @@ namespace AuroraEmu.Network.Game.Packets.Composers.Messenger
             AppendVL64(search.Id);
             AppendString(search.Username);
             AppendString(search.Motto);
-            AppendVL64(ClientManager.GetInstance().PlayerIsOnline(search.Id)); // is online
+            AppendVL64(false); // is online
             AppendVL64(false);
             AppendString("");
             AppendVL64(0);

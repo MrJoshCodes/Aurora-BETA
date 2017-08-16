@@ -1,5 +1,4 @@
-﻿using AuroraEmu.Network.Game.Packets;
-using System.Data;
+﻿using System.Data;
 
 namespace AuroraEmu.Game.Messenger
 {
@@ -8,10 +7,16 @@ namespace AuroraEmu.Game.Messenger
         public int FromId { get; set; }
         public int ToId { get; set; }
 
-        public MessengerRequest(DataRow Row)
+        public MessengerRequest(DataRow row)
         {
-            FromId = (int)Row["from_id"];
-            ToId = (int)Row["to_id"];
+            FromId = (int) row["from_id"];
+            ToId = (int) row["to_id"];
+        }
+
+        public MessengerRequest(int fromId, int toId)
+        {
+            FromId = fromId;
+            ToId = toId;
         }
     }
 }
