@@ -1,5 +1,4 @@
 ﻿using AuroraEmu.Game.Clients;
-using AuroraEmu.Game.Messenger;
 using AuroraEmu.Network.Game.Packets.Composers.Messenger;
 
 namespace AuroraEmu.Network.Game.Packets.Events.Messenger
@@ -8,11 +7,8 @@ namespace AuroraEmu.Network.Game.Packets.Events.Messenger
     {
         public void Run(Client client, MessageEvent msg)
         {
-            if (client.Friends == null)
-                client.Friends = MessengerController.GetInstance().GetFriendsById(client.Player.Id);
-
-            client.SendComposer(new MessengerInitMessageComposer(client.Friends));
-            client.SendComposer(new BuddyRequestsMessageComposer(MessengerController.GetInstance().GetRequestsByPlayerId(client.Player.Id)));
+            client.SendComposer(new MessengerInitMessageComposer(client.Player.MessengerComponent.Friends));
+            client.SendComposer(new BuddyRequestsMessageComposer(client.Player.MessengerComponent.Requests));
         }
     }
 }

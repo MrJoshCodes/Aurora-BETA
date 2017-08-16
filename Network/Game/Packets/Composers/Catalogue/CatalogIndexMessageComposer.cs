@@ -7,7 +7,7 @@ namespace AuroraEmu.Network.Game.Packets.Composers.Catalogue
     {
         public CatalogIndexMessageComposer() : base(126)
         {
-            IReadOnlyList<CatalogPage> categories = CatalogController.GetInstance().GetPages(0);
+            IReadOnlyList<CatalogPage> categories = Engine.MainDI.CatalogController.GetPages(0);
 
             AppendVL64(false);
             AppendVL64(0);
@@ -25,7 +25,7 @@ namespace AuroraEmu.Network.Game.Packets.Composers.Catalogue
 
         private void SerializePage(CatalogPage page)
         {
-            IReadOnlyList<CatalogPage> children = CatalogController.GetInstance().GetPages(page.Id);
+            IReadOnlyList<CatalogPage> children = Engine.MainDI.CatalogController.GetPages(page.Id);
 
             AppendVL64(page.Visible);
             AppendVL64(page.IconColor);

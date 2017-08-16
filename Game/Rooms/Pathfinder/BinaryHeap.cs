@@ -1,40 +1,45 @@
 ﻿namespace AuroraEmu.Game.Rooms.Pathfinder
 {
-    public class BinaryHeap
+    internal sealed class BinaryHeap
     {
-        private Node listHead;
+        private Node _head;
 
-        public bool HasNext()
-        {
-            return listHead != null;
-        }
+        public bool HasNext() => _head != null;
 
-        public void Add(Node item)
+        public void Push(Node node)
         {
-            if (listHead == null)
+            if (_head == null)
             {
-                listHead = item;
+                _head = node;
             }
-            else if (listHead.Next == null && item.Cost <= listHead.Cost)
+            else if (node.ExpectedCost < _head.ExpectedCost)
             {
-                item.NextListElement = listHead;
-                listHead = item;
+                node.NextListElement = _head;
+                _head = node;
             }
             else
             {
-                Node ptr = listHead;
-                while (ptr.NextListElement != null && ptr.NextListElement.Cost < item.Cost)
-                    ptr = ptr.NextListElement;
-                item.NextListElement = ptr.NextListElement;
-                ptr.NextListElement = item;
+                var current = _head;
+                while (current.NextListElement != null && current.NextListElement.ExpectedCost <= node.ExpectedCost)
+                {
+                    current = current.NextListElement;
+                }
+
+                node.NextListElement = current.NextListElement;
+                current.NextListElement = node;
             }
         }
 
-        public Node ExtractFirst()
+        /// <summary>
+        /// Pops a node from the heap, this node is always the node
+        /// with the cheapest path cost
+        /// </summary>
+        public Node Pop()
         {
-            Node result = listHead;
-            listHead = listHead.NextListElement;
-            return result;
+            var top = _head;
+            _head = _head.NextListElement;
+
+            return top;
         }
     }
 }

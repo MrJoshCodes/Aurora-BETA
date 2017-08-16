@@ -1,9 +1,19 @@
-﻿namespace AuroraEmu.Game.Rooms.Pathfinder
+﻿using System;
+
+namespace AuroraEmu.Game.Rooms.Pathfinder
 {
-    public class Point2D
+    public class Point2D : IEquatable<Point2D>
     {
-        public int X;
-        public int Y;
+        public int X { get; set; }
+        public int Y { get; set; }
+        public double Z { get; set; }
+
+        public Point2D(int x, int y, double z)
+        {
+            X = x;
+            Y = y;
+            Z = z;
+        }
 
         public Point2D(int x, int y)
         {
@@ -11,44 +21,25 @@
             Y = y;
         }
 
-        public Point2D(Point2D point1, Point2D point2)
+        public bool Equals(Point2D other)
         {
-            X = point1.X + point2.X;
-            Y = point1.Y + point2.Y;
+            return this.X == other.X && this.Y == other.Y;
         }
 
-        public int GetSquaredDistance(Point2D point)
+        public override bool Equals(object obj)
         {
-            int dx = X - point.X;
-            int dy = Y - point.Y;
+            if (ReferenceEquals(null, obj))
+                return false;
 
-            return (dx * dx) + (dy * dy);
+            return obj is Point2D && Equals((Point2D) obj);
         }
 
-        public bool Equals(Point2D p)
+        public override int GetHashCode()
         {
-            return p.X == this.X && p.Y == this.Y;
-        }
-
-
-        public static bool operator ==(Point2D one, Point2D two)
-        {
-            return one.Equals(two);
-        }
-
-        public static bool operator !=(Point2D one, Point2D two)
-        {
-            return !one.Equals(two);
-        }
-
-        public static Point2D operator +(Point2D one, Point2D two)
-        {
-            return new Point2D(one.X + two.X, one.Y + two.Y);
-        }
-
-        public static Point2D operator -(Point2D one, Point2D two)
-        {
-            return new Point2D(one.X - two.X, one.Y - two.Y);
+            unchecked
+            {
+                return (X * 397) ^ Y;
+            }
         }
     }
 }

@@ -1,23 +1,19 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace AuroraEmu.Game.Tasks
 {
-    public class DiceTask : AuroraTask
+    public class DiceTask : IAuroraTask
     {
-        int number;
+        private readonly int _number;
 
         public DiceTask(int number)
         {
-            this.number = number;
+            _number = number;
         }
 
         public void Execute()
         {
-            Console.WriteLine(number);
+            Console.WriteLine(_number);
         }
     }
 }

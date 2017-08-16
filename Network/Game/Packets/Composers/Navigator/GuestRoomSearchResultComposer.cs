@@ -1,5 +1,4 @@
-﻿using AuroraEmu.Game.Navigator;
-using AuroraEmu.Game.Rooms;
+﻿using AuroraEmu.Game.Rooms;
 using System.Collections.Generic;
 
 namespace AuroraEmu.Network.Game.Packets.Composers.Navigator
@@ -31,7 +30,7 @@ namespace AuroraEmu.Network.Game.Packets.Composers.Navigator
             composer.AppendVL64(room.PlayersMax);
             composer.AppendString(room.Description);
             composer.AppendVL64(0);
-            composer.AppendVL64(NavigatorController.GetInstance().Categories[room.CategoryId].TradeAllowed);
+            composer.AppendVL64(Engine.MainDI.NavigatorController.Categories[room.CategoryId].TradeAllowed);
             composer.AppendVL64(0); // score
             composer.AppendVL64(0); // tags
             composer.AppendString(room.Icon, 0);

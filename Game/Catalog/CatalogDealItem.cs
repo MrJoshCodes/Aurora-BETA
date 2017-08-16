@@ -5,7 +5,7 @@ namespace AuroraEmu.Game.Catalog
 {
     public class CatalogDealItem
     {
-        private ItemDefinition template;
+        private ItemDefinition _template;
 
         public int Id { get; set; }
         public int TemplateId { get; set; }
@@ -22,10 +22,10 @@ namespace AuroraEmu.Game.Catalog
         {
             get
             {
-                if (template == null)
-                    template = ItemController.GetInstance().GetTemplate(TemplateId);
+                if (_template == null)
+                    _template = Engine.MainDI.ItemController.GetTemplate(TemplateId);
 
-                return template;
+                return _template;
             }
         }
     }

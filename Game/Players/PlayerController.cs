@@ -1,45 +1,34 @@
-﻿using AuroraEmu.Database;
+﻿using AuroraEmu.DI.Game.Players;
 using System.Collections.Concurrent;
 using System.Data;
 
 namespace AuroraEmu.Game.Players
 {
-    public class PlayerController
+    public class PlayerController : IPlayerController
     {
-        private static PlayerController instance;
-
-        private ConcurrentDictionary<int, Player> playersById;
-        private ConcurrentDictionary<int, string> playerNamesById;
-        private ConcurrentDictionary<string, Player> playersByName;
+        private readonly ConcurrentDictionary<int, Player> _playersById;
+        private readonly ConcurrentDictionary<int, string> _playerNamesById;
+        private readonly ConcurrentDictionary<string, Player> _playersByName;
 
         public PlayerController()
         {
-            playersById = new ConcurrentDictionary<int, Player>();
-            playerNamesById = new ConcurrentDictionary<int, string>();
-            playersByName = new ConcurrentDictionary<string, Player>();
+            _playersById = new ConcurrentDictionary<int, Player>();
+            _playerNamesById = new ConcurrentDictionary<int, string>();
+            _playersByName = new ConcurrentDictionary<string, Player>();
         }
 
         public Player GetPlayerById(int id)
         {
-            if (playersById.TryGetValue(id, out Player player))
+            if (_playersById.TryGetValue(id, out Player player))
                 return player;
-
-            DataRow result = null;
-
-            using (DatabaseConnection dbClient = DatabaseManager.GetInstance().GetConnection())
-            {
-                dbClient.SetQuery("SELECT id, username, password, email, gender, figure, motto, coins, pixels, rank, home_room, block_friendrequests, sso_ticket FROM players WHERE id = @id;");
-                dbClient.AddParameter("@id", id);
-                dbClient.Open();
-
-                result = dbClient.GetRow();
-            }
-
+            
+            DataRow result = Engine.MainDI.PlayerDao.GetPlayerById(id);
+            
             if (result != null)
             {
                 player = new Player(result);
-                playersById.TryAdd(player.Id, player);
-                playerNamesById.TryAdd(player.Id, player.Username);
+                _playersById.TryAdd(player.Id, player);
+                _playerNamesById.TryAdd(player.Id, player.Username);
 
                 return player;
             }
@@ -49,23 +38,14 @@ namespace AuroraEmu.Game.Players
 
         public Player GetPlayerBySSO(string sso)
         {
-            DataRow result = null;
-
-            using (var dbClient = DatabaseManager.GetInstance().GetConnection())
-            {
-                dbClient.SetQuery("SELECT id, username, password, email, gender, figure, motto, coins, pixels, rank, home_room, block_friendrequests, sso_ticket FROM players WHERE sso_ticket = @sso_ticket;");
-                dbClient.AddParameter("@sso_ticket", sso);
-                dbClient.Open();
-
-                result = dbClient.GetRow();
-            }
+            DataRow result = Engine.MainDI.PlayerDao.GetPlayerBySSO(sso);
 
             if (result != null)
             {
                 Player player = new Player(result);
-                playersById.AddOrUpdate(player.Id, player, (oldkey, oldvalue) => player);
-                playerNamesById.AddOrUpdate(player.Id, player.Username, (oldkey, oldvalue) => player.Username);
-                playersByName.AddOrUpdate(player.Username, player, (oldkey, oldvalue) => player);
+                _playersById.AddOrUpdate(player.Id, player, (oldkey, oldvalue) => player);
+                _playerNamesById.AddOrUpdate(player.Id, player.Username, (oldkey, oldvalue) => player.Username);
+                _playersByName.AddOrUpdate(player.Username, player, (oldkey, oldvalue) => player);
                 return player;
             }
 
@@ -74,54 +54,28 @@ namespace AuroraEmu.Game.Players
 
         public string GetPlayerNameById(int id)
         {
-            if (playerNamesById.TryGetValue(id, out string name))
+            if (_playerNamesById.TryGetValue(id, out string name))
                 return name;
 
-            using (DatabaseConnection dbClient = DatabaseManager.GetInstance().GetConnection())
-            {
-                dbClient.SetQuery("SELECT username FROM players WHERE id = @id LIMIT 1");
-                dbClient.AddParameter("@id", id);
-                dbClient.Open();
-
-                name = dbClient.GetString();
-            }
-
+            Engine.MainDI.PlayerDao.GetPlayerNameById(id, out name);
             return name;
         }
 
         public Player GetPlayerByName(string name)
         {
-            if (playersByName.TryGetValue(name, out Player player))
+            if (_playersByName.TryGetValue(name, out Player player))
                 return player;
 
-            DataRow result = null;
-
-            using (DatabaseConnection dbClient = DatabaseManager.GetInstance().GetConnection())
-            {
-                dbClient.SetQuery("SELECT id, username, password, email, gender, figure, motto, coins, pixels, rank, home_room, block_friendrequests, sso_ticket FROM players WHERE username = @username;");
-                dbClient.AddParameter("@username", name);
-                dbClient.Open();
-
-                result = dbClient.GetRow();
-            }
-
+            DataRow result = Engine.MainDI.PlayerDao.GetPlayerByName(name);
             if (result != null)
             {
                 player = new Player(result);
-                playersByName.TryAdd(player.Username, player);
+                _playersByName.TryAdd(player.Username, player);
 
                 return player;
             }
 
             return null;
-        }
-
-        public static PlayerController GetInstance()
-        {
-            if (instance == null)
-                instance = new PlayerController();
-
-            return instance;
         }
     }
 }

@@ -1,6 +1,4 @@
-﻿using AuroraEmu.Config;
-using AuroraEmu.Game.Clients;
-using AuroraEmu.Game.Rooms;
+﻿using AuroraEmu.Game.Clients;
 using AuroraEmu.Network.Game.Packets.Composers.Navigator;
 
 namespace AuroraEmu.Network.Game.Packets.Events.Navigator
@@ -10,9 +8,9 @@ namespace AuroraEmu.Network.Game.Packets.Events.Navigator
         public void Run(Client client, MessageEvent msgEvent)
         {
             if (client.RoomCount == null)
-                client.RoomCount = RoomController.GetInstance().GetUserRoomCount(client.Player.Id);
+                client.RoomCount = Engine.MainDI.RoomController.GetUserRoomCount(client.Player.Id);
 
-            client.SendComposer(new CanCreateRoomComposer(client.RoomCount < ConfigLoader.GetInstance().HHConfig.MaxRooms, ConfigLoader.GetInstance().HHConfig.MaxRooms));
+            client.SendComposer(new CanCreateRoomComposer(client.RoomCount < Engine.MainDI.ConfigController.HHConfig.MaxRooms, Engine.MainDI.ConfigController.HHConfig.MaxRooms));
         }
     }
 }

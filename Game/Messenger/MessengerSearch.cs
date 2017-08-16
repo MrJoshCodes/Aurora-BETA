@@ -1,4 +1,5 @@
 ﻿using System.Data;
+using AuroraEmu.Game.Clients;
 
 namespace AuroraEmu.Game.Messenger
 {
@@ -9,12 +10,17 @@ namespace AuroraEmu.Game.Messenger
         public string Figure { get; set; }
         public string Motto { get; set; }
 
-        public MessengerSearch(DataRow Row)
+        public Client Client()
         {
-            Id = (int)Row["id"];
-            Username = (string)Row["username"];
-            Figure = (string)Row["figure"];
-            Motto = (string)Row["motto"];
+            return Engine.MainDI.ClientController.GetClientByHabbo(Id);
+        }
+        
+        public MessengerSearch(DataRow row)
+        {
+            Id = (int) row["id"];
+            Username = (string) row["username"];
+            Figure = (string) row["figure"];
+            Motto = (string) row["motto"];
         }
     }
 }

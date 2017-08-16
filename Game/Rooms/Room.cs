@@ -1,22 +1,19 @@
 ﻿using AuroraEmu.Database;
 using AuroraEmu.Game.Clients;
 using AuroraEmu.Game.Items;
-using AuroraEmu.Game.Navigator;
-using AuroraEmu.Game.Players;
 using AuroraEmu.Game.Rooms.Components;
 using AuroraEmu.Game.Rooms.User;
 using AuroraEmu.Network.Game.Packets;
 using MySql.Data.MySqlClient;
 using System;
 using System.Collections.Concurrent;
-using System.Collections.Generic;
 using System.Data;
 
 namespace AuroraEmu.Game.Rooms
 {
     public class Room
     {
-        private int virtualId = 0;
+        private int _virtualId;
         private ConcurrentDictionary<int, Item> _items;
 
         public int Id { get; set; }
@@ -28,7 +25,7 @@ namespace AuroraEmu.Game.Rooms
         public int PlayersMax { get; set; }
         public int CategoryId { get; set; }
         public string Model { get; set; }
-        public string CCTs { get; private set; }
+        public string CCTs { get; }
         public bool ShowOwner { get; set; }
         public bool AllPlayerRights { get; set; }
         public string Icon { get; set; }
@@ -45,7 +42,7 @@ namespace AuroraEmu.Game.Rooms
             get
             {
                 if (_items == null)
-                    _items = ItemController.GetInstance().GetItemsInRoom(Id);
+                    _items = Engine.MainDI.ItemController.GetItemsInRoom(Id);
 
                 return _items;
             }
@@ -63,25 +60,26 @@ namespace AuroraEmu.Game.Rooms
             Icon = "HHIPAI";
             Landscape = 0.0;
         }
+
         public Room(DataRow row)
         {
-            Id = (int)row["id"];
-            OwnerId = row["owner_id"].GetType().Equals(typeof(DBNull)) ? 0 : (int)row["owner_id"];
-            Name = (string)row["name"];
-            Description = (string)row["description"];
-            State = (RoomState)Enum.Parse(typeof(RoomState), (string)row["state"]);
-            PlayersIn = (int)row["players_in"];
-            PlayersMax = (int)row["players_max"];
-            CategoryId = (int)row["category_id"];
-            Model = (string)row["model"];
-            CCTs = (string)row["ccts"];
-            ShowOwner = (bool)row["show_owner"];
-            AllPlayerRights = (bool)row["all_player_rights"];
-            Icon = (string)row["icon"];
-            Floor = (int)row["floor"];
-            Wallpaper = (int)row["wallpaper"];
-            Landscape = (double)row["landscape"];
-            Map = RoomController.GetInstance().RoomMaps[Model];
+            Id = (int) row["id"];
+            OwnerId = row["owner_id"].Equals(typeof(DBNull)) ? 0 : (int) row["owner_id"];
+            Name = (string) row["name"];
+            Description = (string) row["description"];
+            State = (RoomState) Enum.Parse(typeof(RoomState), (string) row["state"]);
+            PlayersIn = (int) row["players_in"];
+            PlayersMax = (int) row["players_max"];
+            CategoryId = (int) row["category_id"];
+            Model = (string) row["model"];
+            CCTs = (string) row["ccts"];
+            ShowOwner = (bool) row["show_owner"];
+            AllPlayerRights = (bool) row["all_player_rights"];
+            Icon = (string) row["icon"];
+            Floor = (int) row["floor"];
+            Wallpaper = (int) row["wallpaper"];
+            Landscape = (double) row["landscape"];
+            Map = Engine.MainDI.RoomController.RoomMaps[Model];
             Actors = new ConcurrentDictionary<int, RoomActor>();
 
             ProcessComponent = new ProcessComponent(this);
@@ -90,17 +88,15 @@ namespace AuroraEmu.Game.Rooms
 
         public void AddUserActor(Client client)
         {
-            int newVirtualId = virtualId++;
-            
+            int newVirtualId = _virtualId++;
+
             UserActor actor = new UserActor(client, newVirtualId);
             Actors.TryAdd(newVirtualId, actor);
-
             client.CurrentRoom = this;
-            client.LoadingRoom = null;
-            client.RoomActor = actor;
+            client.UserActor = actor;
             client.CurrentRoom.PlayersIn++;
 
-            NavigatorController.GetInstance().Categories[client.CurrentRoom.CategoryId].PlayersInside++;
+            Engine.MainDI.NavigatorController.Categories[client.CurrentRoom.CategoryId].PlayersInside++;
         }
 
         public void SendComposer(MessageComposer composer)
@@ -129,15 +125,12 @@ namespace AuroraEmu.Game.Rooms
 
         public string Owner
         {
-            get
-            {
-                return PlayerController.GetInstance().GetPlayerNameById(OwnerId);
-            }
+            get { return Engine.MainDI.PlayerController.GetPlayerNameById(OwnerId); }
         }
-        
+
         public int GetStateNumber()
         {
-            return (int)State;
+            return (int) State;
         }
 
         public ConcurrentBag<Item> GetFloorItems()
@@ -188,7 +181,7 @@ namespace AuroraEmu.Game.Rooms
             query += " WHERE id = @roomId";
             parameters[parameters.Length - 1] = new MySqlParameter("@roomId", Id);
 
-            using (DatabaseConnection dbConnection = DatabaseManager.GetInstance().GetConnection())
+            using (DatabaseConnection dbConnection = Engine.MainDI.DatabaseController.GetConnection())
             {
                 dbConnection.SetQuery(query);
                 dbConnection.AddParameters(parameters);
@@ -200,7 +193,6 @@ namespace AuroraEmu.Game.Rooms
 
         public void Loop()
         {
-
         }
     }
 }

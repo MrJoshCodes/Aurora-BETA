@@ -1,6 +1,5 @@
 ﻿using AuroraEmu.Game.Catalog;
 using AuroraEmu.Game.Clients;
-using AuroraEmu.Game.Items;
 using AuroraEmu.Network.Game.Packets.Composers.Catalogue;
 using AuroraEmu.Network.Game.Packets.Composers.Inventory;
 using AuroraEmu.Network.Game.Packets.Composers.Users;
@@ -16,7 +15,7 @@ namespace AuroraEmu.Network.Game.Packets.Events.Catalogue
             string data = msgEvent.ReadString();
             int unk = msgEvent.ReadVL64();
 
-            CatalogProduct product = CatalogController.GetInstance().GetProduct(productId);
+            CatalogProduct product = Engine.MainDI.CatalogController.GetProduct(productId);
 
             if (product != null)
             {
@@ -41,9 +40,9 @@ namespace AuroraEmu.Network.Game.Packets.Events.Catalogue
                         client.QueueComposer(new HabboActivityPointNotificationMessageComposer(client.Player.Pixels, 0));
                     }
 
-                    string extraData = CatalogController.GetInstance().GenerateExtraData(product, data);
+                    string extraData = Engine.MainDI.CatalogController.GenerateExtraData(product, data);
 
-                    ItemController.GetInstance().GiveItem(client, product, extraData);
+                    Engine.MainDI.ItemController.GiveItem(client, product, extraData);
 
                     client.QueueComposer(new PurchaseOKMessageComposer(product));
 

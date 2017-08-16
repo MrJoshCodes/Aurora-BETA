@@ -1,4 +1,5 @@
-﻿using AuroraEmu.Game.Clients;
+﻿using AuroraEmu.DI.Network.Game.Packets;
+using AuroraEmu.Game.Clients;
 using AuroraEmu.Network.Game.Packets.Events.Catalogue;
 using AuroraEmu.Network.Game.Packets.Events.Handshake;
 using AuroraEmu.Network.Game.Packets.Events.Inventory;
@@ -11,12 +12,11 @@ using System.Collections.Generic;
 
 namespace AuroraEmu.Network.Game.Packets
 {
-    public class PacketHelper
+    public class PacketController : IPacketController
     {
         private Dictionary<int, IPacketEvent> packetEvents;
-        private static PacketHelper packetHelperInstance;
 
-        public PacketHelper()
+        public PacketController()
         {
             LoadPackets();
 
@@ -78,13 +78,6 @@ namespace AuroraEmu.Network.Game.Packets
             {
                 Engine.Logger.Warn($"Unregistered packet event #{msgEvent.HeaderId}: {msgEvent.ToString()}");
             }
-        }
-
-        public static PacketHelper GetInstance()
-        {
-            if (packetHelperInstance == null)
-                packetHelperInstance = new PacketHelper();
-            return packetHelperInstance;
         }
     }
 }

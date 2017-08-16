@@ -1,5 +1,4 @@
 ﻿using AuroraEmu.Game.Clients;
-using AuroraEmu.Game.Messenger;
 
 namespace AuroraEmu.Network.Game.Packets.Events.Messenger
 {
@@ -7,7 +6,7 @@ namespace AuroraEmu.Network.Game.Packets.Events.Messenger
     {
         public void Run(Client client, MessageEvent msg)
         {
-            client.SendComposer(MessengerController.GetInstance().UpdateFriendlist(client.Player.Id));
+            client.SendComposer(client.Player.MessengerComponent.UpdateFriendList());
         }
     }
 }

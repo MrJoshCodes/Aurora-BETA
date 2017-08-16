@@ -15,10 +15,10 @@ namespace AuroraEmu.Network.Game.Packets.Composers.Users
             AppendVL64(actors.Count);
             foreach (RoomActor actor in actors)
             {
-                AppendVL64(actor.VirtualID);
-                AppendVL64(actor.X);
-                AppendVL64(actor.Y);
-                AppendString(actor.Z.ToString("0.00"));
+                AppendVL64(actor.VirtualId);
+                AppendVL64(actor.Position.X);
+                AppendVL64(actor.Position.Y);
+                AppendString(actor.Position.Z.ToString("0.00"));
                 AppendVL64(actor.Rotation);
                 AppendVL64(actor.Rotation);
                 

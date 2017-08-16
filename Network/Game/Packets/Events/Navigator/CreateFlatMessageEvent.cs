@@ -1,5 +1,4 @@
-﻿using AuroraEmu.Config;
-using AuroraEmu.Game.Clients;
+﻿using AuroraEmu.Game.Clients;
 using AuroraEmu.Game.Rooms;
 using AuroraEmu.Network.Game.Packets.Composers.Navigator;
 
@@ -20,7 +19,7 @@ namespace AuroraEmu.Network.Game.Packets.Events.Navigator
             //    return;
             //}
 
-            if (RoomController.GetInstance().TryCreateRoom(roomName, modelName, client.Player.Id, out Room room))
+            if (Engine.MainDI.RoomController.TryCreateRoom(roomName, modelName, client.Player.Id, out Room room))
             {
                 client.SendComposer(new FlatCreatedComposer(room.Id, room.Name));
             }

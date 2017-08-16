@@ -1,20 +1,14 @@
-﻿using System;
+﻿using AuroraEmu.DI.Game;
+using System;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Threading.Tasks.Dataflow;
 
 namespace AuroraEmu.Game
 {
-    public class TaskController
+    public class TaskController : ITaskController
     {
-        private static TaskController instance;
-
-        public TaskController()
-        {
-
-        }
-
-        public Task ExecuteOnce(AuroraTask executeTask, int delay = 0)
+        public Task ExecuteOnce(IAuroraTask executeTask, int delay = 0)
         {
             if (delay == 0)
             {
@@ -30,7 +24,7 @@ namespace AuroraEmu.Game
         public ActionBlock<DateTimeOffset> ExecutePeriodic(Action<DateTimeOffset> action,
             CancellationToken cancellationToken, int delay)
         {
-            if (action == null) throw new ArgumentNullException("action");
+            if (action == null) throw new ArgumentNullException(nameof(action));
 
             ActionBlock<DateTimeOffset> block = null;
 
@@ -48,13 +42,6 @@ namespace AuroraEmu.Game
             });
 
             return block;
-        }
-
-        public static TaskController GetInstance()
-        {
-            if (instance == null)
-                instance = new TaskController();
-            return instance;
         }
     }
 }

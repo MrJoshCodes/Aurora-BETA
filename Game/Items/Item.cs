@@ -29,7 +29,7 @@ namespace AuroraEmu.Game.Items
         public Item(DataRow row)
         {
             Id = (int)row["id"];
-            RoomId = row["room_id"].GetType().Equals(typeof(DBNull)) ? -1 : (int)row["room_id"];
+            RoomId = row["room_id"].Equals(typeof(DBNull)) ? -1 : (int)row["room_id"];
             OwnerId = (int)row["owner_id"];
             DefinitionId = (int)row["definition_id"];
             X = (int)row["x"];
@@ -45,7 +45,7 @@ namespace AuroraEmu.Game.Items
             get
             {
                 if (_definition == null)
-                    _definition = ItemController.GetInstance().GetTemplate(DefinitionId);
+                    _definition = Engine.MainDI.ItemController.GetTemplate(DefinitionId);
 
                 return _definition;
             }

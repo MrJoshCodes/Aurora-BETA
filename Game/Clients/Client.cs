@@ -1,35 +1,34 @@
-﻿using AuroraEmu.Game.Messenger;
-using AuroraEmu.Game.Players;
+﻿using AuroraEmu.Game.Players;
 using AuroraEmu.Network.Game.Packets;
 using DotNetty.Transport.Channels;
 using System.Collections.Generic;
 using AuroraEmu.Game.Rooms;
 using AuroraEmu.Game.Items;
+using AuroraEmu.Game.Rooms.User;
 
 namespace AuroraEmu.Game.Clients
 {
     public class Client
     {
-        private IChannel channel;
+        private readonly IChannel _channel;
 
         public Player Player { get; private set; }
-        public Dictionary<int, MessengerFriends> Friends { get; set; }
 
         public int? RoomCount { get; set; }
         public Room LoadingRoom { get; set; }
         public Room CurrentRoom { get; set; }
-        public RoomActor RoomActor { get; set; }
+        public UserActor UserActor { get; set; }
 
         public Dictionary<int, Item> Items { get; set; }
 
         public Client(IChannel channel)
         {
-            this.channel = channel;
+            _channel = channel;
         }
 
         public void Disconnect()
         {
-            channel.DisconnectAsync();
+            _channel.DisconnectAsync();
         }
 
         public void SendComposer(MessageComposer composer)
@@ -47,21 +46,21 @@ namespace AuroraEmu.Game.Clients
             Engine.Logger.Info($"{System.Text.Encoding.Default.GetString(composer.GetBytes().Array).Replace("\r", "{13}")}");
             if (flush)
             {
-                channel.WriteAndFlushAsync(composer.GetBytes());
+                _channel.WriteAndFlushAsync(composer.GetBytes());
             } else
             {
-                channel.WriteAsync(composer.GetBytes());
+                _channel.WriteAsync(composer.GetBytes());
             }
         }
 
         public IChannel Flush()
         {
-            return channel.Flush();
+            return _channel.Flush();
         }
 
         public void Login(string sso)
         {
-            Player = PlayerController.GetInstance().GetPlayerBySSO(sso);
+            Player = Engine.MainDI.PlayerController.GetPlayerBySSO(sso);
 
             if (Player != null)
             {

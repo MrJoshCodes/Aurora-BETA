@@ -9,7 +9,7 @@ namespace AuroraEmu.Network.Game.Packets.Events.Rooms
         public void Run(Client client, MessageEvent msgEvent)
         {
             int roomId = msgEvent.ReadVL64();
-            Room room = RoomController.GetInstance().GetRoom(roomId);
+            Room room = Engine.MainDI.RoomController.GetRoom(roomId);
 
             if (room != null)
             {
