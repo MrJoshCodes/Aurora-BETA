@@ -20,6 +20,7 @@ namespace AuroraEmu.Game.Players
         public int BlockNewFriends { get; set; }
 
         public MessengerComponent MessengerComponent { get; set; }
+        public BadgesComponent BadgesComponent { get; set; }
 
         public Player(DataRow row)
         {

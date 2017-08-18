@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using AuroraEmu.Game.Rooms;
 using AuroraEmu.Game.Items;
 using AuroraEmu.Game.Rooms.User;
+using AuroraEmu.Game.Players.Components;
 
 namespace AuroraEmu.Game.Clients
 {
@@ -69,6 +70,8 @@ namespace AuroraEmu.Game.Clients
                 MessageComposer composer = new MessageComposer(139);
                 composer.AppendString($"Welcome {Player.Username} to Aurora BETA, enjoy your stay!");
                 SendComposer(composer);
+
+                Player.BadgesComponent = new BadgesComponent(Player.Id);
             }
             else
             {

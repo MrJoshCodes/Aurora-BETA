@@ -41,6 +41,7 @@ namespace AuroraEmu.Game
         public IPlayerDao PlayerDao { get; set; }
         public IRoomDao RoomDao { get; set; }
         public IWordfilterDao WordfilterDao { get; set; }
+        public IBadgesDao BadgesDao { get; set; }
 
         public MainDi(IDependencyLocator locator)
         {
@@ -74,6 +75,7 @@ namespace AuroraEmu.Game
             PlayerDao = _locator.Resolve<IPlayerDao>();
             RoomDao = _locator.Resolve<IRoomDao>();
             WordfilterDao = _locator.Resolve<IWordfilterDao>();
+            BadgesDao = _locator.Resolve<IBadgesDao>();
         }
     }
 }
