@@ -94,6 +94,7 @@ namespace AuroraEmu
             builder.RegisterType<PlayerDao>().As<IPlayerDao>();
             builder.RegisterType<RoomDao>().As<IRoomDao>();
             builder.RegisterType<WordfilterDao>().As<IWordfilterDao>();
+            builder.RegisterType<BadgesDao>().As<IBadgesDao>();
 
             Container = builder.Build();
             MainDI = Container.Resolve<MainDi>();

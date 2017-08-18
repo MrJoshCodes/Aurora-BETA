@@ -3,6 +3,7 @@ using AuroraEmu.Game.Clients;
 using AuroraEmu.Network.Game.Packets.Events.Catalogue;
 using AuroraEmu.Network.Game.Packets.Events.Handshake;
 using AuroraEmu.Network.Game.Packets.Events.Inventory;
+using AuroraEmu.Network.Game.Packets.Events.Inventory.Badges;
 using AuroraEmu.Network.Game.Packets.Events.Messenger;
 using AuroraEmu.Network.Game.Packets.Events.Navigator;
 using AuroraEmu.Network.Game.Packets.Events.Rooms;
@@ -61,7 +62,9 @@ namespace AuroraEmu.Network.Game.Packets
                 { 437, new RoomTextSearchMessageEvent() },
                 { 400, new GetRoomSettingsMessageEvent() },
                 { 386, new UpdateRoomThumbnailMessageEvent() },
-                { 75, new MoveAvatarMessageEvent() }
+                { 75, new MoveAvatarMessageEvent() },
+
+                {157, new GetBadgesEvent() }
             };
         }
 
