@@ -1,7 +1,7 @@
 ﻿using AuroraEmu.DI.Database.DAO;
 using AuroraEmu.Game.Catalog;
+using AuroraEmu.Game.Catalog.Voucher;
 using System.Collections.Generic;
-using System.Data;
 
 namespace AuroraEmu.Database.DAO
 {
@@ -11,72 +11,88 @@ namespace AuroraEmu.Database.DAO
         {
             pages.Clear();
 
-            DataTable result;
-            DataTable result2;
-
             using (DatabaseConnection dbConnection = Engine.MainDI.DatabaseController.GetConnection())
             {
                 dbConnection.Open();
                 dbConnection.SetQuery("SELECT * FROM catalog_pages;");
-                result = dbConnection.GetTable();
+                using (var reader = dbConnection.ExecuteReader())
+                    while (reader.Read())
+                        pages.Add(reader.GetInt32("id"), new CatalogPage(reader));
+
                 dbConnection.SetQuery("SELECT page_id,type,value FROM catalog_pages_data;");
-                result2 = dbConnection.GetTable();
+                using (var reader = dbConnection.ExecuteReader())
+                    while (reader.Read())
+                        pages[reader.GetInt32("page_id")].Data[reader.GetString("type")].Add(reader.GetString("value"));
+
 
                 dbConnection.BeginTransaction();
                 dbConnection.Commit();
                 dbConnection.Dispose();
-            }
-
-            if (result != null)
-            {
-                foreach (DataRow row in result.Rows)
-                {
-                    pages.Add((int)row["id"], new CatalogPage(row));
-                }
-            }
-
-            if (result2 != null)
-            {
-                foreach (DataRow row in result2.Rows)
-                {
-                    pages[(int)row["page_id"]].Data[(string)row["type"]].Add((string)row["value"]);
-                }
             }
             return pages;
         }
 
-        public DataTable ReloadProducts()
+        public Dictionary<int, CatalogProduct> ReloadProducts(Dictionary<int, CatalogProduct> products)
         {
-            DataTable table;
             using (DatabaseConnection dbConnection = Engine.MainDI.DatabaseController.GetConnection())
             {
                 dbConnection.Open();
                 dbConnection.SetQuery("SELECT * FROM catalog_products;");
-                table = dbConnection.GetTable();
+                using (var reader = dbConnection.ExecuteReader())
+                    while (reader.Read())
+                        products.Add(reader.GetInt32("id"), new CatalogProduct(reader));
 
                 dbConnection.BeginTransaction();
                 dbConnection.Commit();
                 dbConnection.Dispose();
             }
 
-            return table;
+            return products;
         }
-
-        public DataTable ReloadDeals()
+        
+        public Dictionary<int, List<CatalogDealItem>> ReloadDeals(Dictionary<int, List<CatalogDealItem>> deals)
         {
-            DataTable table;
             using (DatabaseConnection dbConnection = Engine.MainDI.DatabaseController.GetConnection())
             {
                 dbConnection.Open();
                 dbConnection.SetQuery("SELECT * FROM catalog_deals;");
-                table = dbConnection.GetTable();
+                using (var reader = dbConnection.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        int dealId = reader.GetInt32("id");
+
+                        if (!deals.TryGetValue(dealId, out List<CatalogDealItem> item))
+                            deals.Add(dealId, new List<CatalogDealItem>());
+
+                        deals[dealId].Add(new CatalogDealItem(reader));
+                    }
+                }
 
                 dbConnection.BeginTransaction();
                 dbConnection.Commit();
                 dbConnection.Dispose();
             }
 
-            return table;
+            return deals;
+        }
+
+        public Dictionary<string, Voucher> ReloadVouchers(Dictionary<string, Voucher> vouchers)
+        {
+            using (DatabaseConnection dbConnection = Engine.MainDI.DatabaseController.GetConnection())
+            {
+                dbConnection.Open();
+                dbConnection.SetQuery("SELECT * FROM catalog_vouchers;");
+                using (var reader = dbConnection.ExecuteReader())
+                    while (reader.Read())
+                        vouchers.Add(reader.GetString("voucher"), new Voucher(reader));
+
+                dbConnection.BeginTransaction();
+                dbConnection.Commit();
+                dbConnection.Dispose();
+            }
+
+            return vouchers;
         }
     }
 }

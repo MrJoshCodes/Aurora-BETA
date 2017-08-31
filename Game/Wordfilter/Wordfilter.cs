@@ -1,4 +1,4 @@
-﻿using System.Data;
+﻿using MySql.Data.MySqlClient;
 
 namespace AuroraEmu.Game.Wordfilter
 {
@@ -7,10 +7,10 @@ namespace AuroraEmu.Game.Wordfilter
         public string Word { get; set; }
         public string ReplacementWord { get; set; }
 
-        public Wordfilter(DataRow row)
+        public Wordfilter(MySqlDataReader reader)
         {
-            Word = (string) row["not_allowed_message"];
-            ReplacementWord = (string) row["replace_message"];
+            Word = reader.GetString("not_allowed_message");
+            ReplacementWord = reader.GetString("replace_message");
         }
     }
 }

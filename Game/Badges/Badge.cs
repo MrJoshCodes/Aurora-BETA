@@ -1,4 +1,4 @@
-﻿using System.Data;
+﻿using MySql.Data.MySqlClient;
 
 namespace AuroraEmu.Game.Badges
 {
@@ -8,11 +8,11 @@ namespace AuroraEmu.Game.Badges
         public string Code { get; private set; }
         public int Slot { get; private set; }
 
-        public Badge(DataRow row)
+        public Badge(MySqlDataReader reader)
         {
-            Id = (int)row["id"];
-            Code = (string)row["badge_code"];
-            Slot = (int)row["slot_number"];
+            Id = reader.GetInt32("id");
+            Code = reader.GetString("badge_code");
+            Slot = reader.GetInt32("slot_number");
         }
     }
 }

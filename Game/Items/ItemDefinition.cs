@@ -1,4 +1,5 @@
-﻿using System.Data;
+﻿using MySql.Data.MySqlClient;
+using System.Data;
 
 namespace AuroraEmu.Game.Items
 {
@@ -19,22 +20,22 @@ namespace AuroraEmu.Game.Items
         public string InteractorType { get; set; }
         public string VendorIDs { get; set; }
 
-        public ItemDefinition(DataRow row)
+        public ItemDefinition(MySqlDataReader reader)
         {
-            Id = (int)row["Id"];
-            SwfName = (string)row["swf_name"];
-            SpriteType = (string)row["sprite_type"];
-            SpriteId = (int)row["sprite_id"];
-            Length = (int)row["length"];
-            Width = (int)row["width"];
-            Height = (double)row["height"];
-            CanStack = (bool)row["can_stack"];
-            ItemType = (string)row["item_type"];
-            CanGift = (bool)row["can_gift"];
-            CanRecycle = (bool)row["can_recycle"];
-            InteractorRightsRequired = (bool)row["interactor_requires_rights"];
-            InteractorType = (string)row["interactor_type"];
-            VendorIDs = (string)row["vendor_ids"];
+            Id = reader.GetInt32("Id");
+            SwfName = reader.GetString("swf_name");
+            SpriteType = reader.GetString("sprite_type");
+            SpriteId = reader.GetInt32("sprite_id");
+            Length = reader.GetInt32("length");
+            Width = reader.GetInt32("width");
+            Height = reader.GetDouble("height");
+            CanStack = reader.GetBoolean("can_stack");
+            ItemType = reader.GetString("item_type");
+            CanGift = reader.GetBoolean("can_gift");
+            CanRecycle = reader.GetBoolean("can_recycle");
+            InteractorRightsRequired = reader.GetBoolean("interactor_requires_rights");
+            InteractorType = reader.GetString("interactor_type");
+            VendorIDs = reader.GetString("vendor_ids");
         }
     }
 }

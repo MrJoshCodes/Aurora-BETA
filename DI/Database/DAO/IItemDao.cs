@@ -9,7 +9,7 @@ namespace AuroraEmu.DI.Database.DAO
 {
     public interface IItemDao
     {
-        DataTable ReloadTemplates();
+        Dictionary<int, ItemDefinition> ReloadTemplates(Dictionary<int, ItemDefinition> items);
 
         void GiveItem(Client client, CatalogProduct product, string extraData);
         

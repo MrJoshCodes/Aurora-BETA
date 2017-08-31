@@ -61,24 +61,24 @@ namespace AuroraEmu.Game.Rooms
             Landscape = 0.0;
         }
 
-        public Room(DataRow row)
+        public Room(MySqlDataReader reader)
         {
-            Id = (int) row["id"];
-            OwnerId = row["owner_id"].Equals(typeof(DBNull)) ? 0 : (int) row["owner_id"];
-            Name = (string) row["name"];
-            Description = (string) row["description"];
-            State = (RoomState) Enum.Parse(typeof(RoomState), (string) row["state"]);
-            PlayersIn = (int) row["players_in"];
-            PlayersMax = (int) row["players_max"];
-            CategoryId = (int) row["category_id"];
-            Model = (string) row["model"];
-            CCTs = (string) row["ccts"];
-            ShowOwner = (bool) row["show_owner"];
-            AllPlayerRights = (bool) row["all_player_rights"];
-            Icon = (string) row["icon"];
-            Floor = (int) row["floor"];
-            Wallpaper = (int) row["wallpaper"];
-            Landscape = (double) row["landscape"];
+            Id = reader.GetInt32("id");
+            OwnerId = reader.GetInt32("owner_id").Equals(typeof(DBNull)) ? 0 : reader.GetInt32("owner_id");
+            Name = reader.GetString("name");
+            Description = reader.GetString("description");
+            State = (RoomState) Enum.Parse(typeof(RoomState), reader.GetString("state"));
+            PlayersIn = reader.GetInt32("players_in");
+            PlayersMax = reader.GetInt32("players_max");
+            CategoryId = reader.GetInt32("category_id");
+            Model = reader.GetString("model");
+            CCTs = reader.GetString("ccts");
+            ShowOwner = reader.GetBoolean("show_owner");
+            AllPlayerRights = reader.GetBoolean("all_player_rights");
+            Icon = reader.GetString("icon");
+            Floor = reader.GetInt32("floor");
+            Wallpaper = reader.GetInt32("wallpaper");
+            Landscape = reader.GetDouble("landscape");
             Map = Engine.MainDI.RoomController.RoomMaps[Model];
             Actors = new ConcurrentDictionary<int, RoomActor>();
 

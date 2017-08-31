@@ -1,6 +1,6 @@
 ﻿using AuroraEmu.Game.Catalog;
+using AuroraEmu.Game.Catalog.Voucher;
 using System.Collections.Generic;
-using System.Data;
 
 namespace AuroraEmu.DI.Database.DAO
 {
@@ -8,8 +8,10 @@ namespace AuroraEmu.DI.Database.DAO
     {
         Dictionary<int, CatalogPage> ReloadCatalogPage(Dictionary<int, CatalogPage> pages);
 
-        DataTable ReloadProducts();
+        Dictionary<int, CatalogProduct> ReloadProducts(Dictionary<int, CatalogProduct> products);
 
-        DataTable ReloadDeals();
+        Dictionary<int, List<CatalogDealItem>> ReloadDeals(Dictionary<int, List<CatalogDealItem>> deals);
+
+        Dictionary<string, Voucher> ReloadVouchers(Dictionary<string, Voucher> vouchers);
     }
 }

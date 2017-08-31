@@ -26,7 +26,7 @@ namespace AuroraEmu.Network.Game.Packets
 
         public void AppendString(string value, byte breaker = 2)
         {
-            buffer.WriteBytes(Encoding.Default.GetBytes(value));
+            buffer.WriteBytes(Encoding.GetEncoding(0).GetBytes(value));
 
             if (breaker > 0)
                 buffer.WriteByte(breaker);

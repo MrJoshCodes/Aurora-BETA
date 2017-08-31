@@ -1,24 +1,28 @@
-﻿using System.Data;
-using AuroraEmu.DI.Database.DAO;
+﻿using AuroraEmu.DI.Database.DAO;
+using System.Collections.Generic;
+using AuroraEmu.Game.Wordfilter;
 
 namespace AuroraEmu.Database.DAO
 {
     public class WordfilterDao : IWordfilterDao
     {
-        public DataTable WordfilterData()
+        public List<Wordfilter> WordfilterData(List<Wordfilter> wordFilter)
         {
-            DataTable data;
+            wordFilter.Clear();
+
             using (DatabaseConnection dbClient = Engine.MainDI.DatabaseController.GetConnection())
             {
                 dbClient.Open();
                 dbClient.SetQuery("SELECT * FROM wordfilter");
-                data = dbClient.GetTable();
-                
+                using (var reader = dbClient.ExecuteReader())
+                    while (reader.Read())
+                        wordFilter.Add(new Wordfilter(reader));
+
                 dbClient.BeginTransaction();
                 dbClient.Commit();
                 dbClient.Dispose();
             }
-            return data;
+            return wordFilter;
         }
     }
 }

@@ -1,6 +1,6 @@
 ﻿using AuroraEmu.Game.Items;
+using MySql.Data.MySqlClient;
 using System.Collections.Generic;
-using System.Data;
 
 namespace AuroraEmu.Game.Catalog
 {
@@ -20,18 +20,18 @@ namespace AuroraEmu.Game.Catalog
         public int DealId { get; set; }
         public string Data { get; set; }
 
-        public CatalogProduct(DataRow row)
+        public CatalogProduct(MySqlDataReader reader)
         {
-            Id = (int)row["id"];
-            Name = (string)row["name"];
-            PriceCoins = (int)row["price_coins"];
-            PricePixels = (int)row["price_pixels"];
-            PageId = (int)row["page_id"];
-            IsDeal = (bool)row["is_deal"];
-            Amount = IsDeal ? -1 : (int)row["amount"];
-            TemplateId = IsDeal ? -1 : (int)row["Template_id"];
-            DealId = IsDeal ? (int)row["deal_id"] : -1;
-            Data = (string)row["data"];
+            Id = reader.GetInt32("id");
+            Name = reader.GetString("name");
+            PriceCoins = reader.GetInt32("price_coins");
+            PricePixels = reader.GetInt32("price_pixels");
+            PageId = reader.GetInt32("page_id");
+            IsDeal = reader.GetBoolean("is_deal");
+            Amount = IsDeal ? -1 : reader.GetInt32("amount");
+            TemplateId = IsDeal ? -1 : reader.GetInt32("Template_id");
+            DealId = IsDeal ? reader.GetInt32("deal_id") : -1;
+            Data = reader.GetString("data");
         }
 
         public List<CatalogDealItem> DealItems

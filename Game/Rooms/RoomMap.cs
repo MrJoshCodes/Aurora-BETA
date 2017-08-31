@@ -1,4 +1,4 @@
-﻿using System.Data;
+﻿using MySql.Data.MySqlClient;
 
 namespace AuroraEmu.Game.Rooms
 {
@@ -23,14 +23,14 @@ namespace AuroraEmu.Game.Rooms
         public string RelativeHeightMap { get; private set; }
         public bool DisableDiagonal { get; }
 
-        public RoomMap(DataRow row)
+        public RoomMap(MySqlDataReader reader)
         {
-            Name = (string) row["name"];
-            DoorX = (int) row["door_x"];
-            DoorY = (int) row["door_y"];
-            DoorZ = (double) row["door_z"];
-            DoorRotation = (int) row["door_rotation"];
-            RawMap = (string) row["raw_map"];
+            Name = reader.GetString("name");
+            DoorX = reader.GetInt32("door_x");
+            DoorY = reader.GetInt32("door_y");
+            DoorZ = reader.GetDouble("door_z");
+            DoorRotation = reader.GetInt32("door_rotation");
+            RawMap = reader.GetString("raw_map");
 
             _splitMap = RawMap.Split('|');
 

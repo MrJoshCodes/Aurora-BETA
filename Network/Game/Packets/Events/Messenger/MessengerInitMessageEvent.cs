@@ -1,5 +1,6 @@
 ﻿using AuroraEmu.Game.Clients;
 using AuroraEmu.Network.Game.Packets.Composers.Messenger;
+using AuroraEmu.Network.Game.Packets.Composers.Users;
 
 namespace AuroraEmu.Network.Game.Packets.Events.Messenger
 {
@@ -7,8 +8,12 @@ namespace AuroraEmu.Network.Game.Packets.Events.Messenger
     {
         public void Run(Client client, MessageEvent msg)
         {
-            client.SendComposer(new MessengerInitMessageComposer(client.Player.MessengerComponent.Friends));
-            client.SendComposer(new BuddyRequestsMessageComposer(client.Player.MessengerComponent.Requests));
+            client.QueueComposer(new CreditBalanceMessageComposer(client.Player.Coins));
+            client.QueueComposer(new HabboActivityPointNotificationMessageComposer(client.Player.Pixels, 0));
+
+            client.QueueComposer(new MessengerInitMessageComposer(client.Player.MessengerComponent.Friends));
+
+            client.Flush();
         }
     }
 }

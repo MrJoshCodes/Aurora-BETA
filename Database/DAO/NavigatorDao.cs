@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Data;
 using AuroraEmu.DI.Database.DAO;
 using AuroraEmu.Game.Navigator;
 using AuroraEmu.Game.Rooms;
@@ -12,23 +11,17 @@ namespace AuroraEmu.Database.DAO
         {
             frontpageItems.Clear();
 
-            DataTable result;
-
             using (DatabaseConnection dbConnection = Engine.MainDI.DatabaseController.GetConnection())
             {
                 dbConnection.Open();
                 dbConnection.SetQuery("SELECT * FROM frontpage_items;");
+                using (var reader = dbConnection.ExecuteReader())
+                    while (reader.Read())
+                        frontpageItems.Add(new FrontpageItem(reader));
 
-                result = dbConnection.GetTable();
-                
                 dbConnection.BeginTransaction();
                 dbConnection.Commit();
                 dbConnection.Dispose();
-            }
-
-            foreach (DataRow row in result.Rows)
-            {
-                frontpageItems.Add(new FrontpageItem(row));
             }
             
             return frontpageItems;
@@ -37,23 +30,18 @@ namespace AuroraEmu.Database.DAO
         public Dictionary<int, RoomCategory> ReloadCategories(Dictionary<int, RoomCategory> categories)
         {
             categories.Clear();
-            DataTable result;
 
             using (DatabaseConnection dbConnection = Engine.MainDI.DatabaseController.GetConnection())
             {
                 dbConnection.Open();
                 dbConnection.SetQuery("SELECT * FROM room_categories");
+                using (var reader = dbConnection.ExecuteReader())
+                    while (reader.Read())
+                        categories.Add(reader.GetInt32("id"), new RoomCategory(reader));
 
-                result = dbConnection.GetTable();
-                
-                dbConnection.BeginTransaction();
+                    dbConnection.BeginTransaction();
                 dbConnection.Commit();
                 dbConnection.Dispose();
-            }
-
-            foreach(DataRow row in result.Rows)
-            {
-                categories.Add((int)row["id"], new RoomCategory(row));
             }
             
             return categories;
@@ -62,53 +50,48 @@ namespace AuroraEmu.Database.DAO
         public List<Room> GetRoomsByOwner(int ownerId)
         {
             List<Room> rooms = new List<Room>();
-            DataTable result;
 
             using (DatabaseConnection dbConnection = Engine.MainDI.DatabaseController.GetConnection())
             {
                 dbConnection.Open();
                 dbConnection.SetQuery("SELECT * FROM rooms WHERE owner_id = @ownerId");
                 dbConnection.AddParameter("@ownerId", ownerId);
-                result = dbConnection.GetTable();
-                
+                using (var reader = dbConnection.ExecuteReader())
+                    while (reader.Read())
+                    {
+                        Room room = new Room(reader);
+                        rooms.Add(room);
+                        Engine.MainDI.RoomController.Rooms.AddOrUpdate(room.Id, room, (oldKey, oldValue) => room);
+                    }
+
                 dbConnection.BeginTransaction();
                 dbConnection.Commit();
                 dbConnection.Dispose();
             }
 
-            foreach(DataRow row in result.Rows)
-            {
-                Room room = new Room(row);
-                rooms.Add(room);
-                Engine.MainDI.RoomController.Rooms.AddOrUpdate(room.Id, room, (oldKey, oldValue) => room);
-            }
-
             return rooms;
         }
-        
+
         public List<Room> SearchRooms(string search)
         {
             List<Room> rooms = new List<Room>();
-            DataTable result;
 
             using (DatabaseConnection dbConnection = Engine.MainDI.DatabaseController.GetConnection())
             {
                 dbConnection.Open();
                 dbConnection.SetQuery("SELECT * FROM rooms WHERE name LIKE @search OR owner_id IN (SELECT id FROM players WHERE username LIKE @search)");
                 dbConnection.AddParameter("@search", "%" + search + "%");
+                using (var reader = dbConnection.ExecuteReader())
+                    while (reader.Read())
+                    {
+                        Room room = new Room(reader);
+                        rooms.Add(room);
+                        Engine.MainDI.RoomController.Rooms.AddOrUpdate(room.Id, room, (oldKey, oldValue) => room);
+                    }
 
-                result = dbConnection.GetTable();
-                
                 dbConnection.BeginTransaction();
                 dbConnection.Commit();
                 dbConnection.Dispose();
-            }
-
-            foreach (DataRow row in result.Rows)
-            {
-                Room room = new Room(row);
-                rooms.Add(room);
-                Engine.MainDI.RoomController.Rooms.AddOrUpdate(room.Id, room, (oldKey, oldValue) => room);
             }
 
             return rooms;

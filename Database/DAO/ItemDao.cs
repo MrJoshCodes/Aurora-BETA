@@ -10,21 +10,21 @@ namespace AuroraEmu.Database.DAO
 {
     public class ItemDao : IItemDao
     {
-        public DataTable ReloadTemplates()
+        public Dictionary<int, ItemDefinition> ReloadTemplates(Dictionary<int, ItemDefinition> items)
         {
-            DataTable result;
-
             using (DatabaseConnection dbConnection = Engine.MainDI.DatabaseController.GetConnection())
             {
                 dbConnection.Open();
                 dbConnection.SetQuery("SELECT * FROM item_definitions;");
-                result = dbConnection.GetTable();
-                
+                using (var reader = dbConnection.ExecuteReader())
+                    while (reader.Read())
+                        items.Add(reader.GetInt32("id"), new ItemDefinition(reader));
+
                 dbConnection.BeginTransaction();
                 dbConnection.Commit();
                 dbConnection.Dispose();
             }
-            return result;
+            return items;
         }
         
         public void GiveItem(Client client, CatalogProduct product, string extraData)
@@ -54,26 +54,19 @@ namespace AuroraEmu.Database.DAO
         public ConcurrentDictionary<int, Item> GetItemsInRoom(int roomId)
         {
             ConcurrentDictionary<int, Item> items = new ConcurrentDictionary<int, Item>();
-
-            DataTable result;
-
             using (DatabaseConnection dbConnection = Engine.MainDI.DatabaseController.GetConnection())
             {
                 dbConnection.Open();
                 dbConnection.SetQuery("SELECT * FROM items WHERE room_id = @roomId");
                 dbConnection.AddParameter("@roomId", roomId);
-                result = dbConnection.GetTable();
-                
+                using (var reader = dbConnection.ExecuteReader())
+                    while (reader.Read())
+                        items.TryAdd(reader.GetInt32("id"), new Item(reader));
+
                 dbConnection.BeginTransaction();
                 dbConnection.Commit();
                 dbConnection.Dispose();
             }
-
-            foreach (DataRow row in result.Rows)
-            {
-                items.TryAdd((int)row["id"], new Item(row));
-            }
-
             return items;
         }
         
@@ -81,24 +74,18 @@ namespace AuroraEmu.Database.DAO
         {
             Dictionary<int, Item> items = new Dictionary<int, Item>();
 
-            DataTable result;
-
             using (DatabaseConnection dbConnection = Engine.MainDI.DatabaseController.GetConnection())
             {
                 dbConnection.Open();
                 dbConnection.SetQuery("SELECT * FROM items WHERE owner_id = @ownerId AND room_id IS NULL");
                 dbConnection.AddParameter("@ownerId", ownerId);
+                using (var reader = dbConnection.ExecuteReader())
+                    while (reader.Read())
+                        items.Add(reader.GetInt32("id"), new Item(reader));
 
-                result = dbConnection.GetTable();
-                
                 dbConnection.BeginTransaction();
                 dbConnection.Commit();
                 dbConnection.Dispose();
-            }
-
-            foreach (DataRow row in result.Rows)
-            {
-                items.Add((int)row["id"], new Item(row));
             }
 
             return items;

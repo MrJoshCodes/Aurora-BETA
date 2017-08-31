@@ -1,5 +1,5 @@
 ﻿using AuroraEmu.Game.Items;
-using System.Data;
+using MySql.Data.MySqlClient;
 
 namespace AuroraEmu.Game.Catalog
 {
@@ -11,11 +11,11 @@ namespace AuroraEmu.Game.Catalog
         public int TemplateId { get; set; }
         public int Amount { get; set; }
 
-        public CatalogDealItem(DataRow row)
+        public CatalogDealItem(MySqlDataReader reader)
         {
-            Id = (int)row["id"];
-            TemplateId = (int)row["template_id"];
-            Amount = (int)row["amount"];
+            Id = reader.GetInt32("id");
+            TemplateId = reader.GetInt32("template_id");
+            Amount = reader.GetInt32("amount");
         }
 
         public ItemDefinition Template

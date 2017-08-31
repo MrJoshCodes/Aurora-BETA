@@ -1,4 +1,4 @@
-﻿using System.Data;
+﻿using MySql.Data.MySqlClient;
 
 namespace AuroraEmu.Game.Rooms
 {
@@ -11,12 +11,12 @@ namespace AuroraEmu.Game.Rooms
 
         public int PlayersInside { get; set; }
 
-        public RoomCategory(DataRow row)
+        public RoomCategory(MySqlDataReader reader)
         {
-            Id = (int) row["id"];
-            Name = (string) row["name"];
-            MinRank = (int) row["min_rank"];
-            TradeAllowed = (bool) row["trade_allowed"];
+            Id = reader.GetInt32("id");
+            Name = reader.GetString("name");
+            MinRank = reader.GetInt32("min_rank");
+            TradeAllowed = reader.GetBoolean("trade_allowed");
         }
     }
 }

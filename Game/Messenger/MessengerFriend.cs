@@ -1,5 +1,5 @@
 ﻿using AuroraEmu.Game.Players;
-using System.Data;
+using MySql.Data.MySqlClient;
 
 namespace AuroraEmu.Game.Messenger
 {
@@ -10,12 +10,12 @@ namespace AuroraEmu.Game.Messenger
         public string Figure { get; set; }
         public int UserTwoId { get; set; }
 
-        public MessengerFriend(DataRow row)
+        public MessengerFriend(MySqlDataReader reader)
         {
-            UserTwoId = (int) row["user_two_id"];
-            Username = (string) row["username"];
-            Motto = (string) row["motto"];
-            Figure = (string) row["figure"];
+            UserTwoId = reader.GetInt32("user_two_id");
+            Username = reader.GetString("username");
+            Motto = reader.GetString("motto");
+            Figure = reader.GetString("figure");
         }
 
         public MessengerFriend(int id)

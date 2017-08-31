@@ -19,14 +19,7 @@ namespace AuroraEmu.Game.Rooms
 
         public void LoadRoomMaps()
         {
-            RoomMaps.Clear();
-
-            DataTable table = Engine.MainDI.RoomDao.LoadRoomMaps();
-
-            foreach (DataRow row in table.Rows)
-            {
-                RoomMaps.Add((string) row["name"], new RoomMap(row));
-            }
+            Engine.MainDI.RoomDao.LoadRoomMaps(RoomMaps);
 
             Engine.Logger.Info($"Loaded {RoomMaps.Count} room maps.");
         }
@@ -36,17 +29,8 @@ namespace AuroraEmu.Game.Rooms
             if (Rooms.TryGetValue(id, out Room room))
                 return room;
 
-            DataRow row = Engine.MainDI.RoomDao.GetRoom(id);
-
-            if (row != null)
-            {
-                room = new Room(row);
-                Rooms.TryAdd(id, room);
-
-                return room;
-            }
-
-            return null;
+            room = Engine.MainDI.RoomDao.GetRoom(id);
+            return room;
         }
 
         public int GetUserRoomCount(int userId)

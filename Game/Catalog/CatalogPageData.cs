@@ -1,4 +1,4 @@
-﻿using System.Data;
+﻿using MySql.Data.MySqlClient;
 
 namespace AuroraEmu.Game.Catalog
 {
@@ -9,12 +9,12 @@ namespace AuroraEmu.Game.Catalog
         public string Type { get; set; }
         public string Value { get; set; }
         
-        public CatalogPageData(DataRow row)
+        public CatalogPageData(MySqlDataReader reader)
         {
-            Id = (int)row["id"];
-            PageId = (int)row["page_id"];
-            Type = (string)row["type"];
-            Value = (string)row["value"];
+            Id = reader.GetInt32("id");
+            PageId = reader.GetInt32("page_id");
+            Type = reader.GetString("type");
+            Value = reader.GetString("value");
         }
     }
 }

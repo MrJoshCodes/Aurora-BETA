@@ -1,5 +1,5 @@
-﻿using System.Collections.Generic;
-using System.Data;
+﻿using MySql.Data.MySqlClient;
+using System.Collections.Generic;
 
 namespace AuroraEmu.Game.Catalog
 {
@@ -18,18 +18,18 @@ namespace AuroraEmu.Game.Catalog
 
         public Dictionary<string, List<string>> Data { get; set; }
 
-        public CatalogPage(DataRow row)
+        public CatalogPage(MySqlDataReader reader)
         {
-            Id = (int)row["id"];
-            Name = (string)row["name"];
-            IconColor = (int)row["icon_color"];
-            IconImage = (int)row["icon_image"];
-            Development = (bool)row["in_development"];
-            Visible = (bool)row["is_visible"];
-            ParentId = (int)row["parent_id"];
-            MinRank = (int)row["min_rank"];
-            Layout = (string)row["layout"];
-            HasContent = (bool)row["has_content"];
+            Id = reader.GetInt32("id");
+            Name = reader.GetString("name");
+            IconColor = reader.GetInt32("icon_color");
+            IconImage = reader.GetInt32("icon_image");
+            Development = reader.GetBoolean("in_development");
+            Visible = reader.GetBoolean("is_visible");
+            ParentId = reader.GetInt32("parent_id");
+            MinRank = reader.GetInt32("min_rank");
+            Layout = reader.GetString("layout");
+            HasContent = reader.GetBoolean("has_content");
             Data = new Dictionary<string, List<string>> { { "image", new List<string>() }, { "text", new List<string>() } };
         }
     }

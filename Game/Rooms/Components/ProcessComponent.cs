@@ -4,11 +4,10 @@ using System;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks.Dataflow;
-using AuroraEmu.Network.Game.Packets.Events.Navigator;
 
 namespace AuroraEmu.Game.Rooms.Components
 {
-    public class ProcessComponent
+    public class ProcessComponent : IDisposable
     {
         private Room room;
         private CancellationTokenSource _wtoken;
@@ -49,7 +48,7 @@ namespace AuroraEmu.Game.Rooms.Components
                 {
                     if (actor.IsWalking)
                         actor.Path.Clear();
-                    
+
                     Grid grid = new Grid(actor.Client.CurrentRoom.Map, actor.Client.CurrentRoom.Map.MapSize.Item1, actor.Client.CurrentRoom.Map.MapSize.Item2);
                     actor.Path = grid.GetPath(actor.Position, actor.TargetPoint, MovementPatterns.Full);
 
@@ -106,6 +105,13 @@ namespace AuroraEmu.Game.Rooms.Components
             }
             if (toUpdate.Count > 0)
                 room.SendComposer(new UserUpdateMessageComposer(toUpdate));
+        }
+
+        public void Dispose()
+        {
+            _wtoken.Cancel();
+            _task = null;
+            _wtoken = null;
         }
     }
 }

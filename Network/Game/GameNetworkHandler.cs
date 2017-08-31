@@ -37,7 +37,7 @@ namespace AuroraEmu.Network.Game
             {
                 string policy =
                     "<?xml version=\"1.0\"?>\r\n<!DOCTYPE cross-domain-policy SYSTEM \"/xml/dtds/cross-domain-policy.dtd\">\r\n<cross-domain-policy>\r\n   <allow-access-from domain=\"*\" to-ports=\"1-65535\" />\r\n</cross-domain-policy>\0";
-                ctx.Channel.WriteAndFlushAsync(Unpooled.CopiedBuffer(Encoding.Default.GetBytes(policy))).Wait();
+                ctx.Channel.WriteAndFlushAsync(Unpooled.CopiedBuffer(Encoding.GetEncoding(0).GetBytes(policy))).Wait();
             }
             else
             {

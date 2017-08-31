@@ -6,6 +6,7 @@ using AuroraEmu.Game.Rooms;
 using AuroraEmu.Game.Items;
 using AuroraEmu.Game.Rooms.User;
 using AuroraEmu.Game.Players.Components;
+using AuroraEmu.Database.DAO;
 
 namespace AuroraEmu.Game.Clients
 {
@@ -25,6 +26,7 @@ namespace AuroraEmu.Game.Clients
         public Client(IChannel channel)
         {
             _channel = channel;
+            Items = new Dictionary<int, Item>();
         }
 
         public void Disconnect()
@@ -44,7 +46,7 @@ namespace AuroraEmu.Game.Clients
 
         public void Send(MessageComposer composer, bool flush)
         {
-            Engine.Logger.Info($"{System.Text.Encoding.Default.GetString(composer.GetBytes().Array).Replace("\r", "{13}")}");
+            Engine.Logger.Info($"{System.Text.Encoding.GetEncoding(0).GetString(composer.GetBytes().Array).Replace("\r", "{13}")}");
             if (flush)
             {
                 _channel.WriteAndFlushAsync(composer.GetBytes());
@@ -72,11 +74,42 @@ namespace AuroraEmu.Game.Clients
                 SendComposer(composer);
 
                 Player.BadgesComponent = new BadgesComponent(Player.Id);
+                Player.MessengerComponent = new MessengerComponent(Player);
             }
             else
             {
                 Disconnect();
             }
+        }
+
+
+        public void IncreaseCredits(int amount)
+        {
+            Player.Coins += amount;
+            Engine.MainDI.PlayerDao.UpdateCurrency(Player.Id, Player.Coins, "coins");
+            SendComposer(new Network.Game.Packets.Composers.Users.CreditBalanceMessageComposer(Player.Coins));
+        }
+
+        public void DecreaseCredits(int amount)
+        {
+            Player.Coins -= amount;
+            Engine.MainDI.PlayerDao.UpdateCurrency(Player.Id, Player.Coins, "coins");
+            SendComposer(new Network.Game.Packets.Composers.Users.CreditBalanceMessageComposer(Player.Coins));
+        }
+
+        public void IncreasePixels(int amount)
+        {
+            Player.Pixels += amount;
+            Engine.MainDI.PlayerDao.UpdateCurrency(Player.Id, Player.Pixels, "pixels");
+            SendComposer(new Network.Game.Packets.Composers.Users.HabboActivityPointNotificationMessageComposer(Player.Pixels, 0));
+        }
+
+
+        public void DecreasePixels(int amount)
+        {
+            Player.Pixels -= amount;
+            Engine.MainDI.PlayerDao.UpdateCurrency(Player.Id, Player.Pixels, "pixels");
+            SendComposer(new Network.Game.Packets.Composers.Users.HabboActivityPointNotificationMessageComposer(Player.Pixels, 0));
         }
     }
 }

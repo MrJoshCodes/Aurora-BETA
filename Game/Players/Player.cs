@@ -1,5 +1,5 @@
-﻿using System.Data;
-using AuroraEmu.Game.Players.Components;
+﻿using AuroraEmu.Game.Players.Components;
+using MySql.Data.MySqlClient;
 
 namespace AuroraEmu.Game.Players
 {
@@ -22,21 +22,21 @@ namespace AuroraEmu.Game.Players
         public MessengerComponent MessengerComponent { get; set; }
         public BadgesComponent BadgesComponent { get; set; }
 
-        public Player(DataRow row)
+        public Player(MySqlDataReader reader)
         {
-            Id = (int) row["id"];
-            Username = (string) row["username"];
-            Email = (string) row["email"];
-            Gender = (string) row["gender"];
-            Figure = (string) row["figure"];
-            Motto = (string) row["motto"];
-            Coins = (int) row["coins"];
-            Pixels = (int) row["pixels"];
-            Rank = (byte) row["rank"];
-            HomeRoom = (int) row["home_room"];
-            SSO = (string) row["sso_ticket"];
-            BlockNewFriends = (int) row["block_friendrequests"];
-            MessengerComponent = new MessengerComponent(this);
+            reader.Read();
+            Id = reader.GetInt32("id");
+            Username = reader.GetString("username");
+            Email = reader.GetString("email");
+            Gender = reader.GetString("gender");
+            Figure = reader.GetString("figure");
+            Motto = reader.GetString("motto");
+            Coins = reader.GetInt32("coins");
+            Pixels = reader.GetInt32("pixels");
+            Rank = reader.GetByte("rank");
+            HomeRoom = reader.GetInt32("home_room");
+            SSO = reader.GetString("sso_ticket");
+            BlockNewFriends = reader.GetInt32("block_friendrequests");
         }
     }
 }
