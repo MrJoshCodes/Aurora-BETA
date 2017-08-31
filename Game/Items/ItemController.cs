@@ -1,9 +1,9 @@
 ﻿using System.Collections.Concurrent;
 using System.Collections.Generic;
-using System.Data;
 using AuroraEmu.Game.Catalog;
 using AuroraEmu.Game.Clients;
 using AuroraEmu.DI.Game.Items;
+using AuroraEmu.Database;
 
 namespace AuroraEmu.Game.Items
 {
@@ -20,16 +20,7 @@ namespace AuroraEmu.Game.Items
 
         public void ReloadTemplates()
         {
-            DataTable result = Engine.MainDI.ItemDao.ReloadTemplates();
-            
-            if (result != null)
-            {
-                foreach (DataRow row in result.Rows)
-                {
-                    _items.Add((int)row["id"], new ItemDefinition(row));
-                }
-            }
-
+            Engine.MainDI.ItemDao.ReloadTemplates(_items);
             Engine.Logger.Info($"Loaded {_items.Count} item templates.");
         }
 
@@ -54,6 +45,25 @@ namespace AuroraEmu.Game.Items
         public Dictionary<int, Item> GetItemsFromOwner(int ownerId)
         {
             return Engine.MainDI.ItemDao.GetItemsFromOwner(ownerId);
+        }
+
+        public void AddFloorItem(int itemId, int x, int y, int rot, int roomId)
+        {
+            using(DatabaseConnection dbConnection = Engine.MainDI.DatabaseController.GetConnection())
+            {
+                dbConnection.Open();
+                dbConnection.SetQuery("UPDATE items SET room_id = @roomId, x = @x, y = @y, rotation = @rot WHERE id = @itemId LIMIT 1");
+                dbConnection.AddParameter("@roomId", roomId);
+                dbConnection.AddParameter("@x", x);
+                dbConnection.AddParameter("@y", y);
+                dbConnection.AddParameter("@rot", rot);
+                dbConnection.AddParameter("@itemId", itemId);
+                dbConnection.Execute();
+
+                dbConnection.BeginTransaction();
+                dbConnection.Commit();
+                dbConnection.Dispose();
+            }
         }
     }
 }

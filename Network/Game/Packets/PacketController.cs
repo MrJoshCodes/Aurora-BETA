@@ -64,7 +64,11 @@ namespace AuroraEmu.Network.Game.Packets
                 { 386, new UpdateRoomThumbnailMessageEvent() },
                 { 75, new MoveAvatarMessageEvent() },
 
-                {157, new GetBadgesEvent() }
+                { 157, new GetBadgesEvent() },
+                { 67, new PickupObjectMessageEvent() },
+                { 90, new PlaceObjectMessageEvent() },
+                { 129, new RedeemVoucherMessageEvent() },
+                { 233, new GetBuddyRequestsMessageEvent() }
             };
         }
 

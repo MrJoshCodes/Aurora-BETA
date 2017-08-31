@@ -1,6 +1,5 @@
 ﻿using AuroraEmu.DI.Game.Players;
 using System.Collections.Concurrent;
-using System.Data;
 
 namespace AuroraEmu.Game.Players
 {
@@ -21,34 +20,27 @@ namespace AuroraEmu.Game.Players
         {
             if (_playersById.TryGetValue(id, out Player player))
                 return player;
-            
-            DataRow result = Engine.MainDI.PlayerDao.GetPlayerById(id);
-            
+
+            Player result = Engine.MainDI.PlayerDao.GetPlayerById(id);
             if (result != null)
             {
-                player = new Player(result);
                 _playersById.TryAdd(player.Id, player);
                 _playerNamesById.TryAdd(player.Id, player.Username);
-
-                return player;
+                return result;
             }
-
             return null;
         }
 
         public Player GetPlayerBySSO(string sso)
         {
-            DataRow result = Engine.MainDI.PlayerDao.GetPlayerBySSO(sso);
-
-            if (result != null)
+            Player newPlayer = Engine.MainDI.PlayerDao.GetPlayerBySSO(sso);
+            if (newPlayer != null)
             {
-                Player player = new Player(result);
-                _playersById.AddOrUpdate(player.Id, player, (oldkey, oldvalue) => player);
-                _playerNamesById.AddOrUpdate(player.Id, player.Username, (oldkey, oldvalue) => player.Username);
-                _playersByName.AddOrUpdate(player.Username, player, (oldkey, oldvalue) => player);
-                return player;
+                _playersById.AddOrUpdate(newPlayer.Id, newPlayer, (oldkey, oldvalue) => newPlayer);
+                _playerNamesById.AddOrUpdate(newPlayer.Id, newPlayer.Username, (oldkey, oldvalue) => newPlayer.Username);
+                _playersByName.AddOrUpdate(newPlayer.Username, newPlayer, (oldkey, oldvalue) => newPlayer);
+                return newPlayer;
             }
-
             return null;
         }
 
@@ -66,15 +58,9 @@ namespace AuroraEmu.Game.Players
             if (_playersByName.TryGetValue(name, out Player player))
                 return player;
 
-            DataRow result = Engine.MainDI.PlayerDao.GetPlayerByName(name);
-            if (result != null)
-            {
-                player = new Player(result);
-                _playersByName.TryAdd(player.Username, player);
-
-                return player;
-            }
-
+            Player newPlayer = Engine.MainDI.PlayerDao.GetPlayerByName(name);
+            if (newPlayer != null)
+                return newPlayer;
             return null;
         }
     }

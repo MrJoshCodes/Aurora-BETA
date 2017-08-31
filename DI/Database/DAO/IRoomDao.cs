@@ -1,12 +1,13 @@
-﻿using System.Data;
+﻿using AuroraEmu.Game.Rooms;
+using System.Collections.Generic;
 
 namespace AuroraEmu.DI.Database.DAO
 {
     public interface IRoomDao
     {
-        DataTable LoadRoomMaps();
+        Dictionary<string, RoomMap> LoadRoomMaps(Dictionary<string, RoomMap> roomMaps);
 
-        DataRow GetRoom(int id);
+        Room GetRoom(int id);
 
         int GetUserRoomCount(int userId);
 

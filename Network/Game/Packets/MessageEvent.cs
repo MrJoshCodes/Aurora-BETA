@@ -48,12 +48,12 @@ namespace AuroraEmu.Network.Game.Packets
 
         public string ReadString()
         {
-            return Encoding.Default.GetString(ReadBytes(ReadB64()));
+            return Encoding.GetEncoding(0).GetString(ReadBytes(ReadB64()));
         }
 
         public override string ToString()
         {
-            return Encoding.Default.GetString(buffer.ToArray());
+            return Encoding.GetEncoding(0).GetString(buffer.ToArray());
         }
     }
 }

@@ -1,5 +1,5 @@
-﻿using System.Data;
-using AuroraEmu.Game.Clients;
+﻿using AuroraEmu.Game.Clients;
+using MySql.Data.MySqlClient;
 
 namespace AuroraEmu.Game.Messenger
 {
@@ -15,12 +15,12 @@ namespace AuroraEmu.Game.Messenger
             return Engine.MainDI.ClientController.GetClientByHabbo(Id);
         }
         
-        public MessengerSearch(DataRow row)
+        public MessengerSearch(MySqlDataReader reader)
         {
-            Id = (int) row["id"];
-            Username = (string) row["username"];
-            Figure = (string) row["figure"];
-            Motto = (string) row["motto"];
+            Id = reader.GetInt32("id");
+            Username = reader.GetString("username");
+            Figure = reader.GetString("figure");
+            Motto = reader.GetString("motto");
         }
     }
 }

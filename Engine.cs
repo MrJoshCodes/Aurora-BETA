@@ -1,7 +1,6 @@
 ﻿using AuroraEmu.Config;
 using AuroraEmu.Database;
 using AuroraEmu.Database.DAO;
-using AuroraEmu.DI;
 using AuroraEmu.DI.Config;
 using AuroraEmu.DI.Database;
 using AuroraEmu.DI.Database.DAO;
@@ -30,6 +29,9 @@ using AuroraEmu.Network.Game;
 using AuroraEmu.Network.Game.Packets;
 using Autofac;
 using log4net;
+using log4net.Config;
+using System.IO;
+using System.Reflection;
 
 namespace AuroraEmu
 {
@@ -41,9 +43,11 @@ namespace AuroraEmu
 
         static void Main(string[] args)
         {
-            Logger = LogManager.GetLogger(typeof(Engine));
             
-
+            var logRepository = LogManager.GetRepository(Assembly.GetEntryAssembly());
+            XmlConfigurator.Configure(logRepository, new FileInfo("log4net.config"));
+            Logger = LogManager.GetLogger(typeof(Engine));
+            System.Console.WriteLine($"Aurora: {System.DateTimeOffset.Now} BETA!");
             ContainerBuilder();
             while (true) 
             {

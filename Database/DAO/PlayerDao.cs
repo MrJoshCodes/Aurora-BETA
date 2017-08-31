@@ -1,45 +1,48 @@
-﻿using System.Data;
-using AuroraEmu.DI.Database.DAO;
+﻿using AuroraEmu.DI.Database.DAO;
+using AuroraEmu.Game.Players;
 
 namespace AuroraEmu.Database.DAO
 {
     public class PlayerDao : IPlayerDao
     {
-        public DataRow GetPlayerById(int id)
+        public Player GetPlayerById(int id)
         {
-            DataRow result;
+            Player player;
             using (DatabaseConnection dbClient = Engine.MainDI.DatabaseController.GetConnection())
             {
                 dbClient.Open();
                 dbClient.SetQuery(
                     "SELECT id, username, password, email, gender, figure, motto, coins, pixels, rank, home_room, block_friendrequests, sso_ticket FROM players WHERE id = @id;");
                 dbClient.AddParameter("@id", id);
-                result = dbClient.GetRow();
-                
+                using (var reader = dbClient.ExecuteReader())
+                    player = new Player(reader);
+
+
+
                 dbClient.BeginTransaction();
                 dbClient.Commit();
                 dbClient.Dispose();
             }
             
-            return result;
+            return player;
         }
 
-        public DataRow GetPlayerBySSO(string sso)
+        public Player GetPlayerBySSO(string sso)
         {
-            DataRow result;
-
+            Player player;
             using (DatabaseConnection dbClient = Engine.MainDI.DatabaseController.GetConnection())
             {
                 dbClient.Open();
                 dbClient.SetQuery("SELECT id, username, password, email, gender, figure, motto, coins, pixels, rank, home_room, block_friendrequests, sso_ticket FROM players WHERE sso_ticket = @sso_ticket;");
                 dbClient.AddParameter("@sso_ticket", sso);
-                result = dbClient.GetRow();
-                
+                using (var reader = dbClient.ExecuteReader())
+                    player = new Player(reader);
+
                 dbClient.BeginTransaction();
                 dbClient.Commit();
                 dbClient.Dispose();
             }
-            return result;
+            return player;
         }
 
         public string GetPlayerNameById(int id, out string name)
@@ -59,21 +62,38 @@ namespace AuroraEmu.Database.DAO
             return name;
         }
 
-        public DataRow GetPlayerByName(string username)
+        public Player GetPlayerByName(string username)
         {
-            DataRow row;
+            Player player;
             using (DatabaseConnection dbClient = Engine.MainDI.DatabaseController.GetConnection())
             {
                 dbClient.Open();
                 dbClient.SetQuery("SELECT id, username, password, email, gender, figure, motto, coins, pixels, rank, home_room, block_friendrequests, sso_ticket FROM players WHERE username = @username;");
                 dbClient.AddParameter("@username", username);
-                row = dbClient.GetRow();
-                
+                using (var reader = dbClient.ExecuteReader())
+                    player = new Player(reader);
+
                 dbClient.BeginTransaction();
                 dbClient.Commit();
                 dbClient.Dispose();
             }
-            return row;
+            return player;
+        }
+
+        public void UpdateCurrency(int playerId, int amount, string type)
+        {
+            using (DatabaseConnection dbClient = Engine.MainDI.DatabaseController.GetConnection())
+            {
+                dbClient.Open();
+                dbClient.SetQuery($"UPDATE players SET {type} = @amount WHERE id = @playerId");
+                dbClient.AddParameter("@amount", amount);
+                dbClient.AddParameter("@playerId", playerId);
+                dbClient.Execute();
+
+                dbClient.BeginTransaction();
+                dbClient.Commit();
+                dbClient.Dispose();
+            }
         }
     }
 }

@@ -1,6 +1,5 @@
 ﻿using AuroraEmu.DI.Game.Wordfilter;
 using System.Collections.Generic;
-using System.Data;
 using System.Linq;
 using System.Text.RegularExpressions;
 
@@ -19,12 +18,8 @@ namespace AuroraEmu.Game.Wordfilter
 
         public void Init()
         {
-            DataTable data = Engine.MainDI.WordfilterDao.WordfilterData();
+            Engine.MainDI.WordfilterDao.WordfilterData(_filteredWords);
 
-            foreach (DataRow row in data.Rows)
-            {
-                _filteredWords.Add(new Wordfilter(row));
-            }
             Engine.Logger.Info($"Loaded {_filteredWords.Count} filtered words.");
         }
 

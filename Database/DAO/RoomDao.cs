@@ -1,41 +1,51 @@
-﻿using System.Data;
-using AuroraEmu.DI.Database.DAO;
+﻿using AuroraEmu.DI.Database.DAO;
+using System.Collections.Generic;
+using AuroraEmu.Game.Rooms;
 
 namespace AuroraEmu.Database.DAO
 {
     public class RoomDao : IRoomDao
     {
-        public DataTable LoadRoomMaps()
+        public Dictionary<string, RoomMap> LoadRoomMaps(Dictionary<string, RoomMap> roomMaps)
         {
-            DataTable table;
+            roomMaps.Clear();
             using (DatabaseConnection dbConnection = Engine.MainDI.DatabaseController.GetConnection())
             {
                 dbConnection.Open();
                 dbConnection.SetQuery("SELECT * FROM room_maps");
-                table = dbConnection.GetTable();
+                using (var reader = dbConnection.ExecuteReader())
+                    while (reader.Read())
+                        roomMaps.Add(reader.GetString("name"), new RoomMap(reader));
 
                 dbConnection.BeginTransaction();
                 dbConnection.Commit();
                 dbConnection.Dispose();
             }
-            return table;
+
+            return roomMaps;
         }
 
-        public DataRow GetRoom(int id)
+        public Room GetRoom(int id)
         {
-            DataRow row;
+            Room room;
             using (DatabaseConnection dbConnection = Engine.MainDI.DatabaseController.GetConnection())
             {
                 dbConnection.Open();
                 dbConnection.SetQuery("SELECT * FROM rooms WHERE id = @id LIMIT 1");
                 dbConnection.AddParameter("@id", id);
-                row = dbConnection.GetRow();
+                using(var reader = dbConnection.ExecuteReader())
+                {
+                    room = new Room(reader);
+                    Engine.MainDI.RoomController.Rooms.TryAdd(id, room);
+                }
 
                 dbConnection.BeginTransaction();
                 dbConnection.Commit();
                 dbConnection.Dispose();
             }
-            return row;
+            if (room != null)
+                return room;
+            return null;
         }
 
         public int GetUserRoomCount(int userId)

@@ -1,4 +1,4 @@
-﻿using System.Data;
+﻿using MySql.Data.MySqlClient;
 
 namespace AuroraEmu.Game.Messenger
 {
@@ -7,10 +7,10 @@ namespace AuroraEmu.Game.Messenger
         public int FromId { get; set; }
         public int ToId { get; set; }
 
-        public MessengerRequest(DataRow row)
+        public MessengerRequest(MySqlDataReader reader)
         {
-            FromId = (int) row["from_id"];
-            ToId = (int) row["to_id"];
+            FromId = reader.GetInt32("from_id");
+            ToId = reader.GetInt32("to_id");
         }
 
         public MessengerRequest(int fromId, int toId)

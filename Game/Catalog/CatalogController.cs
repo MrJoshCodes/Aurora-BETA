@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Data;
 using AuroraEmu.DI.Game.Catalog;
 
 namespace AuroraEmu.Game.Catalog
@@ -9,16 +8,19 @@ namespace AuroraEmu.Game.Catalog
         private readonly Dictionary<int, List<CatalogDealItem>> _deals;
         private readonly Dictionary<int, CatalogPage> _pages;
         private readonly Dictionary<int, CatalogProduct> _products;
+        public Dictionary<string, Voucher.Voucher> Vouchers { get; }
 
         public CatalogController()
         {
             _deals = new Dictionary<int, List<CatalogDealItem>>();
             _pages = new Dictionary<int, CatalogPage>();
             _products = new Dictionary<int, CatalogProduct>();
+            Vouchers = new Dictionary<string, Voucher.Voucher>();
 
             ReloadPages();
             ReloadProducts();
             ReloadDeals();
+            ReloadVouchers();
         }
 
         public void ReloadPages()
@@ -49,38 +51,23 @@ namespace AuroraEmu.Game.Catalog
 
         public void ReloadProducts()
         {
-            _products.Clear();
-            DataTable table = Engine.MainDI.CatalogDao.ReloadProducts();
-
-            if (table != null)
-            {
-                foreach (DataRow row in table.Rows)
-                {
-                    _products.Add((int) row["id"], new CatalogProduct(row));
-                }
-            }
+            Engine.MainDI.CatalogDao.ReloadProducts(_products);
 
             Engine.Logger.Info($"Loaded {_products.Count} catalogue products.");
         }
 
         public void ReloadDeals()
         {
-            DataTable table = Engine.MainDI.CatalogDao.ReloadDeals();
+            Engine.MainDI.CatalogDao.ReloadDeals(_deals);
 
-            if (table != null)
-            {
-                foreach (DataRow row in table.Rows)
-                {
-                    int dealId = (int) row["id"];
+            Engine.Logger.Info($"Loaded {_deals.Count} deals.");
+        }
 
-                    if (!_deals.TryGetValue(dealId, out List<CatalogDealItem> item))
-                        _deals.Add(dealId, new List<CatalogDealItem>());
+        public void ReloadVouchers()
+        {
+            Engine.MainDI.CatalogDao.ReloadVouchers(Vouchers);
 
-                    _deals[dealId].Add(new CatalogDealItem(row));
-                }
-            }
-
-            Engine.Logger.Info($"Loaded {_deals.Count} deals");
+            Engine.Logger.Info($"Loaded {Vouchers.Count} vouchers.");
         }
 
         public CatalogPage GetPage(int id)

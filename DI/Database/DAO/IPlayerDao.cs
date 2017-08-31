@@ -1,15 +1,18 @@
-﻿using System.Data;
+﻿using AuroraEmu.Database.DAO;
+using AuroraEmu.Game.Players;
 
 namespace AuroraEmu.DI.Database.DAO
 {
     public interface IPlayerDao
     {
-        DataRow GetPlayerById(int id);
+        Player GetPlayerById(int id);
 
-        DataRow GetPlayerBySSO(string sso);
+        Player GetPlayerBySSO(string sso);
 
         string GetPlayerNameById(int id, out string name);
 
-        DataRow GetPlayerByName(string username);
+        Player GetPlayerByName(string username);
+
+        void UpdateCurrency(int playerId, int amount, string type);
     }
 }

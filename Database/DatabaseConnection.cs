@@ -2,6 +2,7 @@
 using MySql.Data.MySqlClient;
 using System;
 using System.Data;
+using System.Text;
 
 namespace AuroraEmu.Database
 {
@@ -77,68 +78,23 @@ namespace AuroraEmu.Database
                 _command.Parameters.Clear();
             }
         }
-
-        public DataSet GetDataSet()
+        
+        public MySqlDataReader ExecuteReader()
         {
             try
             {
-                DataSet dataSet = new DataSet();
-
-                using (MySqlDataAdapter adapter = new MySqlDataAdapter(_command))
-                {
-                    adapter.Fill(dataSet);
-                }
-
-                return dataSet;
+                return _command.ExecuteReader();
             }
-            catch (Exception ex)
+            catch (MySqlException ex)
             {
                 Engine.Logger.Error("MySQL Error: ", ex);
 
                 return null;
             }
-        }
-
-        public DataTable GetTable()
-        {
-            try
+            finally
             {
-                DataTable dataTable = new DataTable();
-
-                using (MySqlDataAdapter adapter = new MySqlDataAdapter(_command))
-                {
-                    adapter.Fill(dataTable);
-                }
-
-                return dataTable;
-            }
-            catch (Exception ex)
-            {
-                Engine.Logger.Error("MySQL Error: ", ex);
-
-                return null;
-            }
-        }
-
-        public DataRow GetRow()
-        {
-            try
-            {
-                DataRow row = null;
-                DataSet dataSet = GetDataSet();
-
-                if (dataSet != null && dataSet.Tables.Count > 0 && dataSet.Tables[0].Rows.Count == 1)
-                {
-                    row = dataSet.Tables[0].Rows[0];
-                }
-
-                return row;
-            }
-            catch (Exception ex)
-            {
-                Engine.Logger.Error("MySQL Error: ", ex);
-
-                return null;
+                _command.CommandText = string.Empty;
+                _command.Parameters.Clear();
             }
         }
 
@@ -201,9 +157,9 @@ namespace AuroraEmu.Database
             if (IsOpen())
                 _connection.Close();
 
-            _command?.Parameters?.Clear();
+            _command.Parameters?.Clear();
             _transaction?.Dispose();
-            _command?.Dispose();
+            _command.Dispose();
             _objectPool.PutObject(this);
         }
     }

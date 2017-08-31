@@ -1,4 +1,4 @@
-﻿using System.Data;
+﻿using MySql.Data.MySqlClient;
 
 namespace AuroraEmu.Game.Navigator
 {
@@ -12,15 +12,15 @@ namespace AuroraEmu.Game.Navigator
         public int Type { get; set; }
         public string Tag { get; set; }
 
-        public FrontpageItem(DataRow row)
+        public FrontpageItem(MySqlDataReader reader)
         {
-            Id = (int)row["id"];
-            Name = (string)row["name"];
-            Description = (string)row["description"];
-            Size = (int)row["size"];
-            Image = (string)row["image"];
-            Type = (int)row["type"];
-            Tag = (string)row["tag"];
+            Id = reader.GetInt32("id");
+            Name = reader.GetString("name");
+            Description = reader.GetString("description");
+            Size = reader.GetInt32("size");
+            Image = reader.GetString("image");
+            Type = reader.GetInt32("type");
+            Tag = reader.GetString("tag");
         }
     }
 }
