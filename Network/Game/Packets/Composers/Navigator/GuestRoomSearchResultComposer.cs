@@ -5,11 +5,10 @@ namespace AuroraEmu.Network.Game.Packets.Composers.Navigator
 {
     class GuestRoomSearchResultComposer : MessageComposer
     {
-        public GuestRoomSearchResultComposer(int history, int tab2, string search, List<Room> rooms)
+        public GuestRoomSearchResultComposer(int tab, string search, List<Room> rooms)
             : base(451)
         {
-            AppendVL64(history);
-            AppendVL64(tab2);
+            AppendVL64(tab);
             AppendString(search);
             AppendVL64(rooms.Count);
 
@@ -33,6 +32,8 @@ namespace AuroraEmu.Network.Game.Packets.Composers.Navigator
             composer.AppendVL64(Engine.MainDI.NavigatorController.Categories[room.CategoryId].TradeAllowed);
             composer.AppendVL64(0); // score
             composer.AppendVL64(0); // tags
+            composer.AppendString("");
+            composer.AppendVL64(0);
             composer.AppendString(room.Icon, 0);
         }
     }
