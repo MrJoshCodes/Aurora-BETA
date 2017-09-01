@@ -33,7 +33,7 @@ namespace AuroraEmu.Network.Game
         {
             Client client = Engine.MainDI.ClientController.GetClient(ctx.Channel);
             IByteBuffer message = msg as IByteBuffer;
-            if (message.ReadByte() == 60)
+            if (message.GetByte(0) == 60)
             {
                 string policy =
                     "<?xml version=\"1.0\"?>\r\n<!DOCTYPE cross-domain-policy SYSTEM \"/xml/dtds/cross-domain-policy.dtd\">\r\n<cross-domain-policy>\r\n   <allow-access-from domain=\"*\" to-ports=\"1-65535\" />\r\n</cross-domain-policy>\0";
@@ -41,10 +41,17 @@ namespace AuroraEmu.Network.Game
             }
             else
             {
-                int length = Base64Encoding.DecodeInt32(message.ReadBytes(2).ToArray());
-                IByteBuffer packet = message.ReadBytes(length);
+                while (message.ReadableBytes >= 5)
+                {
+                    int length = Base64Encoding.DecodeInt32(message.ReadBytes(3).ToArray());
 
-                Engine.MainDI.PacketController.Handle(client, packet);
+                    if (length > 0)
+                    {
+                        IByteBuffer packet = message.ReadBytes(length);
+
+                        Engine.MainDI.PacketController.Handle(client, packet);
+                    }
+                }
             }
 
             base.ChannelRead(ctx, msg);

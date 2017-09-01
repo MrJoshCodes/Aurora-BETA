@@ -7,6 +7,8 @@ namespace AuroraEmu.Network.Game.Packets.Events.Rooms
     {
         public void Run(Client client, MessageEvent msgEvent)
         {
+            new GetHeightMapMessageEvent().Run(client, null);
+
             client.QueueComposer(new UsersMessageComposer(client.LoadingRoom.Actors.Values));
             client.LoadingRoom.AddUserActor(client);
             client.CurrentRoom.SendComposer(new UsersMessageComposer(client.UserActor));
