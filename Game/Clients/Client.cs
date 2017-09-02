@@ -7,6 +7,7 @@ using AuroraEmu.Game.Items;
 using AuroraEmu.Game.Rooms.User;
 using AuroraEmu.Game.Players.Components;
 using AuroraEmu.Database.DAO;
+using DotNetty.Buffers;
 
 namespace AuroraEmu.Game.Clients
 {
@@ -17,8 +18,8 @@ namespace AuroraEmu.Game.Clients
         public Player Player { get; private set; }
 
         public int? RoomCount { get; set; }
-        public Room LoadingRoom { get; set; }
-        public Room CurrentRoom { get; set; }
+        public int LoadingRoomId { get; set; }
+        public int CurrentRoomId { get; set; }
         public UserActor UserActor { get; set; }
 
         public Dictionary<int, Item> Items { get; set; }
@@ -46,13 +47,13 @@ namespace AuroraEmu.Game.Clients
 
         public void Send(MessageComposer composer, bool flush)
         {
-            Engine.Logger.Info($"{System.Text.Encoding.GetEncoding(0).GetString(composer.GetBytes().Array).Replace("\r", "{13}")}");
+            Engine.Logger.Info(System.Text.Encoding.GetEncoding(0).GetString(composer.GetBytes()));
             if (flush)
             {
-                _channel.WriteAndFlushAsync(composer.GetBytes());
+                _channel.WriteAndFlushAsync(Unpooled.CopiedBuffer(composer.GetBytes()));
             } else
             {
-                _channel.WriteAsync(composer.GetBytes());
+                _channel.WriteAsync(Unpooled.CopiedBuffer(composer.GetBytes()));
             }
         }
 

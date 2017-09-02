@@ -92,11 +92,11 @@ namespace AuroraEmu.Game.Rooms
 
             UserActor actor = new UserActor(client, newVirtualId);
             Actors.TryAdd(newVirtualId, actor);
-            client.CurrentRoom = this;
+            client.CurrentRoomId = this.Id;
             client.UserActor = actor;
-            client.CurrentRoom.PlayersIn++;
+            PlayersIn++;
 
-            Engine.MainDI.NavigatorController.Categories[client.CurrentRoom.CategoryId].PlayersInside++;
+            Engine.MainDI.NavigatorController.Categories[CategoryId].PlayersInside++;
         }
 
         public void SendComposer(MessageComposer composer)

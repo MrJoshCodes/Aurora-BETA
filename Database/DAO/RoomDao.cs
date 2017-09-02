@@ -27,16 +27,20 @@ namespace AuroraEmu.Database.DAO
 
         public Room GetRoom(int id)
         {
-            Room room;
-            using (DatabaseConnection dbConnection = Engine.MainDI.DatabaseController.GetConnection())
+            Room room = null;
+            using (DatabaseConnection dbConnection = Engine.MainDI.DatabaseController.GetConnection(true))
             {
                 dbConnection.Open();
+
                 dbConnection.SetQuery("SELECT * FROM rooms WHERE id = @id LIMIT 1");
                 dbConnection.AddParameter("@id", id);
                 using(var reader = dbConnection.ExecuteReader())
                 {
-                    room = new Room(reader);
-                    Engine.MainDI.RoomController.Rooms.TryAdd(id, room);
+                    if (reader.Read())
+                    {
+                        room = new Room(reader);
+                        Engine.MainDI.RoomController.Rooms.TryAdd(id, room);
+                    }
                 }
 
                 dbConnection.BeginTransaction();

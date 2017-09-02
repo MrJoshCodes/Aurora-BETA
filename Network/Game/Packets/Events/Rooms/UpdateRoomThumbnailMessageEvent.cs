@@ -1,4 +1,5 @@
 ﻿using AuroraEmu.Game.Clients;
+using AuroraEmu.Game.Rooms;
 using AuroraEmu.Network.Game.Packets.Composers.Rooms;
 
 namespace AuroraEmu.Network.Game.Packets.Events.Rooms
@@ -9,16 +10,17 @@ namespace AuroraEmu.Network.Game.Packets.Events.Rooms
         {
             int roomId = msgEvent.ReadVL64();
 
-            if (client.CurrentRoom != null)
+            if (client.CurrentRoomId > 0)
             {
+                Room room = Engine.MainDI.RoomController.GetRoom(client.CurrentRoomId);
                 string icon = msgEvent.ToString();
 
-                client.CurrentRoom.Icon = icon;
-                client.CurrentRoom.Save(new[] { "icon" }, new object[] { icon });
+                room.Icon = icon;
+                room.Save(new[] { "icon" }, new object[] { icon });
 
                 client.SendComposer(new RoomThumbnailUpdateResultComposer(roomId));
                 client.SendComposer(new RoomInfoUpdatedComposer(roomId));
-                client.SendComposer(new GetGuestRoomResultComposer(client.CurrentRoom));
+                client.SendComposer(new GetGuestRoomResultComposer(room));
             }
         }
     }

@@ -49,7 +49,7 @@ namespace AuroraEmu.Game.Rooms.Components
                     if (actor.IsWalking)
                         actor.Path.Clear();
 
-                    Grid grid = new Grid(actor.Client.CurrentRoom.Map, actor.Client.CurrentRoom.Map.MapSize.Item1, actor.Client.CurrentRoom.Map.MapSize.Item2);
+                    Grid grid = new Grid(room.Map, room.Map.MapSize.Item1, room.Map.MapSize.Item2);
                     actor.Path = grid.GetPath(actor.Position, actor.TargetPoint, MovementPatterns.Full);
 
                     if (actor.IsWalking)

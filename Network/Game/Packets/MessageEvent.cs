@@ -32,6 +32,14 @@ namespace AuroraEmu.Network.Game.Packets
             return dest;
         }
 
+        public bool HasBytes
+        {
+            get
+            {
+                return buffer.ReadableBytes > 0;
+            }
+        }
+
         public int ReadB64()
         {
             return Base64Encoding.DecodeInt32(ReadBytes(2));

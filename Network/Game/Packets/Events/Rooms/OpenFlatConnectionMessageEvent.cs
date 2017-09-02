@@ -24,7 +24,7 @@ namespace AuroraEmu.Network.Game.Packets.Events.Rooms
 
             client.Flush();
 
-            client.LoadingRoom = room; 
+            client.LoadingRoomId = room.Id; 
         }
     }
 }

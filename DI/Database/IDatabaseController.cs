@@ -8,6 +8,6 @@ namespace AuroraEmu.DI.Database
 
         bool TryConnection();
 
-        DatabaseConnection GetConnection();
+        DatabaseConnection GetConnection(bool forceNew = false);
     }
 }

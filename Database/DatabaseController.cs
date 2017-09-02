@@ -50,8 +50,11 @@ namespace AuroraEmu.Database
             return true;
         }
 
-        public DatabaseConnection GetConnection()
+        public DatabaseConnection GetConnection(bool forceNew = false)
         {
+            if (forceNew)
+                return new DatabaseConnection(_connectionString, _connectionPool);
+
             return _connectionPool.GetObject() ?? new DatabaseConnection(_connectionString, _connectionPool);
         }
     }

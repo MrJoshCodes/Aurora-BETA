@@ -1,5 +1,6 @@
 ﻿using AuroraEmu.Game.Clients;
 using AuroraEmu.Game.Items;
+using AuroraEmu.Game.Rooms;
 using AuroraEmu.Network.Game.Packets.Composers.Rooms;
 using System.Collections;
 
@@ -9,6 +10,10 @@ namespace AuroraEmu.Network.Game.Packets.Events.Rooms
     {
         public void Run(Client client, MessageEvent msg)
         {
+            if (client.CurrentRoomId < 1)
+                return;
+
+            Room room = Engine.MainDI.RoomController.GetRoom(client.CurrentRoomId);
             string placementData = msg.ReadString();
             string[] dataBits = placementData.Split(' ');
             int itemId = int.Parse(dataBits[0]);
@@ -33,9 +38,9 @@ namespace AuroraEmu.Network.Game.Packets.Events.Rooms
                         item.Rotation = rot;
                         
                         client.Items.Remove(itemId);
-                        client.CurrentRoom.Items.AddOrUpdate(itemId, item, (oldKey, newKey) => item);
-                        Engine.MainDI.ItemController.AddFloorItem(itemId, x, y, rot, client.CurrentRoom.Id);
-                        client.CurrentRoom.SendComposer(new ObjectAddMessageComposer(item));
+                        room.Items.AddOrUpdate(itemId, item, (oldKey, newKey) => item);
+                        Engine.MainDI.ItemController.AddFloorItem(itemId, x, y, rot, room.Id);
+                        room.SendComposer(new ObjectAddMessageComposer(item));
                     }
                 }
             }

@@ -30,17 +30,21 @@ namespace AuroraEmu.Game.Rooms
 
         public RoomActor(Client client, int virtualId)
         {
+            if (client.LoadingRoomId < 1)
+                return;
+
             if (this is UserActor)
                 Type = ActorType.User;
+            Room room = Engine.MainDI.RoomController.GetRoom(client.LoadingRoomId);
             Client = client;
             VirtualId = virtualId;
-            Rotation = client.LoadingRoom.Map.DoorRotation;
+            Rotation = room.Map.DoorRotation;
             Statusses = new Dictionary<string, string>();
 
             Path = new List<Point2D>();
-            TargetPoint = new Point2D(client.LoadingRoom.Map.DoorX, client.LoadingRoom.Map.DoorY, client.LoadingRoom.Map.DoorZ);
-            Position = new Point2D(client.LoadingRoom.Map.DoorX, client.LoadingRoom.Map.DoorY, client.LoadingRoom.Map.DoorZ);
-            NextTile = new Point2D(client.LoadingRoom.Map.DoorX, client.LoadingRoom.Map.DoorY, client.LoadingRoom.Map.DoorZ);
+            TargetPoint = new Point2D(room.Map.DoorX, room.Map.DoorY, room.Map.DoorZ);
+            Position = new Point2D(room.Map.DoorX, room.Map.DoorY, room.Map.DoorZ);
+            NextTile = new Point2D(room.Map.DoorX, room.Map.DoorY, room.Map.DoorZ);
             SetStep = false;
             CalcPath = false;
             UpdateNeeded = true;
