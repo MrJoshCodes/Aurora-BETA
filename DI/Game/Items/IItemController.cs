@@ -17,12 +17,9 @@ namespace AuroraEmu.DI.Game.Items
         ConcurrentDictionary<int, Item> GetItemsInRoom(int roomId);
 
         Dictionary<int, Item> GetItemsFromOwner(int ownerId);
-<<<<<<< HEAD
 
         void AddFloorItem(int itemId, int x, int y, int rot, int roomId);
 
         void AddWallItem(int itemId, string wallposition, int roomId);
-=======
->>>>>>> db_object_pooling
     }
 }

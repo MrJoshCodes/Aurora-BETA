@@ -50,7 +50,6 @@ namespace AuroraEmu
             var logRepository = LogManager.GetRepository(Assembly.GetEntryAssembly());
             XmlConfigurator.Configure(logRepository, new FileInfo("log4net.config"));
             Logger = LogManager.GetLogger(typeof(Engine));
-<<<<<<< HEAD
             System.Console.WriteLine(@" _______           _______  _______  _______  _______  _______  _______          
 (  ___  )|\     /|(  ____ )(  ___  )(  ____ )(  ___  )(  ____ \(       )|\     /|
 | (   ) || )   ( || (    )|| (   ) || (    )|| (   ) || (    \/| () () || )   ( |
@@ -60,8 +59,7 @@ namespace AuroraEmu
 | )   ( || (___) || ) \ \__| (___) || ) \ \__| )   ( || (____/\| )   ( || (___) |
 |/     \|(_______)|/   \__/(_______)|/   \__/|/     \|(_______/|/     \|(_______)
                                                                                  ");
-=======
->>>>>>> db_object_pooling
+
             ContainerBuilder();
 
             while (true)

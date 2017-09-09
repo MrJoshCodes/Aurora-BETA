@@ -21,7 +21,10 @@ namespace AuroraEmu.Network.Game
         public override void ChannelInactive(IChannelHandlerContext ctx)
         {
             base.ChannelInactive(ctx);
-            Client client = Engine.MainDI.ClientController.GetClient(ctx.Channel);
+            using (Client client = Engine.MainDI.ClientController.GetClient(ctx.Channel))
+            {
+                client.Disconnect();
+            }
             Engine.MainDI.ClientController.RemoveClient(ctx.Channel);
 
             Engine.Logger.Debug($"Client disconnected from client: {ctx.Channel.RemoteAddress}");
