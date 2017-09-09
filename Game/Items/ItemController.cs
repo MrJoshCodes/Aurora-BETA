@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using AuroraEmu.Game.Catalog;
 using AuroraEmu.Game.Clients;
 using AuroraEmu.DI.Game.Items;
-using AuroraEmu.Database;
 
 namespace AuroraEmu.Game.Items
 {
@@ -46,6 +45,7 @@ namespace AuroraEmu.Game.Items
         {
             return Engine.MainDI.ItemDao.GetItemsFromOwner(ownerId);
         }
+<<<<<<< HEAD
 
         public void AddFloorItem(int itemId, int x, int y, int rot, int roomId)
         {
@@ -82,5 +82,7 @@ namespace AuroraEmu.Game.Items
                 dbConnection.Dispose();
             }
         }
+=======
+>>>>>>> db_object_pooling
     }
 }

@@ -1,6 +1,5 @@
 ﻿using System.Collections.Concurrent;
 using System.Collections.Generic;
-using System.Data;
 using AuroraEmu.Game.Catalog;
 using AuroraEmu.Game.Clients;
 using AuroraEmu.Game.Items;
@@ -16,5 +15,7 @@ namespace AuroraEmu.DI.Database.DAO
         ConcurrentDictionary<int, Item> GetItemsInRoom(int roomId);
 
         Dictionary<int, Item> GetItemsFromOwner(int ownerId);
+
+        void UpdateItem(int itemId, int x, int y, int rot, object roomId);
     }
 }

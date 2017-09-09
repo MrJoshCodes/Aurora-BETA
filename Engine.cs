@@ -13,6 +13,7 @@ using AuroraEmu.DI.Game.Messenger;
 using AuroraEmu.DI.Game.Navigator;
 using AuroraEmu.DI.Game.Players;
 using AuroraEmu.DI.Game.Rooms;
+using AuroraEmu.DI.Game.Subscription;
 using AuroraEmu.DI.Game.Wordfilter;
 using AuroraEmu.DI.Locator;
 using AuroraEmu.DI.Network.Game;
@@ -26,6 +27,7 @@ using AuroraEmu.Game.Messenger;
 using AuroraEmu.Game.Navigator;
 using AuroraEmu.Game.Players;
 using AuroraEmu.Game.Rooms;
+using AuroraEmu.Game.Subscription;
 using AuroraEmu.Game.Wordfilter;
 using AuroraEmu.Network.Game;
 using AuroraEmu.Network.Game.Packets;
@@ -45,10 +47,10 @@ namespace AuroraEmu
 
         static void Main(string[] args)
         {
-            
             var logRepository = LogManager.GetRepository(Assembly.GetEntryAssembly());
             XmlConfigurator.Configure(logRepository, new FileInfo("log4net.config"));
             Logger = LogManager.GetLogger(typeof(Engine));
+<<<<<<< HEAD
             System.Console.WriteLine(@" _______           _______  _______  _______  _______  _______  _______          
 (  ___  )|\     /|(  ____ )(  ___  )(  ____ )(  ___  )(  ____ \(       )|\     /|
 | (   ) || )   ( || (    )|| (   ) || (    )|| (   ) || (    \/| () () || )   ( |
@@ -58,8 +60,11 @@ namespace AuroraEmu
 | )   ( || (___) || ) \ \__| (___) || ) \ \__| )   ( || (____/\| )   ( || (___) |
 |/     \|(_______)|/   \__/(_______)|/   \__/|/     \|(_______/|/     \|(_______)
                                                                                  ");
+=======
+>>>>>>> db_object_pooling
             ContainerBuilder();
-            while (true) 
+
+            while (true)
             {
                 switch (System.Console.ReadLine())
                 {
@@ -79,9 +84,6 @@ namespace AuroraEmu
 
             builder.RegisterType<MainDi>();
             builder.RegisterType<DependencyLocator>().As<IDependencyLocator>();
-
-            //Database Controller
-            builder.RegisterType<DatabaseController>().As<IDatabaseController>();
 
             //Config controller
             builder.RegisterType<ConfigController>().As<IConfigController>();
@@ -103,6 +105,7 @@ namespace AuroraEmu
             builder.RegisterType<TaskController>().As<ITaskController>();
             builder.RegisterType<WordfilterController>().As<IWordfilterController>();
             builder.RegisterType<CommandController>().As<ICommandController>();
+            builder.RegisterType<SubscriptionController>().As<ISubscriptionController>();
 
             //DAO's
             builder.RegisterType<CatalogDao>().As<ICatalogDao>();
@@ -114,10 +117,17 @@ namespace AuroraEmu
             builder.RegisterType<WordfilterDao>().As<IWordfilterDao>();
             builder.RegisterType<BadgesDao>().As<IBadgesDao>();
 
+            builder.RegisterType<ConnectionPool>().As<IConnectionPool>();
+
             Container = builder.Build();
             MainDI = Container.Resolve<MainDi>();
             MainDI.SetupDaos();
             MainDI.SetupControllers();
+        }
+
+        public static int GetUnixTimeStamp()
+        {
+            return (int)(System.DateTime.UtcNow.Subtract(new System.DateTime(1970, 1, 1))).TotalSeconds;
         }
     }
 }

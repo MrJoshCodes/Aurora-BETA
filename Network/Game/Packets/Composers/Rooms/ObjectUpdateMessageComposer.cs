@@ -11,7 +11,7 @@ namespace AuroraEmu.Network.Game.Packets.Composers.Rooms
             AppendVL64(item.DefinitionId);
             AppendVL64(item.X);
             AppendVL64(item.Y);
-            AppendVL64(item.RoomId);
+            AppendVL64(item.Rotation);
             AppendString(item.Z.ToString());
             AppendVL64(0);
             AppendString(item.Data);

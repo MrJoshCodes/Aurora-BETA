@@ -1,7 +1,6 @@
 ﻿using AuroraEmu.DI.Game.Rooms;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
-using System.Data;
 
 namespace AuroraEmu.Game.Rooms
 {

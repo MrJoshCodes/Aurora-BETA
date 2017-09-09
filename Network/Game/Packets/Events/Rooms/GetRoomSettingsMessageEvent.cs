@@ -1,5 +1,4 @@
 ﻿using AuroraEmu.Game.Clients;
-using AuroraEmu.Game.Rooms;
 using AuroraEmu.Network.Game.Packets.Composers.Rooms;
 
 namespace AuroraEmu.Network.Game.Packets.Events.Rooms
@@ -9,11 +8,10 @@ namespace AuroraEmu.Network.Game.Packets.Events.Rooms
         public void Run(Client client, MessageEvent msgEvent)
         {
             int roomId = msgEvent.ReadVL64();
-            Room room = Engine.MainDI.RoomController.GetRoom(roomId);
 
-            if (room != null)
+            if (client.CurrentRoom != null)
             {
-                client.SendComposer(new RoomSettingsDataComposer(room));
+                client.SendComposer(new RoomSettingsDataComposer(client.CurrentRoom));
             }
         }
     }

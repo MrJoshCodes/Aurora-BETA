@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using AuroraEmu.Game.Clients;
-using AuroraEmu.Game.Rooms;
+﻿using AuroraEmu.Game.Clients;
 using AuroraEmu.Network.Game.Packets.Composers.Rooms;
 
 namespace AuroraEmu.Network.Game.Packets.Events.Rooms
@@ -14,9 +10,7 @@ namespace AuroraEmu.Network.Game.Packets.Events.Rooms
             if (client.CurrentRoomId < 1)
                 return;
 
-            Room room = Engine.MainDI.RoomController.GetRoom(client.CurrentRoomId);
-
-            room.SendComposer(new WaveMessageComposer(client.UserActor.VirtualId));
+            client.CurrentRoom.SendComposer(new WaveMessageComposer(client.UserActor.VirtualId));
         }
     }
 }

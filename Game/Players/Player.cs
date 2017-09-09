@@ -24,7 +24,6 @@ namespace AuroraEmu.Game.Players
 
         public Player(MySqlDataReader reader)
         {
-            reader.Read();
             Id = reader.GetInt32("id");
             Username = reader.GetString("username");
             Email = reader.GetString("email");

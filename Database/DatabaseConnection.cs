@@ -1,33 +1,25 @@
-﻿using AuroraEmu.Database.Pool;
-using MySql.Data.MySqlClient;
+﻿using MySql.Data.MySqlClient;
 using System;
 using System.Data;
-using System.Text;
 
 namespace AuroraEmu.Database
 {
     public class DatabaseConnection : IDisposable
     {
-        private readonly ObjectPool<DatabaseConnection> _objectPool;
-
         private readonly MySqlConnection _connection;
         private readonly MySqlCommand _command;
 
         private MySqlTransaction _transaction;
 
-        public DatabaseConnection(string connectionString, ObjectPool<DatabaseConnection> pool)
+        public DatabaseConnection(string connectionString)
         {
-            _objectPool = pool;
             _connection = new MySqlConnection(connectionString);
             _command = _connection.CreateCommand();
+            _connection.Open();
         }
 
         public void Open()
         {
-            if (_connection.State == ConnectionState.Open)
-            {
-                throw new InvalidOperationException("Connection is already opened...");
-            }
             _connection.Open();
         }
 
@@ -133,34 +125,19 @@ namespace AuroraEmu.Database
             }
         }
 
-        public void BeginTransaction()
-        {
-            _transaction = _connection.BeginTransaction();
-        }
-
-        public void Commit()
-        {
-            if (_transaction == null)
-                throw new InvalidOperationException("Transaction hasn't started yet.");
-            _transaction.Commit();
-        }
-
-        public void Rollback()
-        {
-            if (_transaction == null)
-                throw new InvalidOperationException("Transaction hasn't started yet.");
-            _transaction.Rollback();
-        }
-
         public void Dispose()
         {
+            _transaction = _connection.BeginTransaction();
+            _transaction.Commit();
+
             if (IsOpen())
                 _connection.Close();
 
             _command.Parameters?.Clear();
             _transaction?.Dispose();
             _command.Dispose();
-            _objectPool.PutObject(this);
+            Engine.MainDI.ConnectionPool.ReturnConnection(this);
+            GC.SuppressFinalize(this);
         }
     }
 }

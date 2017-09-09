@@ -11,17 +11,12 @@ namespace AuroraEmu.Database.DAO
         {
             frontpageItems.Clear();
 
-            using (DatabaseConnection dbConnection = Engine.MainDI.DatabaseController.GetConnection())
+            using (DatabaseConnection dbConnection = Engine.MainDI.ConnectionPool.PopConnection())
             {
-                dbConnection.Open();
                 dbConnection.SetQuery("SELECT * FROM frontpage_items;");
                 using (var reader = dbConnection.ExecuteReader())
                     while (reader.Read())
                         frontpageItems.Add(new FrontpageItem(reader));
-
-                dbConnection.BeginTransaction();
-                dbConnection.Commit();
-                dbConnection.Dispose();
             }
             
             return frontpageItems;
@@ -31,17 +26,12 @@ namespace AuroraEmu.Database.DAO
         {
             categories.Clear();
 
-            using (DatabaseConnection dbConnection = Engine.MainDI.DatabaseController.GetConnection())
+            using (DatabaseConnection dbConnection = Engine.MainDI.ConnectionPool.PopConnection())
             {
-                dbConnection.Open();
                 dbConnection.SetQuery("SELECT * FROM room_categories");
                 using (var reader = dbConnection.ExecuteReader())
                     while (reader.Read())
                         categories.Add(reader.GetInt32("id"), new RoomCategory(reader));
-
-                    dbConnection.BeginTransaction();
-                dbConnection.Commit();
-                dbConnection.Dispose();
             }
             
             return categories;
@@ -51,9 +41,8 @@ namespace AuroraEmu.Database.DAO
         {
             List<Room> rooms = new List<Room>();
 
-            using (DatabaseConnection dbConnection = Engine.MainDI.DatabaseController.GetConnection())
+            using (DatabaseConnection dbConnection = Engine.MainDI.ConnectionPool.PopConnection())
             {
-                dbConnection.Open();
                 dbConnection.SetQuery("SELECT `id` FROM rooms WHERE owner_id = @ownerId");
                 dbConnection.AddParameter("@ownerId", ownerId);
                 using (var reader = dbConnection.ExecuteReader())
@@ -62,10 +51,6 @@ namespace AuroraEmu.Database.DAO
                         Room room = Engine.MainDI.RoomController.GetRoom(reader.GetInt32("id"));
                         rooms.Add(room);
                     }
-
-                dbConnection.BeginTransaction();
-                dbConnection.Commit();
-                dbConnection.Dispose();
             }
 
             return rooms;
@@ -75,9 +60,8 @@ namespace AuroraEmu.Database.DAO
         {
             List<Room> rooms = new List<Room>();
 
-            using (DatabaseConnection dbConnection = Engine.MainDI.DatabaseController.GetConnection())
+            using (DatabaseConnection dbConnection = Engine.MainDI.ConnectionPool.PopConnection())
             {
-                dbConnection.Open();
                 dbConnection.SetQuery("SELECT `id` FROM rooms WHERE name LIKE @search OR owner_id IN (SELECT id FROM players WHERE username LIKE @search)");
                 dbConnection.AddParameter("@search", "%" + search + "%");
                 using (var reader = dbConnection.ExecuteReader())
@@ -86,10 +70,6 @@ namespace AuroraEmu.Database.DAO
                         Room room = Engine.MainDI.RoomController.GetRoom(reader.GetInt32("id"));
                         rooms.Add(room);
                     }
-
-                dbConnection.BeginTransaction();
-                dbConnection.Commit();
-                dbConnection.Dispose();
             }
 
             return rooms;
