@@ -65,5 +65,22 @@ namespace AuroraEmu.Game.Items
                 dbConnection.Dispose();
             }
         }
+
+        public void AddWallItem(int itemId, string wallposition, int roomId)
+        {
+            using (DatabaseConnection dbConnection = Engine.MainDI.DatabaseController.GetConnection())
+            {
+                dbConnection.Open();
+                dbConnection.SetQuery("UPDATE items SET room_id = @roomId, wallposition = @wallposition WHERE id = @itemId LIMIT 1");
+                dbConnection.AddParameter("@roomId", roomId);
+                dbConnection.AddParameter("@wallposition", wallposition);
+                dbConnection.AddParameter("@itemId", itemId);
+                dbConnection.Execute();
+
+                dbConnection.BeginTransaction();
+                dbConnection.Commit();
+                dbConnection.Dispose();
+            }
+        }
     }
 }

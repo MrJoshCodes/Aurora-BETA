@@ -13,6 +13,10 @@ namespace AuroraEmu.Network.Game.Packets.Events.Rooms
 
             Room room = Engine.MainDI.RoomController.GetRoom(client.CurrentRoomId);
             string input = msgEvent.ReadString();
+
+            if (input.StartsWith(":") && Engine.MainDI.CommandController.TryHandleCommand(client, input.Substring(1)))
+                return;
+
             room.SendComposer(new ChatMessageComposer(((RoomActor) client.UserActor).VirtualId, Engine.MainDI.WorldfilterController.CheckString(input)));
         }
     }

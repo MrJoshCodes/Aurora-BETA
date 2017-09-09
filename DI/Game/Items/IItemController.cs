@@ -19,5 +19,7 @@ namespace AuroraEmu.DI.Game.Items
         Dictionary<int, Item> GetItemsFromOwner(int ownerId);
 
         void AddFloorItem(int itemId, int x, int y, int rot, int roomId);
+
+        void AddWallItem(int itemId, string wallposition, int roomId);
     }
 }

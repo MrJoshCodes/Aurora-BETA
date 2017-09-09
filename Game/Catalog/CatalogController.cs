@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using AuroraEmu.DI.Game.Catalog;
+using System;
 
 namespace AuroraEmu.Game.Catalog
 {
@@ -32,10 +33,12 @@ namespace AuroraEmu.Game.Catalog
 
         public string GenerateExtraData(CatalogProduct product, string extraData)
         {
-            switch (product.Template.SpriteType)
+            switch (product.Template.ItemType)
             {
                 case "poster":
                     return product.Data;
+                case "trophy":
+                    return $"{{USERNAME}} {(char)9} {DateTime.Now.ToString("dd-MM-yyyy")} {(char)9} {extraData}";
                 default:
                     return "";
             }

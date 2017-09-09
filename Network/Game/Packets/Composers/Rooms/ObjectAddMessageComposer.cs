@@ -14,7 +14,7 @@ namespace AuroraEmu.Network.Game.Packets.Composers.Rooms
             AppendVL64(item.Rotation);
             AppendString(item.Z.ToString().Replace(',', '.'));
             AppendVL64(0);
-            AppendString("");
+            AppendString(item.Data);
             AppendVL64(-1);
         }
     }

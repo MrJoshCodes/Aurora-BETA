@@ -7,7 +7,7 @@ namespace AuroraEmu.Game.Clients
 {
     public class ClientController : IClientController
     {
-        public readonly Dictionary<IChannelId, Client> Clients;
+        public Dictionary<IChannelId, Client> Clients { get; private set; }
 
         public ClientController()
         {
@@ -69,6 +69,17 @@ namespace AuroraEmu.Game.Clients
             foreach (Client client in Clients.Values)
             {
                 if (client.Player.Id == habboId)
+                    return client;
+            }
+
+            return null;
+        }
+
+        public Client GetClientByHabbo(string habboName)
+        {
+            foreach (Client client in Clients.Values)
+            {
+                if (client.Player.Username == habboName)
                     return client;
             }
 

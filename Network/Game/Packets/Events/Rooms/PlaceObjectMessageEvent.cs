@@ -1,6 +1,7 @@
 ﻿using AuroraEmu.Game.Clients;
 using AuroraEmu.Game.Items;
 using AuroraEmu.Game.Rooms;
+using AuroraEmu.Network.Game.Packets.Composers.Inventory;
 using AuroraEmu.Network.Game.Packets.Composers.Rooms;
 using System.Collections;
 
@@ -27,6 +28,11 @@ namespace AuroraEmu.Network.Game.Packets.Events.Rooms
                         string wallPosition = (dataBits[1] + " " + dataBits[2] + " " + dataBits[3]);
 
                         item.Wallposition = wallPosition;
+
+                        client.Items.Remove(itemId);
+                        room.Items.AddOrUpdate(itemId, item, (oldkey, newkey) => item);
+                        Engine.MainDI.ItemController.AddWallItem(itemId, wallPosition, room.Id);
+                        room.SendComposer(new ItemAddMessageComposer(item));
                     }
                     else
                     {
@@ -42,6 +48,8 @@ namespace AuroraEmu.Network.Game.Packets.Events.Rooms
                         Engine.MainDI.ItemController.AddFloorItem(itemId, x, y, rot, room.Id);
                         room.SendComposer(new ObjectAddMessageComposer(item));
                     }
+
+                    client.SendComposer(new FurniListUpdateComposer());
                 }
             }
         }

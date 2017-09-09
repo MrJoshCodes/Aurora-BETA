@@ -30,17 +30,17 @@ namespace AuroraEmu.Network.Game.Packets.Events.Catalogue
                 {
                     if (product.PriceCoins > 0)
                     {
-                        client.Player.Coins -= product.PriceCoins;
+                        client.DecreaseCredits(product.PriceCoins);
                         client.QueueComposer(new CreditBalanceMessageComposer(client.Player.Coins));
                     }
 
                     if (product.PricePixels > 0)
                     {
-                        client.Player.Pixels -= product.PricePixels;
+                        client.DecreasePixels(product.PricePixels);
                         client.QueueComposer(new HabboActivityPointNotificationMessageComposer(client.Player.Pixels, 0));
                     }
 
-                    string extraData = Engine.MainDI.CatalogController.GenerateExtraData(product, data);
+                    string extraData = Engine.MainDI.CatalogController.GenerateExtraData(product, data).Replace("{USERNAME}", client.Player.Username);
 
                     Engine.MainDI.ItemController.GiveItem(client, product, extraData);
 

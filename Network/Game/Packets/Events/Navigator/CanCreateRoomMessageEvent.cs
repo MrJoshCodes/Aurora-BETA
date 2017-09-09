@@ -10,7 +10,7 @@ namespace AuroraEmu.Network.Game.Packets.Events.Navigator
             if (client.RoomCount == null)
                 client.RoomCount = Engine.MainDI.RoomController.GetUserRoomCount(client.Player.Id);
 
-            client.SendComposer(new CanCreateRoomComposer(client.RoomCount < Engine.MainDI.ConfigController.HHConfig.MaxRooms, Engine.MainDI.ConfigController.HHConfig.MaxRooms));
+            client.SendComposer(new CanCreateRoomComposer(client.RoomCount > Engine.MainDI.ConfigController.HHConfig.MaxRooms, Engine.MainDI.ConfigController.HHConfig.MaxRooms));
         }
     }
 }

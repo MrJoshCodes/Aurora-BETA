@@ -7,6 +7,7 @@ using AuroraEmu.DI.Database.DAO;
 using AuroraEmu.DI.Game;
 using AuroraEmu.DI.Game.Catalog;
 using AuroraEmu.DI.Game.Clients;
+using AuroraEmu.DI.Game.Commands;
 using AuroraEmu.DI.Game.Items;
 using AuroraEmu.DI.Game.Messenger;
 using AuroraEmu.DI.Game.Navigator;
@@ -19,6 +20,7 @@ using AuroraEmu.DI.Network.Game.Packets;
 using AuroraEmu.Game;
 using AuroraEmu.Game.Catalog;
 using AuroraEmu.Game.Clients;
+using AuroraEmu.Game.Commands;
 using AuroraEmu.Game.Items;
 using AuroraEmu.Game.Messenger;
 using AuroraEmu.Game.Navigator;
@@ -47,7 +49,15 @@ namespace AuroraEmu
             var logRepository = LogManager.GetRepository(Assembly.GetEntryAssembly());
             XmlConfigurator.Configure(logRepository, new FileInfo("log4net.config"));
             Logger = LogManager.GetLogger(typeof(Engine));
-            System.Console.WriteLine($"Aurora: {System.DateTimeOffset.Now} BETA!");
+            System.Console.WriteLine(@" _______           _______  _______  _______  _______  _______  _______          
+(  ___  )|\     /|(  ____ )(  ___  )(  ____ )(  ___  )(  ____ \(       )|\     /|
+| (   ) || )   ( || (    )|| (   ) || (    )|| (   ) || (    \/| () () || )   ( |
+| (___) || |   | || (____)|| |   | || (____)|| (___) || (__    | || || || |   | | Cuz perfection DOES matter!
+|  ___  || |   | ||     __)| |   | ||     __)|  ___  ||  __)   | |(_)| || |   | | (C) 2017 Spreedblood & Lord Glaceon
+| (   ) || |   | || (\ (   | |   | || (\ (   | (   ) || (      | |   | || |   | |
+| )   ( || (___) || ) \ \__| (___) || ) \ \__| )   ( || (____/\| )   ( || (___) |
+|/     \|(_______)|/   \__/(_______)|/   \__/|/     \|(_______/|/     \|(_______)
+                                                                                 ");
             ContainerBuilder();
             while (true) 
             {
@@ -55,6 +65,9 @@ namespace AuroraEmu
                 {
                     case "reload_packets":
                         MainDI.PacketController.LoadPackets();
+                        break;
+                    case "reload_models":
+                        MainDI.RoomController.LoadRoomMaps();
                         break;
                 }
             }
@@ -89,6 +102,7 @@ namespace AuroraEmu
             builder.RegisterType<RoomController>().As<IRoomController>();
             builder.RegisterType<TaskController>().As<ITaskController>();
             builder.RegisterType<WordfilterController>().As<IWordfilterController>();
+            builder.RegisterType<CommandController>().As<ICommandController>();
 
             //DAO's
             builder.RegisterType<CatalogDao>().As<ICatalogDao>();

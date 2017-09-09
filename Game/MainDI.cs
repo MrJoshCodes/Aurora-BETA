@@ -4,6 +4,7 @@ using AuroraEmu.DI.Database.DAO;
 using AuroraEmu.DI.Game;
 using AuroraEmu.DI.Game.Catalog;
 using AuroraEmu.DI.Game.Clients;
+using AuroraEmu.DI.Game.Commands;
 using AuroraEmu.DI.Game.Items;
 using AuroraEmu.DI.Game.Messenger;
 using AuroraEmu.DI.Game.Navigator;
@@ -32,6 +33,7 @@ namespace AuroraEmu.Game
         public IPacketController PacketController { get; set; }
         public IConfigController ConfigController { get; set; }
         public IWordfilterController WordfilterController { get; set; }
+        public ICommandController CommandController { get; set; }
         public IGameNetworkListener GameNetworkListener { get; set; }
 
         public ICatalogDao CatalogDao { get; set; }
@@ -63,6 +65,7 @@ namespace AuroraEmu.Game
             WorldfilterController = _locator.Resolve<IWordfilterController>();
             PacketController = _locator.Resolve<IPacketController>();
             WordfilterController = _locator.Resolve<IWordfilterController>();
+            CommandController = _locator.Resolve<ICommandController>();
             GameNetworkListener = _locator.Resolve<IGameNetworkListener>();
         }
 
