@@ -1,8 +1,6 @@
 ﻿using AuroraEmu.Game.Badges;
 using AuroraEmu.Game.Clients;
 using AuroraEmu.Network.Game.Packets.Composers.Inventory.Badges;
-using AuroraEmu.Utilities;
-using System;
 using System.Collections.Generic;
 
 namespace AuroraEmu.Network.Game.Packets.Events.Inventory.Badges
@@ -33,7 +31,7 @@ namespace AuroraEmu.Network.Game.Packets.Events.Inventory.Badges
 
             if (client.CurrentRoomId > 0)
             {
-                Engine.MainDI.RoomController.GetRoom(client.CurrentRoomId).SendComposer(new HabboUserBadgesMessageComposer(client.Player.Id, client.Player.BadgesComponent.GetEquippedBadges()));
+                client.CurrentRoom.SendComposer(new HabboUserBadgesMessageComposer(client.Player.Id, client.Player.BadgesComponent.GetEquippedBadges()));
             }
             else
             {

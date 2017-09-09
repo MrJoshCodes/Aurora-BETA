@@ -7,7 +7,8 @@ namespace AuroraEmu.Network.Game.Packets.Events.Inventory
     {
         public void Run(Client client, MessageEvent msgEvent)
         {
-            client.Items = Engine.MainDI.ItemController.GetItemsFromOwner(client.Player.Id);
+            if (client.Items != null)
+                client.Items = Engine.MainDI.ItemController.GetItemsFromOwner(client.Player.Id);
 
             // HH <- unk?
 

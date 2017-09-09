@@ -8,6 +8,7 @@ using AuroraEmu.Network.Game.Packets.Events.Messenger;
 using AuroraEmu.Network.Game.Packets.Events.Navigator;
 using AuroraEmu.Network.Game.Packets.Events.Rooms;
 using AuroraEmu.Network.Game.Packets.Events.Users;
+using AuroraEmu.Network.Game.Packets.Events.Users.Clothing;
 using DotNetty.Buffers;
 using System.Collections.Generic;
 
@@ -63,14 +64,17 @@ namespace AuroraEmu.Network.Game.Packets
                 { 400, new GetRoomSettingsMessageEvent() },
                 { 386, new UpdateRoomThumbnailMessageEvent() },
                 { 75, new MoveAvatarMessageEvent() },
-                {94, new WaveMessageEvent() },
+                { 94, new WaveMessageEvent() },
 
                 { 157, new GetBadgesEvent() },
-                {158, new SetActivatedBadgesEvent() },
+                { 158, new SetActivatedBadgesEvent() },
                 { 67, new PickupObjectMessageEvent() },
                 { 90, new PlaceObjectMessageEvent() },
                 { 129, new RedeemVoucherMessageEvent() },
-                { 233, new GetBuddyRequestsMessageEvent() }
+                { 233, new GetBuddyRequestsMessageEvent() },
+                { 73, new MoveObjectMessageEvent() },
+                { 44, new UpdateFigureDataMessageEvent() },
+                { 26, new ScrGetUserInfoMessageEvent() }
             };
         }
 

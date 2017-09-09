@@ -17,15 +17,15 @@ namespace AuroraEmu.Network.Game.Packets.Events.Rooms
 
             client.QueueComposer(new UsersMessageComposer(room.Actors.Values));
             room.AddUserActor(client);
-            room.SendComposer(new UsersMessageComposer(client.UserActor));
+            client.CurrentRoom.SendComposer(new UsersMessageComposer(client.UserActor));
 
-            client.QueueComposer(new RoomEntryInfoMessageComposer(true, room.Id, true));
-            client.QueueComposer(new GetGuestRoomResultComposer(room));
+            client.QueueComposer(new RoomEntryInfoMessageComposer(true, client.CurrentRoom.Id, true));
+            client.QueueComposer(new GetGuestRoomResultComposer(client.CurrentRoom));
 
-            client.QueueComposer(new ObjectsMessageComposer(room.GetFloorItems()));
-            client.QueueComposer(new ItemsMessageComposer(room.GetWallItems()));
+            client.QueueComposer(new ObjectsMessageComposer(client.CurrentRoom.GetFloorItems()));
+            client.QueueComposer(new ItemsMessageComposer(client.CurrentRoom.GetWallItems()));
 
-            if (room.OwnerId == client.Player.Id)
+            if (client.CurrentRoom.OwnerId == client.Player.Id)
             {
                 client.QueueComposer(new YouAreControllerMessageComposer());
                 client.QueueComposer(new YouAreOwnerMessageComposer());

@@ -6,12 +6,13 @@ using AuroraEmu.Game.Rooms;
 using AuroraEmu.Game.Items;
 using AuroraEmu.Game.Rooms.User;
 using AuroraEmu.Game.Players.Components;
-using AuroraEmu.Database.DAO;
 using DotNetty.Buffers;
+using AuroraEmu.Game.Subscription;
+using System;
 
 namespace AuroraEmu.Game.Clients
 {
-    public class Client
+    public class Client : IDisposable
     {
         private readonly IChannel _channel;
 
@@ -21,13 +22,16 @@ namespace AuroraEmu.Game.Clients
         public int LoadingRoomId { get; set; }
         public int CurrentRoomId { get; set; }
         public UserActor UserActor { get; set; }
+        public Room CurrentRoom { get; set; }
 
         public Dictionary<int, Item> Items { get; set; }
+        public Dictionary<string, SubscriptionData> SubscriptionData { get; set; }
 
         public Client(IChannel channel)
         {
             _channel = channel;
             Items = new Dictionary<int, Item>();
+            SubscriptionData = new Dictionary<string, SubscriptionData>();
         }
 
         public void Disconnect()
@@ -76,6 +80,7 @@ namespace AuroraEmu.Game.Clients
 
                 Player.BadgesComponent = new BadgesComponent(Player.Id);
                 Player.MessengerComponent = new MessengerComponent(Player);
+                Engine.MainDI.SubscriptionController.GetSubscriptionData(SubscriptionData, Player.Id);
             }
             else
             {
@@ -87,21 +92,18 @@ namespace AuroraEmu.Game.Clients
         public void IncreaseCredits(int amount)
         {
             Player.Coins += amount;
-            Engine.MainDI.PlayerDao.UpdateCurrency(Player.Id, Player.Coins, "coins");
             SendComposer(new Network.Game.Packets.Composers.Users.CreditBalanceMessageComposer(Player.Coins));
         }
 
         public void DecreaseCredits(int amount)
         {
             Player.Coins -= amount;
-            Engine.MainDI.PlayerDao.UpdateCurrency(Player.Id, Player.Coins, "coins");
             SendComposer(new Network.Game.Packets.Composers.Users.CreditBalanceMessageComposer(Player.Coins));
         }
 
         public void IncreasePixels(int amount)
         {
             Player.Pixels += amount;
-            Engine.MainDI.PlayerDao.UpdateCurrency(Player.Id, Player.Pixels, "pixels");
             SendComposer(new Network.Game.Packets.Composers.Users.HabboActivityPointNotificationMessageComposer(Player.Pixels, 0));
         }
 
@@ -109,8 +111,23 @@ namespace AuroraEmu.Game.Clients
         public void DecreasePixels(int amount)
         {
             Player.Pixels -= amount;
-            Engine.MainDI.PlayerDao.UpdateCurrency(Player.Id, Player.Pixels, "pixels");
             SendComposer(new Network.Game.Packets.Composers.Users.HabboActivityPointNotificationMessageComposer(Player.Pixels, 0));
+        }
+
+        public void Dispose()
+        {
+            Player.BadgesComponent.Badges.Clear();
+            Player.MessengerComponent.Friends.Clear();
+            Player.MessengerComponent.Requests.Clear();
+            using (var dbClient = Engine.MainDI.ConnectionPool.PopConnection())
+            {
+                dbClient.SetQuery("UPDATE player SET coins = @coins, pixels = @pixels WHERE username = @username");
+                dbClient.AddParameter("@coins", Player.Coins);
+                dbClient.AddParameter("@pixels", Player.Pixels);
+                dbClient.AddParameter("@username", Player.Username);
+                dbClient.Execute();
+            }
+            GC.SuppressFinalize(this);
         }
     }
 }

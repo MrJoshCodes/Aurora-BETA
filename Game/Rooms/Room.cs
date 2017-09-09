@@ -4,6 +4,7 @@ using AuroraEmu.Game.Items;
 using AuroraEmu.Game.Rooms.Components;
 using AuroraEmu.Game.Rooms.User;
 using AuroraEmu.Network.Game.Packets;
+using AuroraEmu.Network.Game.Packets.Composers.Rooms;
 using MySql.Data.MySqlClient;
 using System;
 using System.Collections.Concurrent;
@@ -93,6 +94,7 @@ namespace AuroraEmu.Game.Rooms
             UserActor actor = new UserActor(client, newVirtualId);
             Actors.TryAdd(newVirtualId, actor);
             client.CurrentRoomId = this.Id;
+            client.CurrentRoom = Engine.MainDI.RoomController.GetRoom(client.CurrentRoomId);
             client.UserActor = actor;
             PlayersIn++;
 
@@ -181,11 +183,10 @@ namespace AuroraEmu.Game.Rooms
             query += " WHERE id = @roomId";
             parameters[parameters.Length - 1] = new MySqlParameter("@roomId", Id);
 
-            using (DatabaseConnection dbConnection = Engine.MainDI.DatabaseController.GetConnection())
+            using (DatabaseConnection dbConnection = Engine.MainDI.ConnectionPool.PopConnection())
             {
                 dbConnection.SetQuery(query);
                 dbConnection.AddParameters(parameters);
-                dbConnection.Open();
 
                 dbConnection.Execute();
             }
@@ -193,6 +194,11 @@ namespace AuroraEmu.Game.Rooms
 
         public void Loop()
         {
+        }
+
+        public void RemoveActor(RoomActor actor)
+        {
+            actor.Client.CurrentRoom.SendComposer(new UserRemoveMessageComposer(actor));
         }
     }
 }

@@ -22,6 +22,7 @@ namespace AuroraEmu.Game.Rooms.Pathfinder
             {
                 _weights[n] = defaultCost;
             }
+
         }
 
         public void SetCellCost(Point2D position, float cost)

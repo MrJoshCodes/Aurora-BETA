@@ -9,6 +9,7 @@ using AuroraEmu.DI.Game.Messenger;
 using AuroraEmu.DI.Game.Navigator;
 using AuroraEmu.DI.Game.Players;
 using AuroraEmu.DI.Game.Rooms;
+using AuroraEmu.DI.Game.Subscription;
 using AuroraEmu.DI.Game.Wordfilter;
 using AuroraEmu.DI.Locator;
 using AuroraEmu.DI.Network.Game;
@@ -28,11 +29,12 @@ namespace AuroraEmu.Game
         public IRoomController RoomController { get; set; }
         public ITaskController TaskController { get; set; }
         public IWordfilterController WorldfilterController { get; set; }
-        public IDatabaseController DatabaseController { get; set; }
+        public IConnectionPool ConnectionPool { get; set; }
         public IPacketController PacketController { get; set; }
         public IConfigController ConfigController { get; set; }
         public IWordfilterController WordfilterController { get; set; }
         public IGameNetworkListener GameNetworkListener { get; set; }
+        public ISubscriptionController SubscriptionController { get; set; }
 
         public ICatalogDao CatalogDao { get; set; }
         public IItemDao ItemDao { get; set; }
@@ -51,7 +53,7 @@ namespace AuroraEmu.Game
         public void SetupControllers()
         {
             ConfigController = _locator.Resolve<IConfigController>();
-            DatabaseController = _locator.Resolve<IDatabaseController>();
+            ConnectionPool = _locator.Resolve<IConnectionPool>();
             PlayerController = _locator.Resolve<IPlayerController>();
             ItemController = _locator.Resolve<IItemController>();
             CatalogController = _locator.Resolve<ICatalogController>();
@@ -64,6 +66,7 @@ namespace AuroraEmu.Game
             PacketController = _locator.Resolve<IPacketController>();
             WordfilterController = _locator.Resolve<IWordfilterController>();
             GameNetworkListener = _locator.Resolve<IGameNetworkListener>();
+            SubscriptionController = _locator.Resolve<ISubscriptionController>();
         }
 
         public void SetupDaos()

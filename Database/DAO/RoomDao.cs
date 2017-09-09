@@ -9,17 +9,12 @@ namespace AuroraEmu.Database.DAO
         public Dictionary<string, RoomMap> LoadRoomMaps(Dictionary<string, RoomMap> roomMaps)
         {
             roomMaps.Clear();
-            using (DatabaseConnection dbConnection = Engine.MainDI.DatabaseController.GetConnection())
+            using (DatabaseConnection dbConnection = Engine.MainDI.ConnectionPool.PopConnection())
             {
-                dbConnection.Open();
                 dbConnection.SetQuery("SELECT * FROM room_maps");
                 using (var reader = dbConnection.ExecuteReader())
                     while (reader.Read())
                         roomMaps.Add(reader.GetString("name"), new RoomMap(reader));
-
-                dbConnection.BeginTransaction();
-                dbConnection.Commit();
-                dbConnection.Dispose();
             }
 
             return roomMaps;
@@ -28,10 +23,8 @@ namespace AuroraEmu.Database.DAO
         public Room GetRoom(int id)
         {
             Room room = null;
-            using (DatabaseConnection dbConnection = Engine.MainDI.DatabaseController.GetConnection(true))
+            using (DatabaseConnection dbConnection = Engine.MainDI.ConnectionPool.PopConnection())
             {
-                dbConnection.Open();
-
                 dbConnection.SetQuery("SELECT * FROM rooms WHERE id = @id LIMIT 1");
                 dbConnection.AddParameter("@id", id);
                 using(var reader = dbConnection.ExecuteReader())
@@ -42,10 +35,6 @@ namespace AuroraEmu.Database.DAO
                         Engine.MainDI.RoomController.Rooms.TryAdd(id, room);
                     }
                 }
-
-                dbConnection.BeginTransaction();
-                dbConnection.Commit();
-                dbConnection.Dispose();
             }
             if (room != null)
                 return room;
@@ -55,16 +44,11 @@ namespace AuroraEmu.Database.DAO
         public int GetUserRoomCount(int userId)
         {
             int roomCount;
-            using (DatabaseConnection dbConnection = Engine.MainDI.DatabaseController.GetConnection())
+            using (DatabaseConnection dbConnection = Engine.MainDI.ConnectionPool.PopConnection())
             {
-                dbConnection.Open();
                 dbConnection.SetQuery("SELECT COUNT(*) FROM rooms WHERE owner_id = @ownerId");
                 dbConnection.AddParameter("@ownerId", userId);
                 roomCount = int.Parse(dbConnection.GetString());
-
-                dbConnection.BeginTransaction();
-                dbConnection.Commit();
-                dbConnection.Dispose();
             }
             return roomCount;
         }
@@ -73,18 +57,14 @@ namespace AuroraEmu.Database.DAO
         {
             int tmpRoomId;
             
-            using (DatabaseConnection dbConnection = Engine.MainDI.DatabaseController.GetConnection())
+            using (DatabaseConnection dbConnection = Engine.MainDI.ConnectionPool.PopConnection())
             {
-                dbConnection.Open();
                 dbConnection.SetQuery("INSERT INTO rooms (owner_id,name,model) VALUES (@ownerId, @name, @model)");
                 dbConnection.AddParameter("@ownerId", ownerId);
                 dbConnection.AddParameter("@name", name);
                 dbConnection.AddParameter("@model", model);
 
                 tmpRoomId = dbConnection.Insert();
-                dbConnection.BeginTransaction();
-                dbConnection.Commit();
-                dbConnection.Dispose();
             }
             
             return tmpRoomId;

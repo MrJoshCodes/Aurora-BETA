@@ -5,7 +5,7 @@
         public ObjectRemoveMessageComposer(int itemId)
             : base(94)
         {
-            AppendVL64(itemId);
+            AppendString(itemId.ToString());
             AppendString("");
             AppendVL64(false);
         }

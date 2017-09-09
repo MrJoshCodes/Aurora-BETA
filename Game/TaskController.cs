@@ -11,9 +11,8 @@ namespace AuroraEmu.Game
         public Task ExecuteOnce(IAuroraTask executeTask, int delay = 0)
         {
             if (delay == 0)
-            {
                 return Task.Run(() => executeTask.Execute());
-            }
+
             return Task.Run(async () =>
             {
                 await Task.Delay(TimeSpan.FromMilliseconds(delay));
