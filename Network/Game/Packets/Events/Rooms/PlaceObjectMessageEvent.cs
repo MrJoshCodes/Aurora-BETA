@@ -1,10 +1,6 @@
 ﻿using AuroraEmu.Game.Clients;
 using AuroraEmu.Game.Items;
-<<<<<<< HEAD
-using AuroraEmu.Game.Rooms;
 using AuroraEmu.Network.Game.Packets.Composers.Inventory;
-=======
->>>>>>> db_object_pooling
 using AuroraEmu.Network.Game.Packets.Composers.Rooms;
 
 namespace AuroraEmu.Network.Game.Packets.Events.Rooms
@@ -31,9 +27,9 @@ namespace AuroraEmu.Network.Game.Packets.Events.Rooms
                         item.Wallposition = wallPosition;
 
                         client.Items.Remove(itemId);
-                        room.Items.AddOrUpdate(itemId, item, (oldkey, newkey) => item);
-                        Engine.MainDI.ItemController.AddWallItem(itemId, wallPosition, room.Id);
-                        room.SendComposer(new ItemAddMessageComposer(item));
+                        client.CurrentRoom.Items.AddOrUpdate(itemId, item, (oldkey, newkey) => item);
+                        Engine.MainDI.ItemController.AddWallItem(itemId, wallPosition, client.CurrentRoom.Id);
+                        client.CurrentRoom.SendComposer(new ItemAddMessageComposer(item));
                     }
                     else
                     {
@@ -48,12 +44,12 @@ namespace AuroraEmu.Network.Game.Packets.Events.Rooms
                         {
                             client.Items.Remove(itemId);
                             Engine.MainDI.ItemDao.UpdateItem(itemId, x, y, rot, client.CurrentRoom.Id);
-                            client.SendComposer(new FurniListUpdateComposer());
+                            client.SendComposer(new Composers.Rooms.FurniListUpdateComposer());
                             client.CurrentRoom.SendComposer(new ObjectAddMessageComposer(item));
                         }
                     }
 
-                    client.SendComposer(new FurniListUpdateComposer());
+                    client.SendComposer(new Composers.Inventory.FurniListUpdateComposer());
                 }
             }
         }

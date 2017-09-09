@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using AuroraEmu.Game.Catalog;
 using AuroraEmu.Game.Clients;
 using AuroraEmu.DI.Game.Items;
+using AuroraEmu.Database;
 
 namespace AuroraEmu.Game.Items
 {
@@ -45,13 +46,11 @@ namespace AuroraEmu.Game.Items
         {
             return Engine.MainDI.ItemDao.GetItemsFromOwner(ownerId);
         }
-<<<<<<< HEAD
 
         public void AddFloorItem(int itemId, int x, int y, int rot, int roomId)
         {
-            using(DatabaseConnection dbConnection = Engine.MainDI.DatabaseController.GetConnection())
+            using(DatabaseConnection dbConnection = Engine.MainDI.ConnectionPool.PopConnection())
             {
-                dbConnection.Open();
                 dbConnection.SetQuery("UPDATE items SET room_id = @roomId, x = @x, y = @y, rotation = @rot WHERE id = @itemId LIMIT 1");
                 dbConnection.AddParameter("@roomId", roomId);
                 dbConnection.AddParameter("@x", x);
@@ -59,30 +58,19 @@ namespace AuroraEmu.Game.Items
                 dbConnection.AddParameter("@rot", rot);
                 dbConnection.AddParameter("@itemId", itemId);
                 dbConnection.Execute();
-
-                dbConnection.BeginTransaction();
-                dbConnection.Commit();
-                dbConnection.Dispose();
             }
         }
 
         public void AddWallItem(int itemId, string wallposition, int roomId)
         {
-            using (DatabaseConnection dbConnection = Engine.MainDI.DatabaseController.GetConnection())
+            using (DatabaseConnection dbConnection = Engine.MainDI.ConnectionPool.PopConnection())
             {
-                dbConnection.Open();
                 dbConnection.SetQuery("UPDATE items SET room_id = @roomId, wallposition = @wallposition WHERE id = @itemId LIMIT 1");
                 dbConnection.AddParameter("@roomId", roomId);
                 dbConnection.AddParameter("@wallposition", wallposition);
                 dbConnection.AddParameter("@itemId", itemId);
                 dbConnection.Execute();
-
-                dbConnection.BeginTransaction();
-                dbConnection.Commit();
-                dbConnection.Dispose();
             }
         }
-=======
->>>>>>> db_object_pooling
     }
 }
