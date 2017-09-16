@@ -6,7 +6,7 @@ namespace AuroraEmu.DI.Game.Navigator
 {
     public interface INavigatorController
     {
-        List<FrontpageItem> FrontpageItems { get; set; }
+        Dictionary<int, FrontpageItem> FrontpageItems { get; set; }
 
         Dictionary<int, RoomCategory> Categories { get; set; }
 

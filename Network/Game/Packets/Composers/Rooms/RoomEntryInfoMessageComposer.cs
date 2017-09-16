@@ -9,5 +9,13 @@
             AppendVL64(roomId);
             AppendVL64(rights);
         }
+
+         public RoomEntryInfoMessageComposer(string model)
+            : base(471)
+        {
+            AppendVL64(false);
+            AppendString(model);
+            AppendVL64(false);
+        }
     }
 }

@@ -19,8 +19,15 @@ namespace AuroraEmu.Network.Game.Packets.Events.Rooms
             room.AddUserActor(client);
             client.CurrentRoom.SendComposer(new UsersMessageComposer(client.UserActor));
 
-            client.QueueComposer(new RoomEntryInfoMessageComposer(true, client.CurrentRoom.Id, true));
-            client.QueueComposer(new GetGuestRoomResultComposer(client.CurrentRoom));
+            if (room.IsFrontpageItem) 
+            {
+                client.QueueComposer(new RoomEntryInfoMessageComposer(room.FrontpageItem.ExternalText));
+            } 
+            else
+            {
+                client.QueueComposer(new RoomEntryInfoMessageComposer(true, client.CurrentRoom.Id, true));
+                client.QueueComposer(new GetGuestRoomResultComposer(client.CurrentRoom));
+            }
 
             client.QueueComposer(new ObjectsMessageComposer(client.CurrentRoom.GetFloorItems()));
             client.QueueComposer(new ItemsMessageComposer(client.CurrentRoom.GetWallItems()));

@@ -7,7 +7,7 @@ namespace AuroraEmu.Database.DAO
 {
     public class NavigatorDao : INavigatorDao
     {
-        public List<FrontpageItem> ReloadFrontpageItems(List<FrontpageItem> frontpageItems)
+        public Dictionary<int, FrontpageItem> ReloadFrontpageItems(Dictionary<int, FrontpageItem> frontpageItems)
         {
             frontpageItems.Clear();
 
@@ -16,7 +16,7 @@ namespace AuroraEmu.Database.DAO
                 dbConnection.SetQuery("SELECT * FROM frontpage_items;");
                 using (var reader = dbConnection.ExecuteReader())
                     while (reader.Read())
-                        frontpageItems.Add(new FrontpageItem(reader));
+                        frontpageItems.Add(reader.GetInt32("room_id"), new FrontpageItem(reader));
             }
             
             return frontpageItems;

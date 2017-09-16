@@ -6,13 +6,13 @@ namespace AuroraEmu.Network.Game.Packets.Composers.Navigator
 {
     class OfficialRoomsComposer : MessageComposer
     {
-        public OfficialRoomsComposer(IList<FrontpageItem> frontpageItems)
+        public OfficialRoomsComposer(IDictionary<int, FrontpageItem> frontpageItems)
             : base(450)
         {
             AppendVL64(0);
             AppendVL64(frontpageItems.Count);
 
-            foreach (FrontpageItem item in frontpageItems)
+            foreach (FrontpageItem item in frontpageItems.Values)
             {
                 AppendString(item.Name);
                 AppendString(item.Description);

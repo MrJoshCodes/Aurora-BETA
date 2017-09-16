@@ -6,13 +6,13 @@ namespace AuroraEmu.Game.Navigator
 {
     public class NavigatorController : INavigatorController
     {
-        public List<FrontpageItem> FrontpageItems { get; set; }
+        public Dictionary<int, FrontpageItem> FrontpageItems { get; set; }
         public Dictionary<int, RoomCategory> Categories { get; set; }
 
 
         public NavigatorController()
         {
-            FrontpageItems = new List<FrontpageItem>();
+            FrontpageItems = new Dictionary<int, FrontpageItem>();
             Categories = new Dictionary<int, RoomCategory>();
 
             ReloadFrontpageItems();

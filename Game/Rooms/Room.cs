@@ -1,6 +1,7 @@
 ﻿using AuroraEmu.Database;
 using AuroraEmu.Game.Clients;
 using AuroraEmu.Game.Items;
+using AuroraEmu.Game.Navigator;
 using AuroraEmu.Game.Rooms.Components;
 using AuroraEmu.Game.Rooms.User;
 using AuroraEmu.Network.Game.Packets;
@@ -29,6 +30,21 @@ namespace AuroraEmu.Game.Rooms
         public string CCTs { get; }
         public bool ShowOwner { get; set; }
         public bool AllPlayerRights { get; set; }
+        public bool IsFrontpageItem 
+        { 
+            get
+            {
+                return Engine.MainDI.NavigatorController.FrontpageItems.ContainsKey(Id);
+            }
+        }
+        public FrontpageItem FrontpageItem 
+        { 
+            get
+            {
+                return Engine.MainDI.NavigatorController.FrontpageItems[Id];
+            }
+        }
+
         public string Icon { get; set; }
         public int Floor { get; set; }
         public int Wallpaper { get; set; }
@@ -48,7 +64,6 @@ namespace AuroraEmu.Game.Rooms
                 return _items;
             }
         }
-
         public ConcurrentDictionary<int, RoomActor> Actors { get; private set; }
         private ProcessComponent ProcessComponent { get; set; }
 
