@@ -1,5 +1,6 @@
 ﻿using AuroraEmu.Game.Navigator;
 using System.Collections.Generic;
+using AuroraEmu.Game.Rooms;
 
 namespace AuroraEmu.Network.Game.Packets.Composers.Navigator
 {
@@ -21,8 +22,25 @@ namespace AuroraEmu.Network.Game.Packets.Composers.Navigator
                 AppendVL64(0);
                 AppendVL64(item.Type);
 
-                if (item.Type == 1)
-                    AppendString(item.Tag);
+                switch (item.Type)
+                {
+                    case 1:
+                        AppendString(item.Tag);
+                        break;
+                    case 2:
+                        
+                        break;
+                    case 3:
+                        var room = Engine.MainDI.RoomController.GetRoom(item.RoomId);
+                        
+                        AppendString("");
+                        AppendVL64(room.Id);
+                        AppendVL64(0);
+                        AppendString(room.CCTs);
+                        AppendVL64(room.PlayersMax);
+                        AppendVL64(item.RoomId);
+                        break;
+                }
             }
         }
     }

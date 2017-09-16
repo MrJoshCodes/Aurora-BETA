@@ -11,6 +11,7 @@ namespace AuroraEmu.Game.Navigator
         public string Image { get; set; }
         public int Type { get; set; }
         public string Tag { get; set; }
+        public int RoomId { get; set; }
 
         public FrontpageItem(MySqlDataReader reader)
         {
@@ -21,6 +22,7 @@ namespace AuroraEmu.Game.Navigator
             Image = reader.GetString("image");
             Type = reader.GetInt32("type");
             Tag = reader.GetString("tag");
+            RoomId = reader.GetInt32("room_id");
         }
     }
 }

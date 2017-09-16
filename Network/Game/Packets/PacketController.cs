@@ -45,6 +45,7 @@ namespace AuroraEmu.Network.Game.Packets
                 { 38, new DeclineBuddyMessageEvent() },
                 { 40, new RemoveBuddyMessageEvent() },
 
+                {2, new OpenConnectionMessageEvent()},
                 { 41, new HabboSearchMessageEvent() },
                 { 434, new MyRoomsSearchMessageEvent() },
                 {432, new MyFriendsRoomsSearchMessageEvent()},

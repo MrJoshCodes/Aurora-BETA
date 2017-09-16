@@ -65,7 +65,7 @@ namespace AuroraEmu.Game.Rooms
         public Room(MySqlDataReader reader)
         {
             Id = reader.GetInt32("id");
-            OwnerId = reader.GetInt32("owner_id").Equals(typeof(DBNull)) ? 0 : reader.GetInt32("owner_id");
+            OwnerId = reader.IsDBNull(reader.GetOrdinal("owner_id")) ? 0 : reader.GetInt32("owner_id");
             Name = reader.GetString("name");
             Description = reader.GetString("description");
             State = (RoomState) Enum.Parse(typeof(RoomState), reader.GetString("state"));
