@@ -18,6 +18,8 @@ namespace AuroraEmu.DI.Game.Navigator
 
         List<Room> SearchRooms(string search);
 
+        List<Room> GetRoomsByFriends(int playerId);
+
         List<RoomCategory> GetUserCategories(byte rank);
     }
 }

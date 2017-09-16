@@ -8,16 +8,20 @@ namespace AuroraEmu.Network.Game.Packets.Composers.Users
         public ScrSendUserInfoComposer(SubscriptionData data)
             : base(7)
         {
-            AppendString(data.Subscription.ToLower());
-            double timeLeft = data.TimeExpire - Engine.GetUnixTimeStamp();
-            int totalDaysLeft = (int)Math.Ceiling(timeLeft / 86400);
-            int monthsLeft = totalDaysLeft / 31;
-
-            if (monthsLeft >= 1) monthsLeft--;
-
-            AppendVL64(totalDaysLeft - (monthsLeft * 31));
+//            AppendString(data.Subscription.ToLower());
+//            double timeLeft = data.TimeExpire - Engine.GetUnixTimeStamp();
+//            int totalDaysLeft = (int)Math.Ceiling(timeLeft / 86400);
+//            int monthsLeft = totalDaysLeft / 31;
+//
+//            if (monthsLeft >= 1) monthsLeft--;
+//
+//            AppendVL64(totalDaysLeft - (monthsLeft * 31));
+//            AppendVL64(true);
+//            AppendVL64(monthsLeft);
+            AppendString("club_habbo");
+            AppendVL64(1337);
             AppendVL64(true);
-            AppendVL64(monthsLeft);
+            AppendVL64(1337);
         }
     }
 }

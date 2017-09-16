@@ -74,5 +74,24 @@ namespace AuroraEmu.Database.DAO
 
             return rooms;
         }
+
+        public List<Room> GetRoomsByFriends(int playerId)
+        {
+            List<Room> rooms = new List<Room>();
+
+            using (DatabaseConnection dbConnection = Engine.MainDI.ConnectionPool.PopConnection())
+            {
+                dbConnection.SetQuery("SELECT `id` FROM rooms WHERE owner_id IN (SELECT `user_two_id` FROM `messenger_friends` WHERE `user_one_id` = @playerId) ORDER BY `players_in` DESC LIMIT 40");
+                dbConnection.AddParameter("@playerId", playerId);
+                using (var reader = dbConnection.ExecuteReader())
+                    while (reader.Read())
+                    {
+                        Room room = Engine.MainDI.RoomController.GetRoom(reader.GetInt32("id"));
+                        rooms.Add(room);
+                    }
+            }
+
+            return rooms;
+        }
     }
 }
