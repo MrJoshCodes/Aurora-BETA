@@ -41,6 +41,11 @@ namespace AuroraEmu.Game.Navigator
             return Engine.MainDI.NavigatorDao.SearchRooms(search);
         }
 
+        public List<Room> GetRoomsByFriends(int playerId)
+        {
+            return Engine.MainDI.NavigatorDao.GetRoomsByFriends(playerId);
+        }
+
         public List<RoomCategory> GetUserCategories(byte rank)
         {
             List<RoomCategory> categories = new List<RoomCategory>();

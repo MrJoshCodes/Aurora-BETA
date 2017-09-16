@@ -13,5 +13,7 @@ namespace AuroraEmu.DI.Database.DAO
         List<Room> GetRoomsByOwner(int ownerId);
 
         List<Room> SearchRooms(string search);
+        
+        List<Room> GetRoomsByFriends(int playerId);
     }
 }

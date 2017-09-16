@@ -9,6 +9,7 @@ using AuroraEmu.Game.Players.Components;
 using DotNetty.Buffers;
 using AuroraEmu.Game.Subscription;
 using System;
+using AuroraEmu.Network.Game.Packets.Composers.Users;
 
 namespace AuroraEmu.Game.Clients
 {
@@ -72,6 +73,7 @@ namespace AuroraEmu.Game.Clients
 
             if (Player != null)
             {
+                SendComposer(new UserRightsMessageComposer());
                 SendComposer(new MessageComposer(3));
 
                 MessageComposer composer = new MessageComposer(139);

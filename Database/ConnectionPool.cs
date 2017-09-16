@@ -8,7 +8,7 @@ namespace AuroraEmu.Database
         private Stack<DatabaseConnection> connections;
         private readonly string _connectionString =
             $"Server={Engine.MainDI.ConfigController.DbConfig.Server};" +
-            "Port=3306; " +
+            $"Port={Engine.MainDI.ConfigController.DbConfig.Port}; " +
             $"Uid={Engine.MainDI.ConfigController.DbConfig.User}; " +
             $"Password={Engine.MainDI.ConfigController.DbConfig.Password}; " +
             $"Database={Engine.MainDI.ConfigController.DbConfig.Database}; " +

@@ -47,6 +47,7 @@ namespace AuroraEmu.Network.Game.Packets
 
                 { 41, new HabboSearchMessageEvent() },
                 { 434, new MyRoomsSearchMessageEvent() },
+                {432, new MyFriendsRoomsSearchMessageEvent()},
                 { 151, new GetUserFlatCatsMessageEvent() },
                 { 387, new CanCreateRoomMessageEvent() },
                 { 29, new CreateFlatMessageEvent() },
