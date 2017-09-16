@@ -19,7 +19,7 @@ namespace AuroraEmu.Network.Game.Packets.Events.Rooms
             room.AddUserActor(client);
             client.CurrentRoom.SendComposer(new UsersMessageComposer(client.UserActor));
 
-            if (room.IsFrontpageItem) 
+            if (room.IsFrontpageItem && room.FrontpageItem.ExternalText.Length > 0) 
             {
                 client.QueueComposer(new RoomEntryInfoMessageComposer(room.FrontpageItem.ExternalText));
             } 
