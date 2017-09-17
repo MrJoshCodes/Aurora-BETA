@@ -49,7 +49,7 @@ namespace AuroraEmu.Game.Rooms.Components
                     if (actor.QuitRoom)
                     {
                         actor.QuitRoom = false;
-                        room.RemoveActor(actor);
+                        room.RemoveActor(actor, true);
                     }
                 }
 

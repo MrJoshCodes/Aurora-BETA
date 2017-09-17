@@ -16,6 +16,10 @@ namespace AuroraEmu.Network.Game.Packets.Events.Rooms
 
             if (room == null) return;
 
+            if (client.CurrentRoomId != 0 &&
+                Engine.MainDI.RoomController.Rooms.TryGetValue(client.CurrentRoomId, out Room currentRoom))
+                currentRoom.RemoveActor(client.UserActor, false);
+
             client.LoadingRoomId = id;
             
             MessageComposer fuseResponse = new MessageComposer(166);
