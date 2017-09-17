@@ -45,6 +45,12 @@ namespace AuroraEmu.Game.Rooms.Components
 
                     actor.UpdateNeeded = true;
                     actor.SetStep = false;
+
+                    if (actor.QuitRoom)
+                    {
+                        actor.QuitRoom = false;
+                        room.RemoveActor(actor);
+                    }
                 }
 
                 if (actor.CalcPath)

@@ -10,6 +10,7 @@ using MySql.Data.MySqlClient;
 using System;
 using System.Collections.Concurrent;
 using System.Data;
+using AuroraEmu.Network.Game.Packets.Events.Rooms;
 
 namespace AuroraEmu.Game.Rooms
 {
@@ -230,7 +231,10 @@ namespace AuroraEmu.Game.Rooms
 
         public void RemoveActor(RoomActor actor)
         {
-            actor.Client.CurrentRoom.SendComposer(new UserRemoveMessageComposer(actor));
+            Actors.TryRemove(actor.VirtualId, out RoomActor roomActor);
+            SendComposer(new UserRemoveMessageComposer(actor));
+            actor.Client.SendComposer(new CloseConnectionMessageComposer());
+            PlayersIn--;
         }
     }
 }

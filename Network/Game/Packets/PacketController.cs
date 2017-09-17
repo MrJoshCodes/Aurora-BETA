@@ -67,6 +67,7 @@ namespace AuroraEmu.Network.Game.Packets
                 { 386, new UpdateRoomThumbnailMessageEvent() },
                 { 75, new MoveAvatarMessageEvent() },
                 { 94, new WaveMessageEvent() },
+                {53, new QuitMessageEvent()},
 
                 { 157, new GetBadgesEvent() },
                 { 158, new SetActivatedBadgesEvent() },

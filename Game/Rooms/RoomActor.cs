@@ -27,6 +27,7 @@ namespace AuroraEmu.Game.Rooms
         public Point2D NextTile { get; set; }
 
         public ActorType Type { get; private set; }
+        public bool QuitRoom { get; set; }
 
         public RoomActor(Client client, int virtualId)
         {
