@@ -78,6 +78,7 @@ namespace AuroraEmu.Network.Game.Packets
                 { 233, new GetBuddyRequestsMessageEvent() },
                 { 73, new MoveObjectMessageEvent() },
                 { 44, new UpdateFigureDataMessageEvent() },
+                 { 375, new GetWardrobeMessageEvent() },
                 { 26, new ScrGetUserInfoMessageEvent() }
             };
         }
