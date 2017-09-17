@@ -38,6 +38,8 @@ namespace AuroraEmu.Game.Rooms.Components
                 if (actor.SetStep)
                 {
                     actor.Position = actor.NextTile;
+                    actor.Position.Z = Math.Round(room.Map.TileHeights[actor.Position.X, actor.Position.Y], 1);
+                    
                     if (actor.Position.X == actor.TargetPoint.X && actor.Position.Y == actor.TargetPoint.Y)
                         UpdateUserStatus(actor);
 
@@ -86,7 +88,7 @@ namespace AuroraEmu.Game.Rooms.Components
 
                         if (actor.Statusses.ContainsKey("sit"))
                             actor.Statusses.Remove("sit");
-                        actor.Statusses.Add("mv", $"{nextStep.X},{nextStep.Y},0.00");
+                        actor.Statusses.Add("mv", $"{nextStep.X},{nextStep.Y},{Math.Round(room.Map.TileHeights[nextStep.X, nextStep.Y], 1)}");
                         actor.SetStep = true;
                         actor.Rotation = PathFinder.CalculateRotation(actor.Position.X, actor.Position.Y, nextStep.X,
                             nextStep.Y);
