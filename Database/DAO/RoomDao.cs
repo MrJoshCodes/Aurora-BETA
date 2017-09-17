@@ -59,7 +59,7 @@ namespace AuroraEmu.Database.DAO
             
             using (DatabaseConnection dbConnection = Engine.MainDI.ConnectionPool.PopConnection())
             {
-                dbConnection.SetQuery("INSERT INTO rooms (owner_id,name,model) VALUES (@ownerId, @name, @model)");
+                dbConnection.SetQuery("INSERT INTO rooms (owner_id,name,model,description,ccts) VALUES (@ownerId, @name, @model, '', '')");
                 dbConnection.AddParameter("@ownerId", ownerId);
                 dbConnection.AddParameter("@name", name);
                 dbConnection.AddParameter("@model", model);

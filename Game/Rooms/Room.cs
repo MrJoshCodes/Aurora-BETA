@@ -50,7 +50,7 @@ namespace AuroraEmu.Game.Rooms
         public int Wallpaper { get; set; }
         public double Landscape { get; set; }
 
-        public RoomMap Map { get; private set; }
+        public RoomMap Map { get; set; }
 
         public bool DiagEnabled { get; set; } = true;
 
@@ -95,7 +95,12 @@ namespace AuroraEmu.Game.Rooms
             Floor = reader.GetInt32("floor");
             Wallpaper = reader.GetInt32("wallpaper");
             Landscape = reader.GetDouble("landscape");
-            Map = Engine.MainDI.RoomController.RoomMaps[Model];
+
+            if (Engine.MainDI.RoomController.RoomMaps.TryGetValue(Model, out RoomMap map))
+            {
+                Map = map;
+            }
+            
             Actors = new ConcurrentDictionary<int, RoomActor>();
 
             ProcessComponent = new ProcessComponent(this);

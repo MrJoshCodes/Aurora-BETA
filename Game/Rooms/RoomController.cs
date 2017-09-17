@@ -43,7 +43,8 @@ namespace AuroraEmu.Game.Rooms
             {
                 Name = name,
                 Model = model,
-                OwnerId = ownerId
+                OwnerId = ownerId,
+                Map = Engine.MainDI.RoomController.RoomMaps[model]
             };
 
             tmpRoom.Id = Engine.MainDI.RoomDao.GetRoomId(name, model, ownerId);

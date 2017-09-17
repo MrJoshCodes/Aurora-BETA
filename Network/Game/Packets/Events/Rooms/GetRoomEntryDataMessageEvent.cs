@@ -1,5 +1,6 @@
 ﻿using AuroraEmu.Game.Clients;
 using AuroraEmu.Game.Rooms;
+using AuroraEmu.Network.Game.Packets.Composers.Misc;
 using AuroraEmu.Network.Game.Packets.Composers.Rooms;
 
 namespace AuroraEmu.Network.Game.Packets.Events.Rooms
@@ -12,6 +13,16 @@ namespace AuroraEmu.Network.Game.Packets.Events.Rooms
                 return;
 
             Room room = Engine.MainDI.RoomController.GetRoom(client.LoadingRoomId);
+
+            if (room.Map == null)
+            {
+                client.LoadingRoomId = 0;
+                client.QueueComposer(new CloseConnectionMessageComposer());
+                client.QueueComposer(new HabboBroadcastMessageComposer($"Model {room.Model} not found!"));
+                client.Flush();
+
+                return;
+            }
 
             new GetHeightMapMessageEvent().Run(client, null);
 
