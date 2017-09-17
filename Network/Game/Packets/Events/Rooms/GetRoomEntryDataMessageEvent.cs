@@ -22,6 +22,7 @@ namespace AuroraEmu.Network.Game.Packets.Events.Rooms
             if (room.IsFrontpageItem && room.FrontpageItem.ExternalText.Length > 0) 
             {
                 client.QueueComposer(new RoomEntryInfoMessageComposer(room.FrontpageItem.ExternalText));
+                client.QueueComposer(new SpecialItemsMessageComposer(client.CurrentRoom.GetItems()));
             } 
             else
             {

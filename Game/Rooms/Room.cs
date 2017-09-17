@@ -163,6 +163,18 @@ namespace AuroraEmu.Game.Rooms
             return items;
         }
 
+         public ConcurrentBag<Item> GetItems()
+        {
+            ConcurrentBag<Item> items = new ConcurrentBag<Item>();
+
+            foreach (Item item in Items.Values)
+            {
+                items.Add(item);
+            }
+
+            return items;
+        }
+
         public ConcurrentBag<Item> GetWallItems()
         {
             ConcurrentBag<Item> items = new ConcurrentBag<Item>();
