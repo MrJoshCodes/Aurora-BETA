@@ -3,5 +3,5 @@
   "User" : "root",
   "Password" : "",
   "Database" : "aurora",
-  "Port": "3307"
+  "Port": "3306"
 }
