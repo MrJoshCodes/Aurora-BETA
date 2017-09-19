@@ -4,18 +4,29 @@ using AuroraEmu.Game.Catalog;
 using AuroraEmu.Game.Clients;
 using AuroraEmu.DI.Game.Items;
 using AuroraEmu.Database;
+using AuroraEmu.Game.Items.Handlers;
 
 namespace AuroraEmu.Game.Items
 {
     public class ItemController : IItemController
     {
         private readonly Dictionary<int, ItemDefinition> _items;
+        public Dictionary<HandleType, IItemHandler> Handlers { get; set; }
 
         public ItemController()
         {
             _items = new Dictionary<int, ItemDefinition>();
 
             ReloadTemplates();
+            ReloadHandlers();
+        }
+
+        public void ReloadHandlers()
+        {
+            Handlers = new Dictionary<HandleType, IItemHandler>()
+            {
+                { HandleType.DICE, new DiceHandler() }
+            };
         }
 
         public void ReloadTemplates()

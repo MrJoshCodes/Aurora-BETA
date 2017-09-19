@@ -4,6 +4,7 @@ using AuroraEmu.Network.Game.Packets.Events.Catalogue;
 using AuroraEmu.Network.Game.Packets.Events.Handshake;
 using AuroraEmu.Network.Game.Packets.Events.Inventory;
 using AuroraEmu.Network.Game.Packets.Events.Inventory.Badges;
+using AuroraEmu.Network.Game.Packets.Events.Items;
 using AuroraEmu.Network.Game.Packets.Events.Messenger;
 using AuroraEmu.Network.Game.Packets.Events.Navigator;
 using AuroraEmu.Network.Game.Packets.Events.Rooms;
@@ -78,8 +79,11 @@ namespace AuroraEmu.Network.Game.Packets
                 { 233, new GetBuddyRequestsMessageEvent() },
                 { 73, new MoveObjectMessageEvent() },
                 { 44, new UpdateFigureDataMessageEvent() },
-                 { 375, new GetWardrobeMessageEvent() },
-                { 26, new ScrGetUserInfoMessageEvent() }
+                { 375, new GetWardrobeMessageEvent() },
+                { 26, new ScrGetUserInfoMessageEvent() },
+
+                { 76, new ThrowDiceMessageEvent() },
+                { 77, new DiceOffMessageEvent() }
             };
         }
 
