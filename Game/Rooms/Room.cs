@@ -9,12 +9,10 @@ using AuroraEmu.Network.Game.Packets.Composers.Rooms;
 using MySql.Data.MySqlClient;
 using System;
 using System.Collections.Concurrent;
-using System.Data;
-using AuroraEmu.Network.Game.Packets.Events.Rooms;
 
 namespace AuroraEmu.Game.Rooms
 {
-    public class Room
+    public class Room : IDisposable
     {
         private int _virtualId;
         private ConcurrentDictionary<int, Item> _items;
@@ -238,6 +236,15 @@ namespace AuroraEmu.Game.Rooms
             // Since when switching rooms it SHOULDN'T close connection, this check:
             if (closeConnection)
                 actor.Client.SendComposer(new CloseConnectionMessageComposer());
+        }
+
+        public void Dispose()
+        {
+            Actors.Clear();
+            _items.Clear();
+            Items.Clear();
+            ProcessComponent.Dispose();
+            ProcessComponent = null;
         }
     }
 }

@@ -8,6 +8,7 @@ namespace AuroraEmu.DI.Game.Clients
     public interface IClientController
     {
         Dictionary<IChannelId, Client> Clients { get; }
+
         void AddClient(IChannel channel);
 
         Client GetClient(IChannel channel);

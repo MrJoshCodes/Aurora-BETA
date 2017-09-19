@@ -2,6 +2,6 @@
   "Server" : "127.0.0.1",
   "User" : "root",
   "Password" : "",
-  "Database" : "aurora",
-  "Port": "3307"
+  "Database" : "aurora_beta",
+  "Port": "3306"
 }

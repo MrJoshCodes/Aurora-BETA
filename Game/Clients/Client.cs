@@ -10,6 +10,7 @@ using DotNetty.Buffers;
 using AuroraEmu.Game.Subscription;
 using System;
 using AuroraEmu.Network.Game.Packets.Composers.Users;
+using AuroraEmu.Network.Game.Packets.Composers.Misc;
 
 namespace AuroraEmu.Game.Clients
 {
@@ -75,10 +76,7 @@ namespace AuroraEmu.Game.Clients
             {
                 SendComposer(new UserRightsMessageComposer());
                 SendComposer(new MessageComposer(3));
-
-                MessageComposer composer = new MessageComposer(139);
-                composer.AppendString($"Welcome {Player.Username} to Aurora BETA, enjoy your stay!");
-                SendComposer(composer);
+                SendComposer(new HabboBroadcastMessageComposer($"Welcome {Player.Username} to Aurora BETA, enjoy your stay!"));
 
                 Player.BadgesComponent = new BadgesComponent(Player.Id);
                 Player.MessengerComponent = new MessengerComponent(Player);
@@ -94,26 +92,26 @@ namespace AuroraEmu.Game.Clients
         public void IncreaseCredits(int amount)
         {
             Player.Coins += amount;
-            SendComposer(new Network.Game.Packets.Composers.Users.CreditBalanceMessageComposer(Player.Coins));
+            SendComposer(new CreditBalanceMessageComposer(Player.Coins));
         }
 
         public void DecreaseCredits(int amount)
         {
             Player.Coins -= amount;
-            SendComposer(new Network.Game.Packets.Composers.Users.CreditBalanceMessageComposer(Player.Coins));
+            SendComposer(new CreditBalanceMessageComposer(Player.Coins));
         }
 
         public void IncreasePixels(int amount)
         {
             Player.Pixels += amount;
-            SendComposer(new Network.Game.Packets.Composers.Users.HabboActivityPointNotificationMessageComposer(Player.Pixels, 0));
+            SendComposer(new HabboActivityPointNotificationMessageComposer(Player.Pixels, 0));
         }
 
 
         public void DecreasePixels(int amount)
         {
             Player.Pixels -= amount;
-            SendComposer(new Network.Game.Packets.Composers.Users.HabboActivityPointNotificationMessageComposer(Player.Pixels, 0));
+            SendComposer(new HabboActivityPointNotificationMessageComposer(Player.Pixels, 0));
         }
 
         public void Dispose()
@@ -123,6 +121,8 @@ namespace AuroraEmu.Game.Clients
                 Player.BadgesComponent.Badges.Clear();
                 Player.MessengerComponent.Friends.Clear();
                 Player.MessengerComponent.Requests.Clear();
+                SubscriptionData.Clear();
+                Items.Clear();
                 using (var dbClient = Engine.MainDI.ConnectionPool.PopConnection())
                 {
                     dbClient.SetQuery("UPDATE players SET coins = @coins, pixels = @pixels WHERE id = @id");

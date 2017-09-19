@@ -1,5 +1,5 @@
-﻿using MySql.Data.MySqlClient;
-using System.Data;
+﻿using AuroraEmu.Game.Items.Handlers;
+using MySql.Data.MySqlClient;
 
 namespace AuroraEmu.Game.Items
 {
@@ -19,6 +19,7 @@ namespace AuroraEmu.Game.Items
         public bool InteractorRightsRequired { get; set; }
         public string InteractorType { get; set; }
         public string VendorIDs { get; set; }
+        public HandleType HandleType { get; set; }
 
         public ItemDefinition(MySqlDataReader reader)
         {
@@ -35,6 +36,7 @@ namespace AuroraEmu.Game.Items
             CanRecycle = reader.GetBoolean("can_recycle");
             InteractorRightsRequired = reader.GetBoolean("interactor_requires_rights");
             InteractorType = reader.GetString("interactor_type");
+            HandleType = HandlerParser.GetItemHandle(InteractorType);
             VendorIDs = reader.GetString("vendor_ids");
         }
     }
