@@ -1,6 +1,6 @@
 ﻿using AuroraEmu.Game.Items;
 
-namespace AuroraEmu.Network.Game.Packets.Composers.Rooms
+namespace AuroraEmu.Network.Game.Packets.Composers.Items
 {
     public class ObjectUpdateMessageComposer : MessageComposer
     {

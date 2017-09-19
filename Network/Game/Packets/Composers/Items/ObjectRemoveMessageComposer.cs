@@ -1,4 +1,4 @@
-﻿namespace AuroraEmu.Network.Game.Packets.Composers.Rooms
+﻿namespace AuroraEmu.Network.Game.Packets.Composers.Items
 {
     public class ObjectRemoveMessageComposer : MessageComposer
     {

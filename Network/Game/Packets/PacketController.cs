@@ -8,6 +8,7 @@ using AuroraEmu.Network.Game.Packets.Events.Items;
 using AuroraEmu.Network.Game.Packets.Events.Messenger;
 using AuroraEmu.Network.Game.Packets.Events.Navigator;
 using AuroraEmu.Network.Game.Packets.Events.Rooms;
+using AuroraEmu.Network.Game.Packets.Events.Rooms.Items;
 using AuroraEmu.Network.Game.Packets.Events.Users;
 using AuroraEmu.Network.Game.Packets.Events.Users.Clothing;
 using DotNetty.Buffers;
