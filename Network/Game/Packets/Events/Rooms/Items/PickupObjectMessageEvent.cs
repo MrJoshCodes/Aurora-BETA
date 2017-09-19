@@ -1,8 +1,9 @@
 ﻿using AuroraEmu.Game.Clients;
 using AuroraEmu.Game.Items;
 using AuroraEmu.Network.Game.Packets.Composers.Rooms;
+using AuroraEmu.Network.Game.Packets.Composers.Items;
 
-namespace AuroraEmu.Network.Game.Packets.Events.Rooms
+namespace AuroraEmu.Network.Game.Packets.Events.Rooms.Items
 {
     public class PickupObjectMessageEvent : IPacketEvent
     {

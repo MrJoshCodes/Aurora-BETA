@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace AuroraEmu.Network.Game.Packets.Composers.Rooms
+namespace AuroraEmu.Network.Game.Packets.Composers.Items
 {
     class ItemAddMessageComposer : MessageComposer
     {
