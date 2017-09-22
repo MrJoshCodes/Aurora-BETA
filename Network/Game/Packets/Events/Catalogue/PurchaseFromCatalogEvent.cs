@@ -32,13 +32,11 @@ namespace AuroraEmu.Network.Game.Packets.Events.Catalogue
                 if (product.PriceCoins > 0)
                 {
                     client.DecreaseCredits(product.PriceCoins);
-                    client.QueueComposer(new CreditBalanceMessageComposer(client.Player.Coins));
                 }
 
                 if (product.PricePixels > 0)
                 {
                     client.DecreasePixels(product.PricePixels);
-                    client.QueueComposer(new HabboActivityPointNotificationMessageComposer(client.Player.Pixels, 0));
                 }
 
                 if (product.IsDeal)
