@@ -83,10 +83,7 @@ namespace AuroraEmu.Game.Catalog
 
         public CatalogProduct GetProduct(int id)
         {
-            if (_products.TryGetValue(id, out CatalogProduct product))
-                return product;
-
-            return null;
+            return _products.TryGetValue(id, out CatalogProduct product) ? product : null;
         }
 
         public List<CatalogPage> GetPages(int parent)

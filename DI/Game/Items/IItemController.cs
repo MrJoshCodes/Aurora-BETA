@@ -18,6 +18,8 @@ namespace AuroraEmu.DI.Game.Items
         ItemDefinition GetTemplate(int id);
 
         void GiveItem(Client client, CatalogProduct product, string extraData);
+        
+        void GiveItem(Client client, ItemDefinition template, string extraData);
 
         ConcurrentDictionary<int, Item> GetItemsInRoom(int roomId);
 

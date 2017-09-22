@@ -37,15 +37,17 @@ namespace AuroraEmu.Game.Items
 
         public ItemDefinition GetTemplate(int id)
         {
-            if (_items.TryGetValue(id, out ItemDefinition item))
-                return item;
-
-            return null;
+            return _items.TryGetValue(id, out ItemDefinition item) ? item : null;
         }
 
         public void GiveItem(Client client, CatalogProduct product, string extraData)
         {
             Engine.MainDI.ItemDao.GiveItem(client, product, extraData);
+        }
+        
+        public void GiveItem(Client client, ItemDefinition template, string extraData)
+        {
+            Engine.MainDI.ItemDao.GiveItem(client, template, extraData);
         }
 
         public ConcurrentDictionary<int, Item> GetItemsInRoom(int roomId)
