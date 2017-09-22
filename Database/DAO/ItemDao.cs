@@ -41,6 +41,25 @@ namespace AuroraEmu.Database.DAO
             }
         }
         
+        public void GiveItem(Client client, ItemDefinition template, string extraData)
+        {
+            int id = -1;
+
+            using (DatabaseConnection dbConnection = Engine.MainDI.ConnectionPool.PopConnection())
+            {
+                dbConnection.SetQuery("INSERT INTO items (owner_id, definition_id, data) VALUES (@ownerId, @definitionId, @data)");
+                dbConnection.AddParameter("@ownerId", client.Player.Id);
+                dbConnection.AddParameter("@definitionId", template.Id);
+                dbConnection.AddParameter("@data", extraData);
+                id = dbConnection.Insert();
+            }
+
+            if (id > 0 && client.Items != null)
+            {
+                client.Items.Add(id, new Item(id, client.Player.Id, template.Id, extraData));
+            }
+        }
+        
         public ConcurrentDictionary<int, Item> GetItemsInRoom(int roomId)
         {
             ConcurrentDictionary<int, Item> items = new ConcurrentDictionary<int, Item>();

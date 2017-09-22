@@ -12,6 +12,8 @@ namespace AuroraEmu.DI.Database.DAO
 
         void GiveItem(Client client, CatalogProduct product, string extraData);
         
+        void GiveItem(Client client, ItemDefinition template, string extraData);
+        
         ConcurrentDictionary<int, Item> GetItemsInRoom(int roomId);
 
         Dictionary<int, Item> GetItemsFromOwner(int ownerId);
