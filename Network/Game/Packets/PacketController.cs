@@ -13,6 +13,7 @@ using AuroraEmu.Network.Game.Packets.Events.Users;
 using AuroraEmu.Network.Game.Packets.Events.Users.Clothing;
 using DotNetty.Buffers;
 using System.Collections.Generic;
+using AuroraEmu.Network.Game.Packets.Events.Moderation;
 
 namespace AuroraEmu.Network.Game.Packets
 {
@@ -84,7 +85,9 @@ namespace AuroraEmu.Network.Game.Packets
                 { 26, new ScrGetUserInfoMessageEvent() },
 
                 { 76, new ThrowDiceMessageEvent() },
-                { 77, new DiceOffMessageEvent() }
+                { 77, new DiceOffMessageEvent() },
+                
+                {454, new GetModeratorUserInfoMessageEvent()}
             };
         }
 

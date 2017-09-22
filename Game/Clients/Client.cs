@@ -11,6 +11,7 @@ using AuroraEmu.Game.Subscription;
 using System;
 using AuroraEmu.Network.Game.Packets.Composers.Users;
 using AuroraEmu.Network.Game.Packets.Composers.Misc;
+using AuroraEmu.Network.Game.Packets.Composers.Moderation;
 
 namespace AuroraEmu.Game.Clients
 {
@@ -74,10 +75,17 @@ namespace AuroraEmu.Game.Clients
 
             if (Player != null)
             {
-                SendComposer(new UserRightsMessageComposer());
-                SendComposer(new MessageComposer(3));
-                SendComposer(new HabboBroadcastMessageComposer($"Welcome {Player.Username} to Aurora BETA, enjoy your stay!"));
+                QueueComposer(new UserRightsMessageComposer());
+                QueueComposer(new MessageComposer(3));
+                QueueComposer(new HabboBroadcastMessageComposer($"Welcome {Player.Username} to Aurora BETA, enjoy your stay!"));
 
+                if (Player.Rank > 5)
+                {
+                    QueueComposer(new ModeratorInitMessageComposer());
+                }
+
+                Flush();
+                
                 Player.BadgesComponent = new BadgesComponent(Player.Id);
                 Player.MessengerComponent = new MessengerComponent(Player);
                 Engine.MainDI.SubscriptionController.GetSubscriptionData(SubscriptionData, Player.Id);
