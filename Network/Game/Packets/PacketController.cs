@@ -48,10 +48,10 @@ namespace AuroraEmu.Network.Game.Packets
                 { 38, new DeclineBuddyMessageEvent() },
                 { 40, new RemoveBuddyMessageEvent() },
 
-                {2, new OpenConnectionMessageEvent()},
+                { 2, new OpenConnectionMessageEvent()},
                 { 41, new HabboSearchMessageEvent() },
                 { 434, new MyRoomsSearchMessageEvent() },
-                {432, new MyFriendsRoomsSearchMessageEvent()},
+                { 432, new MyFriendsRoomsSearchMessageEvent()},
                 { 151, new GetUserFlatCatsMessageEvent() },
                 { 387, new CanCreateRoomMessageEvent() },
                 { 29, new CreateFlatMessageEvent() },
@@ -70,8 +70,8 @@ namespace AuroraEmu.Network.Game.Packets
                 { 386, new UpdateRoomThumbnailMessageEvent() },
                 { 75, new MoveAvatarMessageEvent() },
                 { 94, new WaveMessageEvent() },
-                {53, new QuitMessageEvent()},
-                {182, new GetInterstitialMessageEvent()},
+                { 53, new QuitMessageEvent() },
+                { 182, new GetInterstitialMessageEvent() },
 
                 { 157, new GetBadgesEvent() },
                 { 158, new SetActivatedBadgesEvent() },
@@ -86,8 +86,12 @@ namespace AuroraEmu.Network.Game.Packets
 
                 { 76, new ThrowDiceMessageEvent() },
                 { 77, new DiceOffMessageEvent() },
-                
-                {454, new GetModeratorUserInfoMessageEvent()}
+                { 247, new SpinWheelOfFortuneMessageEvent() },
+                { 341, new RoomDimmerGetPresetsMessageEvent() },
+                { 342, new RoomDimmerSavePresetMessageEvent() },
+                { 343, new RoomDimmerChangeStateMessageEvent() },
+
+                { 454, new GetModeratorUserInfoMessageEvent() }
             };
         }
 

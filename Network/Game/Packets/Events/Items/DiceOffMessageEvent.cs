@@ -15,7 +15,7 @@ namespace AuroraEmu.Network.Game.Packets.Events.Items
                 if (item.Cycling)
                     return;
                 item.Handler.Trigger(item);
-                client.SendComposer(new ObjectDataUpdateMessageComposer(itemId, item.Data));
+                client.CurrentRoom.SendComposer(new ObjectDataUpdateMessageComposer(itemId, item.Data));
             }
         }
     }

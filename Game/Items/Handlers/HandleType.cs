@@ -3,7 +3,9 @@
     public enum HandleType
     {
         NONE,
-        DICE
+        DICE,
+        COLOR_WHEEL,
+        DIMMER
     }
 
     public static class HandlerParser
@@ -14,6 +16,10 @@
             {
                 case "dice":
                     return HandleType.DICE;
+                case "color_wheel":
+                    return HandleType.COLOR_WHEEL;
+                case "dimmer":
+                    return HandleType.DIMMER;
                 default:
                     return HandleType.NONE;
             }

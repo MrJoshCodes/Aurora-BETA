@@ -39,6 +39,8 @@ namespace AuroraEmu.Game.Catalog
                     return product.Data;
                 case "trophy":
                     return $"{{USERNAME}} {(char)9} {DateTime.Now.ToString("dd-MM-yyyy")} {(char)9} {extraData}";
+                case "dimmer":
+                    return "1,1,1,#000000,255";
                 default:
                     return "";
             }

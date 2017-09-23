@@ -5,6 +5,7 @@ using AuroraEmu.Game.Clients;
 using AuroraEmu.DI.Game.Items;
 using AuroraEmu.Database;
 using AuroraEmu.Game.Items.Handlers;
+using AuroraEmu.Game.Items.Dimmer;
 
 namespace AuroraEmu.Game.Items
 {
@@ -12,10 +13,12 @@ namespace AuroraEmu.Game.Items
     {
         private readonly Dictionary<int, ItemDefinition> _items;
         public Dictionary<HandleType, IItemHandler> Handlers { get; set; }
+        public Dictionary<int, DimmerData> Dimmers { get; set; }
 
         public ItemController()
         {
             _items = new Dictionary<int, ItemDefinition>();
+            Dimmers = new Dictionary<int, DimmerData>();
 
             ReloadTemplates();
             ReloadHandlers();
@@ -25,7 +28,8 @@ namespace AuroraEmu.Game.Items
         {
             Handlers = new Dictionary<HandleType, IItemHandler>()
             {
-                { HandleType.DICE, new DiceHandler() }
+                { HandleType.DICE, new DiceHandler() },
+                { HandleType.COLOR_WHEEL, new ColorWheelHandler() }
             };
         }
 
@@ -62,27 +66,46 @@ namespace AuroraEmu.Game.Items
 
         public void AddFloorItem(int itemId, int x, int y, int rot, int roomId)
         {
-            using(DatabaseConnection dbConnection = Engine.MainDI.ConnectionPool.PopConnection())
-            {
-                dbConnection.SetQuery("UPDATE items SET room_id = @roomId, x = @x, y = @y, rotation = @rot WHERE id = @itemId LIMIT 1");
-                dbConnection.AddParameter("@roomId", roomId);
-                dbConnection.AddParameter("@x", x);
-                dbConnection.AddParameter("@y", y);
-                dbConnection.AddParameter("@rot", rot);
-                dbConnection.AddParameter("@itemId", itemId);
-                dbConnection.Execute();
-            }
+            Engine.MainDI.ItemDao.AddFloorItem(itemId, x, y, rot, roomId);
         }
 
         public void AddWallItem(int itemId, string wallposition, int roomId)
         {
+            Engine.MainDI.ItemDao.AddWallItem(itemId, wallposition, roomId);
+        }
+
+        public DimmerData GetDimmerData(int itemId)
+        {
+            if (Dimmers.TryGetValue(itemId, out DimmerData data))
+                return data;
+
+            DimmerData dimmerData = null;
             using (DatabaseConnection dbConnection = Engine.MainDI.ConnectionPool.PopConnection())
             {
-                dbConnection.SetQuery("UPDATE items SET room_id = @roomId, wallposition = @wallposition WHERE id = @itemId LIMIT 1");
-                dbConnection.AddParameter("@roomId", roomId);
-                dbConnection.AddParameter("@wallposition", wallposition);
+                dbConnection.SetQuery("SELECT * FROM room_dimmer WHERE item_id = @itemId");
+                dbConnection.AddParameter("@itemId", itemId);
+                using (var reader = dbConnection.ExecuteReader())
+                    if (reader.Read())
+                    {
+                        dimmerData = new DimmerData(reader, false);
+                        Dimmers.Add(dimmerData.ItemId, dimmerData);
+                        return dimmerData;
+                    }
+                    else
+                    {
+                        return NewDimmerData(itemId);
+                    }
+            }
+        }
+
+        public DimmerData NewDimmerData(int itemId)
+        {
+            using (DatabaseConnection dbConnection = Engine.MainDI.ConnectionPool.PopConnection())
+            {
+                dbConnection.SetQuery("INSERT INTO room_dimmer(item_id, enabled, current_preset, preset_one, preset_two,preset_three) VALUES(@itemId,DEFAULT,1,'#000000,255,0','#000000,255,0','#000000,255,0');");
                 dbConnection.AddParameter("@itemId", itemId);
                 dbConnection.Execute();
+                return GetDimmerData(itemId);
             }
         }
     }

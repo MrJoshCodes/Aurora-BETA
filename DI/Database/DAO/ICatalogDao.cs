@@ -6,12 +6,12 @@ namespace AuroraEmu.DI.Database.DAO
 {
     public interface ICatalogDao
     {
-        Dictionary<int, CatalogPage> ReloadCatalogPage(Dictionary<int, CatalogPage> pages);
+        void ReloadCatalogPage(Dictionary<int, CatalogPage> pages);
 
-        Dictionary<int, CatalogProduct> ReloadProducts(Dictionary<int, CatalogProduct> products);
+        void ReloadProducts(Dictionary<int, CatalogProduct> products);
 
-        Dictionary<int, List<CatalogDealItem>> ReloadDeals(Dictionary<int, List<CatalogDealItem>> deals);
+        void ReloadDeals(Dictionary<int, List<CatalogDealItem>> deals);
 
-        Dictionary<string, Voucher> ReloadVouchers(Dictionary<string, Voucher> vouchers);
+        void ReloadVouchers(Dictionary<string, Voucher> vouchers);
     }
 }

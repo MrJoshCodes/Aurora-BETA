@@ -5,6 +5,6 @@ namespace AuroraEmu.DI.Game.Subscription
 {
     public interface ISubscriptionController
     {
-        Dictionary<string, SubscriptionData> GetSubscriptionData(Dictionary<string, SubscriptionData> data, int userId);
+       void GetSubscriptionData(Dictionary<string, SubscriptionData> data, int userId);
     }
 }

@@ -1,16 +1,16 @@
 ﻿using System.Collections.Concurrent;
 using System.Collections.Generic;
-using System.Data;
 using AuroraEmu.DI.Database.DAO;
 using AuroraEmu.Game.Catalog;
 using AuroraEmu.Game.Clients;
 using AuroraEmu.Game.Items;
+using AuroraEmu.Game.Items.Dimmer;
 
 namespace AuroraEmu.Database.DAO
 {
     public class ItemDao : IItemDao
     {
-        public Dictionary<int, ItemDefinition> ReloadTemplates(Dictionary<int, ItemDefinition> items)
+        public void ReloadTemplates(Dictionary<int, ItemDefinition> items)
         {
             using (DatabaseConnection dbConnection = Engine.MainDI.ConnectionPool.PopConnection())
             {
@@ -19,7 +19,6 @@ namespace AuroraEmu.Database.DAO
                     while (reader.Read())
                         items.Add(reader.GetInt32("id"), new ItemDefinition(reader));
             }
-            return items;
         }
         
         public void GiveItem(Client client, CatalogProduct product, string extraData)
@@ -100,6 +99,58 @@ namespace AuroraEmu.Database.DAO
                 dbConnection.AddParameter("@y", y);
                 dbConnection.AddParameter("@rot", rot);
                 dbConnection.AddParameter("@itemId", itemId);
+                dbConnection.Execute();
+            }
+        }
+
+        public void AddFloorItem(int itemId, int x, int y, int rot, int roomId)
+        {
+            using (DatabaseConnection dbConnection = Engine.MainDI.ConnectionPool.PopConnection())
+            {
+                dbConnection.SetQuery("UPDATE items SET room_id = @roomId, x = @x, y = @y, rotation = @rot WHERE id = @itemId LIMIT 1");
+                dbConnection.AddParameter("@roomId", roomId);
+                dbConnection.AddParameter("@x", x);
+                dbConnection.AddParameter("@y", y);
+                dbConnection.AddParameter("@rot", rot);
+                dbConnection.AddParameter("@itemId", itemId);
+                dbConnection.Execute();
+            }
+        }
+
+        public void AddWallItem(int itemId, string wallposition, int roomId)
+        {
+            using (DatabaseConnection dbConnection = Engine.MainDI.ConnectionPool.PopConnection())
+            {
+                dbConnection.SetQuery("UPDATE items SET room_id = @roomId, wallposition = @wallposition WHERE id = @itemId LIMIT 1");
+                dbConnection.AddParameter("@roomId", roomId);
+                dbConnection.AddParameter("@wallposition", wallposition);
+                dbConnection.AddParameter("@itemId", itemId);
+                dbConnection.Execute();
+            }
+        }
+
+        public void UpdateItemData(int itemId, string data)
+        {
+            using (DatabaseConnection dbConnection = Engine.MainDI.ConnectionPool.PopConnection())
+            {
+                dbConnection.SetQuery("UPDATE items SET data = @extraData WHERE id = @id LIMIT 1");
+                dbConnection.AddParameter("@extraData", data);
+                dbConnection.AddParameter("@id", itemId);
+                dbConnection.Execute();
+            }
+        }
+
+        public void UpdateDimmerPreset(DimmerData data)
+        {
+            using (DatabaseConnection dbConnection = Engine.MainDI.ConnectionPool.PopConnection())
+            {
+                dbConnection.SetQuery("UPDATE room_dimmer SET enabled = @enabled, current_preset = @cur_preset, preset_one = @pres_one, preset_two = @pres_two, preset_three = @pres_three WHERE item_id = @item_id");
+                dbConnection.AddParameter("@enabled", data.Enabled ? 1 : 0);
+                dbConnection.AddParameter("@cur_preset", data.CurrentPreset);
+                dbConnection.AddParameter("@pres_one", data.Presets[0].PresetData());
+                dbConnection.AddParameter("@pres_two", data.Presets[1].PresetData());
+                dbConnection.AddParameter("@pres_three", data.Presets[2].PresetData());
+                dbConnection.AddParameter("@item_id", data.ItemId);
                 dbConnection.Execute();
             }
         }

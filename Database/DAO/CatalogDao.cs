@@ -7,7 +7,7 @@ namespace AuroraEmu.Database.DAO
 {
     public class CatalogDao : ICatalogDao
     {
-        public Dictionary<int, CatalogPage> ReloadCatalogPage(Dictionary<int, CatalogPage> pages)
+        public void ReloadCatalogPage(Dictionary<int, CatalogPage> pages)
         {
             pages.Clear();
 
@@ -23,10 +23,9 @@ namespace AuroraEmu.Database.DAO
                     while (reader.Read())
                         pages[reader.GetInt32("page_id")].Data[reader.GetString("type")].Add(reader.GetString("value"));
             }
-            return pages;
         }
 
-        public Dictionary<int, CatalogProduct> ReloadProducts(Dictionary<int, CatalogProduct> products)
+        public void ReloadProducts(Dictionary<int, CatalogProduct> products)
         {
             using (DatabaseConnection dbConnection = Engine.MainDI.ConnectionPool.PopConnection())
             {
@@ -35,11 +34,9 @@ namespace AuroraEmu.Database.DAO
                     while (reader.Read())
                         products.Add(reader.GetInt32("id"), new CatalogProduct(reader));
             }
-
-            return products;
         }
         
-        public Dictionary<int, List<CatalogDealItem>> ReloadDeals(Dictionary<int, List<CatalogDealItem>> deals)
+        public void ReloadDeals(Dictionary<int, List<CatalogDealItem>> deals)
         {
             using (DatabaseConnection dbConnection = Engine.MainDI.ConnectionPool.PopConnection())
             {
@@ -57,11 +54,9 @@ namespace AuroraEmu.Database.DAO
                     }
                 }
             }
-
-            return deals;
         }
 
-        public Dictionary<string, Voucher> ReloadVouchers(Dictionary<string, Voucher> vouchers)
+        public void ReloadVouchers(Dictionary<string, Voucher> vouchers)
         {
             using (DatabaseConnection dbConnection = Engine.MainDI.ConnectionPool.PopConnection())
             {
@@ -70,8 +65,6 @@ namespace AuroraEmu.Database.DAO
                     while (reader.Read())
                         vouchers.Add(reader.GetString("voucher"), new Voucher(reader));
             }
-
-            return vouchers;
         }
     }
 }

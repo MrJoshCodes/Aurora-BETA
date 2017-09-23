@@ -6,7 +6,7 @@ namespace AuroraEmu.Database.DAO
 {
     public class RoomDao : IRoomDao
     {
-        public Dictionary<string, RoomMap> LoadRoomMaps(Dictionary<string, RoomMap> roomMaps)
+        public void LoadRoomMaps(Dictionary<string, RoomMap> roomMaps)
         {
             roomMaps.Clear();
             using (DatabaseConnection dbConnection = Engine.MainDI.ConnectionPool.PopConnection())
@@ -16,8 +16,6 @@ namespace AuroraEmu.Database.DAO
                     while (reader.Read())
                         roomMaps.Add(reader.GetString("name"), new RoomMap(reader));
             }
-
-            return roomMaps;
         }
 
         public Room GetRoom(int id)
