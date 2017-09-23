@@ -37,6 +37,8 @@ namespace AuroraEmu.Game.Rooms.Components
 
                 if (actor.SetStep)
                 {
+                    room.BlockedTiles[actor.Position.X, actor.Position.Y] = false;
+                    room.BlockedTiles[actor.NextTile.X, actor.NextTile.Y] = true;
                     actor.Position = actor.NextTile;
                     actor.Position.Z = Math.Round(room.Map.TileHeights[actor.Position.X, actor.Position.Y], 1);
                     
@@ -127,15 +129,17 @@ namespace AuroraEmu.Game.Rooms.Components
         {
             foreach (Items.Item item in actor.Client.CurrentRoom.Items.Values)
             {
-                if (item.X == actor.Position.X && item.Y == actor.Position.Y)
-                {
-                    if (item.Definition.ItemType == "seat")
+                foreach (Point2D itemPos in item.Tiles)
+                    if ((itemPos.Y == actor.Position.Y && itemPos.X == actor.Position.X) || (item.X == actor.Position.X && item.Y == actor.Position.Y))
                     {
-                        if (!actor.Statusses.ContainsKey("sit"))
-                            actor.Statusses.Add("sit", "1.0");
-                        actor.Rotation = item.Rotation;
+                        item.ActorOnItem = actor;
+                        if (item.Definition.ItemType == "seat")
+                        {
+                            if (!actor.Statusses.ContainsKey("sit"))
+                                actor.Statusses.Add("sit", "1.00");
+                            actor.Rotation = item.Rotation;
+                        }
                     }
-                }
             }
         }
 

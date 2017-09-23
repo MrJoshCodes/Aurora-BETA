@@ -5,7 +5,7 @@ namespace AuroraEmu.DI.Database.DAO
 {
     public interface IRoomDao
     {
-        Dictionary<string, RoomMap> LoadRoomMaps(Dictionary<string, RoomMap> roomMaps);
+        void LoadRoomMaps(Dictionary<string, RoomMap> roomMaps);
 
         Room GetRoom(int id);
 

@@ -7,7 +7,7 @@ namespace AuroraEmu.Database.DAO
 {
     public class NavigatorDao : INavigatorDao
     {
-        public Dictionary<int, FrontpageItem> ReloadFrontpageItems(Dictionary<int, FrontpageItem> frontpageItems)
+        public void ReloadFrontpageItems(Dictionary<int, FrontpageItem> frontpageItems)
         {
             frontpageItems.Clear();
 
@@ -18,11 +18,9 @@ namespace AuroraEmu.Database.DAO
                     while (reader.Read())
                         frontpageItems.Add(reader.GetInt32("room_id"), new FrontpageItem(reader));
             }
-            
-            return frontpageItems;
         }
 
-        public Dictionary<int, RoomCategory> ReloadCategories(Dictionary<int, RoomCategory> categories)
+        public void ReloadCategories(Dictionary<int, RoomCategory> categories)
         {
             categories.Clear();
 
@@ -33,8 +31,6 @@ namespace AuroraEmu.Database.DAO
                     while (reader.Read())
                         categories.Add(reader.GetInt32("id"), new RoomCategory(reader));
             }
-            
-            return categories;
         }
         
         public List<Room> GetRoomsByOwner(int ownerId)

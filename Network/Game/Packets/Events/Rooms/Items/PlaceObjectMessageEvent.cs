@@ -29,12 +29,17 @@ namespace AuroraEmu.Network.Game.Packets.Events.Rooms.Items
                         client.CurrentRoom.Items.AddOrUpdate(itemId, item, (oldkey, newkey) => item);
                         Engine.MainDI.ItemController.AddWallItem(itemId, wallPosition, client.CurrentRoom.Id);
                         client.CurrentRoom.SendComposer(new ItemAddMessageComposer(item));
+                        client.CurrentRoom.SendComposer(new ItemUpdateMessageComposer(item));
                     }
                     else
                     {
                         int x = int.Parse(dataBits[1]);
                         int y = int.Parse(dataBits[2]);
                         int rot = int.Parse(dataBits[3]);
+                        if (client.CurrentRoom.BlockedTiles[x, y])
+                            return;
+                        client.CurrentRoom.BlockedTiles[item.X, item.Y] = false;
+                        client.CurrentRoom.BlockedTiles[x, y] = true;
                         item.X = x;
                         item.Y = y;
                         item.Rotation = rot;

@@ -8,12 +8,12 @@ namespace AuroraEmu.Database.DAO
         public Player GetPlayerById(int id)
         {
             Player player = null;
-            using (DatabaseConnection dbClient = Engine.MainDI.ConnectionPool.PopConnection())
+            using (DatabaseConnection dbConnection = Engine.MainDI.ConnectionPool.PopConnection())
             {
-                dbClient.SetQuery(
+                dbConnection.SetQuery(
                     "SELECT id, username, password, email, gender, figure, motto, coins, pixels, rank, home_room, block_friendrequests, sso_ticket FROM players WHERE id = @id;");
-                dbClient.AddParameter("@id", id);
-                using (var reader = dbClient.ExecuteReader())
+                dbConnection.AddParameter("@id", id);
+                using (var reader = dbConnection.ExecuteReader())
                     if (reader.Read())
                         player = new Player(reader);
             }
@@ -24,11 +24,11 @@ namespace AuroraEmu.Database.DAO
         public Player GetPlayerBySSO(string sso)
         {
             Player player = null;
-            using (DatabaseConnection dbClient = Engine.MainDI.ConnectionPool.PopConnection())
+            using (DatabaseConnection dbConnection = Engine.MainDI.ConnectionPool.PopConnection())
             {
-                dbClient.SetQuery("SELECT id, username, password, email, gender, figure, motto, coins, pixels, rank, home_room, block_friendrequests, sso_ticket FROM players WHERE sso_ticket = @sso_ticket;");
-                dbClient.AddParameter("@sso_ticket", sso);
-                using (var reader = dbClient.ExecuteReader())
+                dbConnection.SetQuery("SELECT id, username, password, email, gender, figure, motto, coins, pixels, rank, home_room, block_friendrequests, sso_ticket FROM players WHERE sso_ticket = @sso_ticket;");
+                dbConnection.AddParameter("@sso_ticket", sso);
+                using (var reader = dbConnection.ExecuteReader())
                     if (reader.Read())
                         player = new Player(reader);
             }
@@ -38,11 +38,11 @@ namespace AuroraEmu.Database.DAO
 
         public string GetPlayerNameById(int id, out string name)
         {
-            using (DatabaseConnection dbClient = Engine.MainDI.ConnectionPool.PopConnection())
+            using (DatabaseConnection dbConnection = Engine.MainDI.ConnectionPool.PopConnection())
             {
-                dbClient.SetQuery("SELECT username FROM players WHERE id = @id LIMIT 1");
-                dbClient.AddParameter("@id", id);
-                name = dbClient.GetString();
+                dbConnection.SetQuery("SELECT username FROM players WHERE id = @id LIMIT 1");
+                dbConnection.AddParameter("@id", id);
+                name = dbConnection.GetString();
             }
             
             return name;
@@ -51,11 +51,11 @@ namespace AuroraEmu.Database.DAO
         public Player GetPlayerByName(string username)
         {
             Player player = null;
-            using (DatabaseConnection dbClient = Engine.MainDI.ConnectionPool.PopConnection())
+            using (DatabaseConnection dbConnection = Engine.MainDI.ConnectionPool.PopConnection())
             {
-                dbClient.SetQuery("SELECT id, username, password, email, gender, figure, motto, coins, pixels, rank, home_room, block_friendrequests, sso_ticket FROM players WHERE username = @username;");
-                dbClient.AddParameter("@username", username);
-                using (var reader = dbClient.ExecuteReader())
+                dbConnection.SetQuery("SELECT id, username, password, email, gender, figure, motto, coins, pixels, rank, home_room, block_friendrequests, sso_ticket FROM players WHERE username = @username;");
+                dbConnection.AddParameter("@username", username);
+                using (var reader = dbConnection.ExecuteReader())
                     if (reader.Read())
                         player = new Player(reader);
             }
@@ -64,12 +64,12 @@ namespace AuroraEmu.Database.DAO
 
         public void UpdateCurrency(int playerId, int amount, string type)
         {
-            using (DatabaseConnection dbClient = Engine.MainDI.ConnectionPool.PopConnection())
+            using (DatabaseConnection dbConnection = Engine.MainDI.ConnectionPool.PopConnection())
             {
-                dbClient.SetQuery($"UPDATE players SET {type} = @amount WHERE id = @playerId");
-                dbClient.AddParameter("@amount", amount);
-                dbClient.AddParameter("@playerId", playerId);
-                dbClient.Execute();
+                dbConnection.SetQuery($"UPDATE players SET {type} = @amount WHERE id = @playerId");
+                dbConnection.AddParameter("@amount", amount);
+                dbConnection.AddParameter("@playerId", playerId);
+                dbConnection.Execute();
             }
         }
     }

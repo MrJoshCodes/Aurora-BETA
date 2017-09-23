@@ -1,6 +1,9 @@
 ﻿using AuroraEmu.Game.Clients;
+using AuroraEmu.Game.Rooms;
+using AuroraEmu.Game.Rooms.Pathfinder;
 using AuroraEmu.Network.Game.Packets.Composers.Items;
 using MySql.Data.MySqlClient;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace AuroraEmu.Game.Items
@@ -20,6 +23,14 @@ namespace AuroraEmu.Game.Items
         public string Data { get; set; }
         public string Wallposition { get; set; }
         public bool Cycling { get; private set; } = false;
+        public IList<Point2D> Tiles {
+            get {
+                var list = Utilities.Extensions.AffectedTiles(Definition.Length, Definition.Width, X, Y, Rotation);
+                list.Add(new Point2D(X, Y));
+                return list;
+            }
+        }
+        public RoomActor ActorOnItem { get; set; }
 
         public Item(int id, int ownerId, int definitionId, string data)
         {

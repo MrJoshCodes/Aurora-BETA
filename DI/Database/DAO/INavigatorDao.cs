@@ -6,9 +6,9 @@ namespace AuroraEmu.DI.Database.DAO
 {
     public interface INavigatorDao
     {
-        Dictionary<int, FrontpageItem> ReloadFrontpageItems(Dictionary<int, FrontpageItem> frontpageItems);
+        void ReloadFrontpageItems(Dictionary<int, FrontpageItem> frontpageItems);
 
-        Dictionary<int, RoomCategory> ReloadCategories(Dictionary<int, RoomCategory> categories);
+        void ReloadCategories(Dictionary<int, RoomCategory> categories);
 
         List<Room> GetRoomsByOwner(int ownerId);
 

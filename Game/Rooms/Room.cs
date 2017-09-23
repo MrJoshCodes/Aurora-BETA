@@ -3,6 +3,7 @@ using AuroraEmu.Game.Clients;
 using AuroraEmu.Game.Items;
 using AuroraEmu.Game.Navigator;
 using AuroraEmu.Game.Rooms.Components;
+using AuroraEmu.Game.Rooms.Pathfinder;
 using AuroraEmu.Game.Rooms.User;
 using AuroraEmu.Network.Game.Packets;
 using AuroraEmu.Network.Game.Packets.Composers.Rooms;
@@ -65,6 +66,7 @@ namespace AuroraEmu.Game.Rooms
         }
         public ConcurrentDictionary<int, RoomActor> Actors { get; private set; }
         private ProcessComponent ProcessComponent { get; set; }
+        public bool[,] BlockedTiles { get; }
 
         public Room()
         {
@@ -82,7 +84,7 @@ namespace AuroraEmu.Game.Rooms
             OwnerId = reader.IsDBNull(reader.GetOrdinal("owner_id")) ? 0 : reader.GetInt32("owner_id");
             Name = reader.GetString("name");
             Description = reader.GetString("description");
-            State = (RoomState) Enum.Parse(typeof(RoomState), reader.GetString("state"));
+            State = (RoomState)Enum.Parse(typeof(RoomState), reader.GetString("state"));
             PlayersIn = reader.GetInt32("players_in");
             PlayersMax = reader.GetInt32("players_max");
             CategoryId = reader.GetInt32("category_id");
@@ -99,11 +101,18 @@ namespace AuroraEmu.Game.Rooms
             {
                 Map = map;
             }
-            
+
+            BlockedTiles = new bool[map.MapSize.Item1, map.MapSize.Item2];
+
             Actors = new ConcurrentDictionary<int, RoomActor>();
 
             ProcessComponent = new ProcessComponent(this);
             ProcessComponent.SetupRoomLoop();
+
+            foreach (Item item in Items.Values)
+                if (item.Definition.ItemType == "seat")
+                    foreach (Point2D point in item.Tiles)
+                        BlockedTiles[point.X, point.Y] = true;
         }
 
         public void AddUserActor(Client client)

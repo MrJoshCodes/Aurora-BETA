@@ -21,31 +21,32 @@ namespace AuroraEmu.Game
     public class MainDi
     {
         private readonly IDependencyLocator _locator;
-        public ICatalogController CatalogController { get; set; }
-        public IClientController ClientController { get; set; } 
-        public IItemController ItemController { get; set; }
-        public IMessengerController MessengerController { get; set; }
-        public INavigatorController NavigatorController { get; set; } 
-        public IPlayerController PlayerController { get; set; }
-        public IRoomController RoomController { get; set; }
-        public ITaskController TaskController { get; set; }
-        public IWordfilterController WorldfilterController { get; set; }
-        public IConnectionPool ConnectionPool { get; set; }
-        public IPacketController PacketController { get; set; }
-        public IConfigController ConfigController { get; set; }
-        public IWordfilterController WordfilterController { get; set; }
-        public ICommandController CommandController { get; set; }
-        public IGameNetworkListener GameNetworkListener { get; set; }
-        public ISubscriptionController SubscriptionController { get; set; }
+        public ICatalogController CatalogController { get; private set; }
+        public IClientController ClientController { get; private set; } 
+        public IItemController ItemController { get; private set; }
+        public IMessengerController MessengerController { get; private set; }
+        public INavigatorController NavigatorController { get; private set; } 
+        public IPlayerController PlayerController { get; private set; }
+        public IRoomController RoomController { get; private set; }
+        public ITaskController TaskController { get; private set; }
+        public IWordfilterController WorldfilterController { get; private set; }
+        public IConnectionPool ConnectionPool { get; private set; }
+        public IPacketController PacketController { get; private set; }
+        public IConfigController ConfigController { get; private set; }
+        public IWordfilterController WordfilterController { get; private set; }
+        public ICommandController CommandController { get; private set; }
+        public IGameNetworkListener GameNetworkListener { get; private set; }
+        public ISubscriptionController SubscriptionController { get; private set; }
 
-        public ICatalogDao CatalogDao { get; set; }
-        public IItemDao ItemDao { get; set; }
-        public IMessengerDao MessengerDao { get; set; }
-        public INavigatorDao NavigatorDao { get; set; }
-        public IPlayerDao PlayerDao { get; set; }
-        public IRoomDao RoomDao { get; set; }
-        public IWordfilterDao WordfilterDao { get; set; }
-        public IBadgesDao BadgesDao { get; set; }
+        public ICatalogDao CatalogDao { get; private set; }
+        public IItemDao ItemDao { get; private set; }
+        public IMessengerDao MessengerDao { get; private set; }
+        public INavigatorDao NavigatorDao { get; private set; }
+        public IPlayerDao PlayerDao { get; private set; }
+        public IRoomDao RoomDao { get; private set; }
+        public IWordfilterDao WordfilterDao { get; private set; }
+        public IBadgesDao BadgesDao { get; private set; }
+        public ISubscriptionDao SubscriptionDao { get; private set; }
 
         public MainDi(IDependencyLocator locator)
         {
@@ -82,6 +83,7 @@ namespace AuroraEmu.Game
             RoomDao = _locator.Resolve<IRoomDao>();
             WordfilterDao = _locator.Resolve<IWordfilterDao>();
             BadgesDao = _locator.Resolve<IBadgesDao>();
+            SubscriptionDao = _locator.Resolve<ISubscriptionDao>();
         }
     }
 }

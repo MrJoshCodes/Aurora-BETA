@@ -5,6 +5,6 @@ namespace AuroraEmu.DI.Database.DAO
 {
     public interface IWordfilterDao
     {
-        List<Wordfilter> WordfilterData(List<Wordfilter> wordFilter);
+        void WordfilterData(List<Wordfilter> wordFilter);
     }
 }

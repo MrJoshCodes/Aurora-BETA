@@ -114,6 +114,7 @@ namespace AuroraEmu
             builder.RegisterType<RoomDao>().As<IRoomDao>();
             builder.RegisterType<WordfilterDao>().As<IWordfilterDao>();
             builder.RegisterType<BadgesDao>().As<IBadgesDao>();
+            builder.RegisterType<SubscriptionDao>().As<ISubscriptionDao>();
 
             builder.RegisterType<ConnectionPool>().As<IConnectionPool>();
 

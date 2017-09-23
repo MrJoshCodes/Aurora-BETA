@@ -123,13 +123,13 @@ namespace AuroraEmu.Game.Clients
                 Player.MessengerComponent.Requests.Clear();
                 SubscriptionData.Clear();
                 Items.Clear();
-                using (var dbClient = Engine.MainDI.ConnectionPool.PopConnection())
+                using (var dbConnection = Engine.MainDI.ConnectionPool.PopConnection())
                 {
-                    dbClient.SetQuery("UPDATE players SET coins = @coins, pixels = @pixels WHERE id = @id");
-                    dbClient.AddParameter("@coins", Player.Coins);
-                    dbClient.AddParameter("@pixels", Player.Pixels);
-                    dbClient.AddParameter("@id", Player.Id);
-                    dbClient.Execute();
+                    dbConnection.SetQuery("UPDATE players SET coins = @coins, pixels = @pixels WHERE id = @id");
+                    dbConnection.AddParameter("@coins", Player.Coins);
+                    dbConnection.AddParameter("@pixels", Player.Pixels);
+                    dbConnection.AddParameter("@id", Player.Id);
+                    dbConnection.Execute();
                 }
             }
             GC.SuppressFinalize(this);
