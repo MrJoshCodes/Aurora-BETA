@@ -1,9 +1,10 @@
 ﻿using AuroraEmu.Game.Players.Components;
 using MySql.Data.MySqlClient;
+using System;
 
 namespace AuroraEmu.Game.Players
 {
-    public class Player
+    public class Player : IDisposable
     {
         public int Id { get; set; }
         public string Username { get; set; }
@@ -36,6 +37,14 @@ namespace AuroraEmu.Game.Players
             HomeRoom = reader.GetInt32("home_room");
             SSO = reader.GetString("sso_ticket");
             BlockNewFriends = reader.GetInt32("block_friendrequests");
+        }
+
+        public void Dispose()
+        {
+            MessengerComponent.Dispose();
+            MessengerComponent = null;
+            BadgesComponent.Dispose();
+            BadgesComponent = null;
         }
     }
 }

@@ -12,6 +12,7 @@ namespace AuroraEmu.Game.Rooms.Components
         private Room room;
         private CancellationTokenSource _wtoken;
         private ActionBlock<DateTimeOffset> _task;
+        private int idleRoom = 0;
 
         public ProcessComponent(Room room)
         {
@@ -29,6 +30,13 @@ namespace AuroraEmu.Game.Rooms.Components
         private void Loop()
         {
             room.Loop();
+            if (idleRoom > 120)
+                room.Dispose();
+
+            if (!(room.Actors.Count > 0))
+                idleRoom++;
+            else
+                idleRoom = 0;
 
             List<RoomActor> toUpdate = new List<RoomActor>();
             foreach (RoomActor actor in room.Actors.Values)

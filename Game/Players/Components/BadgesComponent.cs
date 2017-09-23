@@ -6,7 +6,7 @@ using AuroraEmu.Utilities;
 
 namespace AuroraEmu.Game.Players.Components
 {
-    public class BadgesComponent
+    public class BadgesComponent : IDisposable
     {
         private int _playerId;
 
@@ -50,6 +50,12 @@ namespace AuroraEmu.Game.Players.Components
             }
 
             return badges;
+        }
+
+        public void Dispose()
+        {
+            Badges.Clear();
+            GC.SuppressFinalize(this);
         }
     }
 }
