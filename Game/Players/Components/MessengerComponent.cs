@@ -2,10 +2,11 @@
 using AuroraEmu.Game.Messenger;
 using AuroraEmu.Network.Game.Packets;
 using AuroraEmu.Network.Game.Packets.Composers.Messenger;
+using System;
 
 namespace AuroraEmu.Game.Players.Components
 {
-    public class MessengerComponent
+    public class MessengerComponent : IDisposable
     {
         private Player Player { get; }
         public Dictionary<int, MessengerFriend> Friends { get; }
@@ -63,6 +64,13 @@ namespace AuroraEmu.Game.Players.Components
         public MessageComposer UpdateFriendList()
         {
             return new FriendListUpdateMessageComposer(Friends);
+        }
+
+        public void Dispose()
+        {
+            Friends.Clear();
+            Requests.Clear();
+            GC.SuppressFinalize(this);
         }
     }
 }

@@ -1,11 +1,12 @@
 ﻿using AuroraEmu.Game.Clients;
 using AuroraEmu.Game.Rooms.Pathfinder;
 using AuroraEmu.Game.Rooms.User;
+using System;
 using System.Collections.Generic;
 
 namespace AuroraEmu.Game.Rooms
 {
-    public abstract class RoomActor
+    public abstract class RoomActor : IDisposable
     {
         public Client Client { get; }
         public int VirtualId { get; }
@@ -49,6 +50,15 @@ namespace AuroraEmu.Game.Rooms
             SetStep = false;
             CalcPath = false;
             UpdateNeeded = true;
+        }
+
+        public void Dispose()
+        {
+            Statusses.Clear();
+            Path.Clear();
+            NextTile = null;
+            Position = null;
+            TargetPoint = null;
         }
     }
 }

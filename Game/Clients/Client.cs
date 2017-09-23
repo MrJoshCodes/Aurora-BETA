@@ -126,18 +126,18 @@ namespace AuroraEmu.Game.Clients
         {
             if (Player != null)
             {
-                Player.BadgesComponent.Badges.Clear();
-                Player.MessengerComponent.Friends.Clear();
-                Player.MessengerComponent.Requests.Clear();
-                SubscriptionData.Clear();
-                Items.Clear();
-                using (var dbConnection = Engine.MainDI.ConnectionPool.PopConnection())
+                using (Player player = Player)
                 {
-                    dbConnection.SetQuery("UPDATE players SET coins = @coins, pixels = @pixels WHERE id = @id");
-                    dbConnection.AddParameter("@coins", Player.Coins);
-                    dbConnection.AddParameter("@pixels", Player.Pixels);
-                    dbConnection.AddParameter("@id", Player.Id);
-                    dbConnection.Execute();
+                    SubscriptionData.Clear();
+                    Items.Clear();
+                    using (var dbConnection = Engine.MainDI.ConnectionPool.PopConnection())
+                    {
+                        dbConnection.SetQuery("UPDATE players SET coins = @coins, pixels = @pixels WHERE id = @id");
+                        dbConnection.AddParameter("@coins", player.Coins);
+                        dbConnection.AddParameter("@pixels", player.Pixels);
+                        dbConnection.AddParameter("@id", player.Id);
+                        dbConnection.Execute();
+                    }
                 }
             }
             GC.SuppressFinalize(this);
