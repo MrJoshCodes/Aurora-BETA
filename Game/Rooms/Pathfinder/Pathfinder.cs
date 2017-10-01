@@ -1,54 +1,120 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using DotNetty.Common.Utilities;
+using System;
+using System.Collections.Generic;
 
 namespace AuroraEmu.Game.Rooms.Pathfinder
 {
-    internal static class PathFinder
+    public static class Pathfinder
     {
-        public static Node FindReversePath(RoomMap map, Grid grid, Point2D start, Point2D end,
-            Point2D[] movementPattern)
+        public static List<Point2D> GetPath(Room room, Point2D start, Point2D end)
         {
-            var head = new Node(start);
-            var open = new BinaryHeap();
-            open.Push(head);
-            bool[,] walkableTiles = map.PassableTiles;
+            List<Point2D> steps = new List<Point2D>();
 
-            while (open.HasNext())
+            var path = FindReversePath(room, start, end);
+
+            Node current = path;
+            while (current != null)
             {
-                var current = open.Pop();
+                steps.Add(current.Position);
+                current = current.Next;
+            }
 
-                if (current.Position.Equals(end))
-                {
-                    return current;
-                }
+            return steps;
+        }
 
-                foreach (var p in GetNeighbours(current.Position, grid.X, grid.Y, movementPattern))
+        public static Point2D[] DiagMovePoints = new[]
+        {
+            new Point2D(-1, -1),
+            new Point2D(0, -1),
+            new Point2D(1, -1),
+            new Point2D(1, 0),
+            new Point2D(1, 1),
+            new Point2D(0, 1),
+            new Point2D(-1, 1),
+            new Point2D(-1, 0)
+        };
+
+        public static Node FindReversePath(Room room, Point2D start, Point2D end)
+        {
+            PriorityQueue<Node> openList = new PriorityQueue<Node>();
+            var brWorld = new Node[room.Map.MapSize.Item1, room.Map.MapSize.Item2];
+            Node node;
+            Point2D tmp;
+            int cost, diff;
+
+            Node current = new Node(start);
+            current.cost = 0;
+
+            Node finish = new Node(end);
+            brWorld[current.Position.X, current.Position.Y] = current;
+            openList.Enqueue(current);
+
+            while (openList.Count > 0)
+            {
+                current = openList.Dequeue();
+                current.onClosedList = true;
+
+                for (int i = 0; i < 8; i++)
                 {
-                    var cellCost = grid.GetCellCostUnchecked(p);
-                    if (walkableTiles[current.Position.X, current.Position.Y] && !float.IsInfinity(cellCost))
+                    tmp = current.Position + DiagMovePoints[i];
+                    try
                     {
-                        var costSoFar = current.CostSoFar + cellCost;
-                        var expectedCost = costSoFar + GetSquaredDistance(end, p);
+                        if (!room.BlockedTiles[tmp.X, tmp.Y] && room.Map.PassableTiles[tmp.X, tmp.Y])
+                        {
+                            if (brWorld[tmp.X, tmp.Y] == null)
+                            {
+                                node = new Node(tmp);
+                                brWorld[tmp.X, tmp.Y] = node;
+                            }
+                            else
+                            {
+                                node = brWorld[tmp.X, tmp.Y];
+                            }
 
-                        open.Push(new Node(p, expectedCost, costSoFar) {Next = current});
+                            if (!node.onClosedList)
+                            {
+                                diff = 0;
+
+                                if (current.Position.X != node.Position.X)
+                                {
+                                    diff += 1;
+                                }
+
+                                if (current.Position.Y != node.Position.Y)
+                                {
+                                    diff += 1;
+                                }
+
+                                cost = current.cost + diff + GetSquaredDistance(node.Position, end);
+
+                                if (cost < node.cost)
+                                {
+                                    node.cost = cost;
+                                    node.Next = current;
+                                }
+
+                                if (!node.onOpenList)
+                                {
+                                    if (node.Equals(finish))
+                                    {
+                                        node.Next = current;
+                                        return node;
+                                    }
+
+                                    node.onOpenList = true;
+                                    openList.Enqueue(node);
+                                }
+                            }
+                        }
                     }
+                    catch (IndexOutOfRangeException) { }
                 }
             }
 
             return null;
         }
 
-        private static IEnumerable<Point2D> GetNeighbours(
-            Point2D position,
-            int dimX,
-            int dimY,
-            IEnumerable<Point2D> movementPattern)
-        {
-            return movementPattern.Select(n => new Point2D(position.X + n.X, position.Y + n.Y))
-                .Where(p => p.X >= 0 && p.X < dimX && p.Y >= 0 && p.Y < dimY);
-        }
-
-        private static float GetSquaredDistance(Point2D point, Point2D p1)
+        private static int GetSquaredDistance(Point2D point, Point2D p1)
         {
             int dx = p1.X - point.X;
             int dy = p1.Y - point.Y;

@@ -68,13 +68,7 @@ namespace AuroraEmu.Game.Rooms.Components
                     if (actor.IsWalking)
                         actor.Path.Clear();
 
-                    Grid grid = new Grid(room.Map, room.Map.MapSize.Item1, room.Map.MapSize.Item2);
-                    foreach (Items.Item item in room.Items.Values)
-                    {
-                        if (item.Definition.ItemType == "solid")
-                            grid.BlockCell(new Point2D(item.X, item.Y));
-                    }
-                    actor.Path = grid.GetPath(actor.Position, actor.TargetPoint, MovementPatterns.Full);
+                    actor.Path = Pathfinder.Pathfinder.GetPath(room, actor.Position, actor.TargetPoint);
 
                     if (actor.IsWalking)
                     {
@@ -90,27 +84,20 @@ namespace AuroraEmu.Game.Rooms.Components
 
                 if (actor.IsWalking)
                 {
-                    if ((actor.StepsOnPath >= actor.Path.Count))
-                    {
-                        actor.Path.Clear();
-                        actor.CalcPath = false;
-                        actor.Statusses.Remove("mv");
-                    }
-                    else
-                    {
-                        Point2D nextStep = actor.Path[(actor.Path.Count - actor.StepsOnPath) - 1];
-                        actor.StepsOnPath++;
-                        actor.Statusses.Remove("mv");
+                    Point2D nextStep = actor.Path[(actor.Path.Count - actor.StepsOnPath) - 1];
+                    actor.StepsOnPath++;
 
-                        if (actor.Statusses.ContainsKey("sit"))
-                            actor.Statusses.Remove("sit");
-                        actor.Statusses.Add("mv", $"{nextStep.X},{nextStep.Y},{Math.Round(room.Map.TileHeights[nextStep.X, nextStep.Y], 1)}");
-                        actor.SetStep = true;
-                        actor.Rotation = PathFinder.CalculateRotation(actor.Position.X, actor.Position.Y, nextStep.X,
-                            nextStep.Y);
-                        actor.NextTile = nextStep;
-                        actor.UpdateNeeded = true;
-                    }
+                    actor.Statusses.Remove("mv");
+                    if (actor.Statusses.ContainsKey("sit"))
+                        actor.Statusses.Remove("sit");
+                    actor.Statusses.Add("mv", $"{nextStep.X},{nextStep.Y},{Math.Round(room.Map.TileHeights[nextStep.X, nextStep.Y], 1)}");
+
+                    actor.Rotation = Pathfinder.Pathfinder.CalculateRotation(actor.Position.X, actor.Position.Y, nextStep.X,
+                        nextStep.Y);
+                    actor.NextTile = nextStep;
+
+                    actor.SetStep = true;
+                    actor.UpdateNeeded = true;
                 }
                 else
                 {

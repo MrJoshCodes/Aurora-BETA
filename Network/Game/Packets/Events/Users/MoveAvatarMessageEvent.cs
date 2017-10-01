@@ -18,7 +18,8 @@ namespace AuroraEmu.Network.Game.Packets.Events.Users
 
             if (x == room.Map.DoorX && y == room.Map.DoorY)
                 actor.QuitRoom = true;
-            
+            if (actor.Position.X == x && actor.Position.Y == y) return;
+
             actor.TargetPoint.X = x;
             actor.TargetPoint.Y = y;
             actor.CalcPath = true;

@@ -13,12 +13,14 @@ namespace AuroraEmu.Network.Game.Packets.Events.Rooms.Items
             int x = msgEvent.ReadVL64();
             int y = msgEvent.ReadVL64();
             int rotation = msgEvent.ReadVL64();
-            if (client.CurrentRoom.BlockedTiles[x, y])
-                return;
+
             if (client.CurrentRoom.Items.TryGetValue(itemId, out Item item))
             {
-                client.CurrentRoom.BlockedTiles[item.X, item.Y] = false;
-                client.CurrentRoom.BlockedTiles[x, y] = true;
+                if (rotation == item.Rotation)
+                    if (client.CurrentRoom.BlockedTiles[x, y])
+                        return;
+                foreach (Point2D point in item.Tiles)
+                    client.CurrentRoom.BlockedTiles[point.X, point.Y] = false;
                 item.X = x;
                 item.Y = y;
                 item.Rotation = rotation;
@@ -37,6 +39,11 @@ namespace AuroraEmu.Network.Game.Packets.Events.Rooms.Items
                             item.ActorOnItem = null;
                         }
                     }
+
+                var affectedTiles = Utilities.Extensions.AffectedTiles(item.Definition.Length, item.Definition.Width, x, y, rotation);
+                affectedTiles.Add(new Point2D(x, y));
+                foreach (Point2D point in affectedTiles)
+                    client.CurrentRoom.BlockedTiles[point.X, point.Y] = true;
 
                 client.CurrentRoom.SendComposer(new ObjectUpdateMessageComposer(item));
                 Engine.MainDI.ItemDao.UpdateItem(itemId, x, y, rotation, client.CurrentRoom.Id);

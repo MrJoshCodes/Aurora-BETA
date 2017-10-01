@@ -41,5 +41,10 @@ namespace AuroraEmu.Game.Rooms.Pathfinder
                 return (X * 397) ^ Y;
             }
         }
+
+        public static Point2D operator +(Point2D p1, Point2D p2)
+        {
+            return new Point2D(p1.X + p2.X, p1.Y + p2.Y);
+        }
     }
 }
