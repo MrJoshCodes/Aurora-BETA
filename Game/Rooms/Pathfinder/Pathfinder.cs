@@ -15,7 +15,7 @@ namespace AuroraEmu.Game.Rooms.Pathfinder
             Node current = path;
             while (current != null)
             {
-                steps.Add(current.Position);
+                steps.Add(new Point2D(current.X, current.Y));
                 current = current.Next;
             }
 
@@ -39,14 +39,12 @@ namespace AuroraEmu.Game.Rooms.Pathfinder
             PriorityQueue<Node> openList = new PriorityQueue<Node>();
             var brWorld = new Node[room.Map.MapSize.Item1, room.Map.MapSize.Item2];
             Node node;
-            Point2D tmp;
-            int cost, diff;
-
-            Node current = new Node(start);
+            int cost, diff, tmpX, tmpY;
+            Node current = new Node(start.X, start.Y);
             current.cost = 0;
 
-            Node finish = new Node(end);
-            brWorld[current.Position.X, current.Position.Y] = current;
+            Node finish = new Node(end.X, end.Y);
+            brWorld[current.X, current.Y] = current;
             openList.Enqueue(current);
 
             while (openList.Count > 0)
@@ -56,36 +54,37 @@ namespace AuroraEmu.Game.Rooms.Pathfinder
 
                 for (int i = 0; i < 8; i++)
                 {
-                    tmp = current.Position + DiagMovePoints[i];
+                    tmpX = current.X + DiagMovePoints[i].X;
+                    tmpY = current.Y + DiagMovePoints[i].Y;
+
                     try
                     {
-                        if (!room.BlockedTiles[tmp.X, tmp.Y] && room.Map.PassableTiles[tmp.X, tmp.Y])
+                        if (!room.BlockedTiles[tmpX, tmpY] && room.Map.PassableTiles[tmpX, tmpY])
                         {
-                            if (brWorld[tmp.X, tmp.Y] == null)
+                            if (brWorld[tmpX, tmpY] == null)
                             {
-                                node = new Node(tmp);
-                                brWorld[tmp.X, tmp.Y] = node;
+                                brWorld[tmpX, tmpY] = node = new Node(tmpX, tmpY);
                             }
                             else
                             {
-                                node = brWorld[tmp.X, tmp.Y];
+                                node = brWorld[tmpX, tmpY];
                             }
 
                             if (!node.onClosedList)
                             {
                                 diff = 0;
 
-                                if (current.Position.X != node.Position.X)
+                                if (current.X != node.X)
                                 {
                                     diff += 1;
                                 }
 
-                                if (current.Position.Y != node.Position.Y)
+                                if (current.Y != node.Y)
                                 {
                                     diff += 1;
                                 }
 
-                                cost = current.cost + diff + GetSquaredDistance(node.Position, end);
+                                cost = current.cost + diff + GetSquaredDistance(node.X, node.Y, end.X, end.Y);
 
                                 if (cost < node.cost)
                                 {
@@ -95,7 +94,7 @@ namespace AuroraEmu.Game.Rooms.Pathfinder
 
                                 if (!node.onOpenList)
                                 {
-                                    if (node.Equals(finish))
+                                    if (node.X == finish.X && node.Y == finish.Y)
                                     {
                                         node.Next = current;
                                         return node;
@@ -114,10 +113,10 @@ namespace AuroraEmu.Game.Rooms.Pathfinder
             return null;
         }
 
-        private static int GetSquaredDistance(Point2D point, Point2D p1)
+        private static int GetSquaredDistance(int x1, int y1, int x2, int y2)
         {
-            int dx = p1.X - point.X;
-            int dy = p1.Y - point.Y;
+            int dx = x1 - x2;
+            int dy = y1 - y2;
 
             return (dx * dx) + (dy * dy);
         }

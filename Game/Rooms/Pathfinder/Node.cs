@@ -4,31 +4,26 @@ namespace AuroraEmu.Game.Rooms.Pathfinder
 {
     public sealed class Node : IComparable<Node>
     {
-        public Point2D Position { get; }
+        public int X { get; }
+        public int Y { get; }
         public bool onClosedList = false;
         public bool onOpenList = false;
         public int cost = int.MaxValue;
 
         public Node Next { get; set; }
 
-        public Node(Point2D position)
+        public Node(int x, int y)
         {
-            Position = position;
+            X = x;
+            Y = y;
         }
-
-        public override bool Equals(object obj)
-        {
-            return (obj is Node) && ((Node)obj).Position.Equals(this.Position);
-        }
-
-        public bool Equals(Node Breadcrumb)
-        {
-            return Breadcrumb.Position.Equals(this.Position);
-        }
-
+        
         public override int GetHashCode()
         {
-            return Position.GetHashCode();
+            unchecked
+            {
+                return (X * 397) ^ Y;
+            }
         }
 
         public int CompareTo(Node Other)
