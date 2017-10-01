@@ -110,7 +110,8 @@ namespace AuroraEmu.Game.Rooms
             ProcessComponent.SetupRoomLoop();
 
             foreach (Item item in Items.Values)
-                if (item.Definition.ItemType == "seat")
+                if (item.Definition.ItemType == "trophy" ||
+                    item.Definition.ItemType == "solid")
                     foreach (Point2D point in item.Tiles)
                         BlockedTiles[point.X, point.Y] = true;
         }
