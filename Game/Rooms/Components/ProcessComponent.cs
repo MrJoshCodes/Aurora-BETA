@@ -1,4 +1,5 @@
-﻿using AuroraEmu.Game.Rooms.Pathfinder;
+﻿using AuroraEmu.Game.Items;
+using AuroraEmu.Game.Rooms.Pathfinder;
 using AuroraEmu.Network.Game.Packets.Composers.Users;
 using System;
 using System.Collections.Generic;
@@ -45,13 +46,13 @@ namespace AuroraEmu.Game.Rooms.Components
 
                 if (actor.SetStep)
                 {
-                    room.BlockedTiles[actor.Position.X, actor.Position.Y] = false;
-                    room.BlockedTiles[actor.NextTile.X, actor.NextTile.Y] = true;
+                    room.Grid.EntityGrid[actor.Position.X, actor.Position.Y] = false;
+                    room.Grid.EntityGrid[actor.NextTile.X, actor.NextTile.Y] = true;
                     actor.Position = actor.NextTile;
                     actor.Position.Z = Math.Round(room.Map.TileHeights[actor.Position.X, actor.Position.Y], 1);
-                    
-                    if (actor.Position.X == actor.TargetPoint.X && actor.Position.Y == actor.TargetPoint.Y)
-                        UpdateUserStatus(actor);
+
+                    if (actor.Position.Equals(actor.TargetPoint))
+                        UpdateUserStatus(actor, room.Grid.ItemAt(actor.Position));
 
                     actor.UpdateNeeded = true;
                     actor.SetStep = false;
@@ -68,7 +69,7 @@ namespace AuroraEmu.Game.Rooms.Components
                     if (actor.IsWalking)
                         actor.Path.Clear();
 
-                    actor.Path = Pathfinder.Pathfinder.GetPath(room, actor.Position, actor.TargetPoint);
+                    actor.Path = Pathfinder.Pathfinder.GetPath(room, actor.Position, actor.TargetPoint, actor);
 
                     if (actor.IsWalking)
                     {
@@ -129,21 +130,17 @@ namespace AuroraEmu.Game.Rooms.Components
                 room.SendComposer(new UserUpdateMessageComposer(toUpdate));
         }
 
-        private void UpdateUserStatus(RoomActor actor)
+        private void UpdateUserStatus(RoomActor actor, Item item)
         {
-            foreach (Items.Item item in actor.Client.CurrentRoom.Items.Values)
+            if (item != null)
             {
-                foreach (Point2D itemPos in item.Tiles)
-                    if ((itemPos.Y == actor.Position.Y && itemPos.X == actor.Position.X) || (item.X == actor.Position.X && item.Y == actor.Position.Y))
-                    {
-                        item.ActorOnItem = actor;
-                        if (item.Definition.ItemType == "seat")
-                        {
-                            if (!actor.Statusses.ContainsKey("sit"))
-                                actor.Statusses.Add("sit", "1.00");
-                            actor.Rotation = item.Rotation;
-                        }
-                    }
+                item.ActorOnItem = actor;
+                if (item.Definition.ItemType == "seat")
+                {
+                    if (!actor.Statusses.ContainsKey("sit"))
+                        actor.Statusses.Add("sit", "1.00");
+                    actor.Rotation = item.Rotation;
+                }
             }
         }
 

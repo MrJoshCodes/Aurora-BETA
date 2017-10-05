@@ -3,13 +3,14 @@ using AuroraEmu.Game.Clients;
 using AuroraEmu.Game.Items;
 using AuroraEmu.Game.Navigator;
 using AuroraEmu.Game.Rooms.Components;
-using AuroraEmu.Game.Rooms.Pathfinder;
 using AuroraEmu.Game.Rooms.User;
 using AuroraEmu.Network.Game.Packets;
 using AuroraEmu.Network.Game.Packets.Composers.Rooms;
 using MySql.Data.MySqlClient;
 using System;
 using System.Collections.Concurrent;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace AuroraEmu.Game.Rooms
 {
@@ -20,14 +21,18 @@ namespace AuroraEmu.Game.Rooms
 
         public int Id { get; set; }
         public int OwnerId { get; set; }
-        public string Name { get; set; }
-        public string Description { get; set; }
-        public RoomState State { get; set; }
         public int PlayersIn { get; set; }
         public int PlayersMax { get; set; }
         public int CategoryId { get; set; }
+        public int Floor { get; set; }
+        public int Wallpaper { get; set; }
+        public string Name { get; set; }
+        public string Description { get; set; }
         public string Model { get; set; }
         public string CCTs { get; }
+        public string Icon { get; set; }
+        public double Landscape { get; set; }
+        public bool DiagEnabled { get; set; } = true;
         public bool ShowOwner { get; set; }
         public bool AllPlayerRights { get; set; }
         public bool IsFrontpageItem 
@@ -45,28 +50,20 @@ namespace AuroraEmu.Game.Rooms
             }
         }
 
-        public string Icon { get; set; }
-        public int Floor { get; set; }
-        public int Wallpaper { get; set; }
-        public double Landscape { get; set; }
-
-        public RoomMap Map { get; set; }
-
-        public bool DiagEnabled { get; set; } = true;
-
         public ConcurrentDictionary<int, Item> Items
         {
             get
             {
                 if (_items == null)
                     _items = Engine.MainDI.ItemController.GetItemsInRoom(Id);
-
                 return _items;
             }
         }
         public ConcurrentDictionary<int, RoomActor> Actors { get; private set; }
         private ProcessComponent ProcessComponent { get; set; }
-        public bool[,] BlockedTiles { get; }
+        public RoomGrid Grid { get; }
+        public RoomState State { get; set; }
+        public RoomMap Map { get; set; }
 
         public Room()
         {
@@ -102,18 +99,11 @@ namespace AuroraEmu.Game.Rooms
                 Map = map;
             }
 
-            BlockedTiles = new bool[map.MapSize.Item1, map.MapSize.Item2];
-
             Actors = new ConcurrentDictionary<int, RoomActor>();
 
             ProcessComponent = new ProcessComponent(this);
             ProcessComponent.SetupRoomLoop();
-
-            foreach (Item item in Items.Values)
-                if (item.Definition.ItemType == "trophy" ||
-                    item.Definition.ItemType == "solid")
-                    foreach (Point2D point in item.Tiles)
-                        BlockedTiles[point.X, point.Y] = true;
+            Grid = new RoomGrid(this);
         }
 
         public void AddUserActor(Client client)
@@ -164,42 +154,19 @@ namespace AuroraEmu.Game.Rooms
             return (int) State;
         }
 
-        public ConcurrentBag<Item> GetFloorItems()
+        public List<Item> GetFloorItems()
         {
-            ConcurrentBag<Item> items = new ConcurrentBag<Item>();
-
-            foreach (Item item in Items.Values)
-            {
-                if (item.Definition.SpriteType.ToLower().Equals("s"))
-                    items.Add(item);
-            }
-
-            return items;
+            return Items.Values.Where(x => x.Definition.SpriteType.ToLower().Equals("s")).ToList();
         }
 
-         public ConcurrentBag<Item> GetItems()
+         public List<Item> GetItems()
         {
-            ConcurrentBag<Item> items = new ConcurrentBag<Item>();
-
-            foreach (Item item in Items.Values)
-            {
-                items.Add(item);
-            }
-
-            return items;
+            return Items.Values.ToList();
         }
 
-        public ConcurrentBag<Item> GetWallItems()
+        public List<Item> GetWallItems()
         {
-            ConcurrentBag<Item> items = new ConcurrentBag<Item>();
-
-            foreach (Item item in Items.Values)
-            {
-                if (item.Definition.SpriteType.ToLower().Equals("i"))
-                    items.Add(item);
-            }
-
-            return items;
+            return Items.Values.Where(x => x.Definition.SpriteType.ToLower().Equals("i")).ToList();
         }
 
         public void Save(string[] columns, object[] values)
@@ -252,18 +219,12 @@ namespace AuroraEmu.Game.Rooms
         public void Dispose()
         {
             Engine.MainDI.RoomController.Rooms.TryRemove(Id, out Room room);
-            lock (Actors)
-            {
-                for (int i = 0; i < Actors.Count; i++)
-                {
-                    Actors[i].Dispose();
-                }
-            }
             Actors.Clear();
             _items.Clear();
             Items.Clear();
             ProcessComponent.Dispose();
             ProcessComponent = null;
+            Grid.Dispose();
         }
     }
 }

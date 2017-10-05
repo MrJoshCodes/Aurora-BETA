@@ -1,5 +1,6 @@
 ﻿using AuroraEmu.Game.Clients;
 using AuroraEmu.Game.Items;
+using AuroraEmu.Game.Rooms.Pathfinder;
 using AuroraEmu.Network.Game.Packets.Composers.Items;
 
 namespace AuroraEmu.Network.Game.Packets.Events.Rooms.Items
@@ -36,15 +37,14 @@ namespace AuroraEmu.Network.Game.Packets.Events.Rooms.Items
                         int x = int.Parse(dataBits[1]);
                         int y = int.Parse(dataBits[2]);
                         int rot = int.Parse(dataBits[3]);
-                        if (client.CurrentRoom.BlockedTiles[x, y])
-                            return;
-                        client.CurrentRoom.BlockedTiles[item.X, item.Y] = false;
-                        client.CurrentRoom.BlockedTiles[x, y] = true;
-                        item.X = x;
-                        item.Y = y;
+
+                        if (!client.CurrentRoom.Grid.PlaceObject(x, y, rot, item)) return;
+
+                        item.Position.X = x;
+                        item.Position.Y = y;
                         item.Rotation = rot;
 
-                        if(client.CurrentRoom.Items.TryAdd(itemId, item))
+                        if (client.CurrentRoom.Items.TryAdd(itemId, item))
                         {
                             client.Items.Remove(itemId);
                             Engine.MainDI.ItemDao.UpdateItem(itemId, x, y, rot, client.CurrentRoom.Id);
@@ -52,7 +52,6 @@ namespace AuroraEmu.Network.Game.Packets.Events.Rooms.Items
                             client.CurrentRoom.SendComposer(new ObjectAddMessageComposer(item));
                         }
                     }
-
                     client.SendComposer(new Composers.Inventory.FurniListUpdateComposer());
                 }
             }

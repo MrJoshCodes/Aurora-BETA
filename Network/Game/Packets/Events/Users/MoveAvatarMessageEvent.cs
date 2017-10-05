@@ -1,6 +1,5 @@
 ﻿using AuroraEmu.Game.Clients;
 using AuroraEmu.Game.Rooms;
-using AuroraEmu.Game.Rooms.Pathfinder;
 
 namespace AuroraEmu.Network.Game.Packets.Events.Users
 {

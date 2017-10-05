@@ -61,7 +61,7 @@ namespace AuroraEmu
                                                                                  ");
 
             ContainerBuilder();
-
+            MainDI.GameNetworkListener.RunServer().Wait();
             while (true)
             {
                 switch (System.Console.ReadLine())

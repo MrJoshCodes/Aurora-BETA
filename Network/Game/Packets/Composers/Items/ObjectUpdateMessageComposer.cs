@@ -9,10 +9,10 @@ namespace AuroraEmu.Network.Game.Packets.Composers.Items
         {
             AppendVL64(item.Id);
             AppendVL64(item.DefinitionId);
-            AppendVL64(item.X);
-            AppendVL64(item.Y);
+            AppendVL64(item.Position.X);
+            AppendVL64(item.Position.Y);
             AppendVL64(item.Rotation);
-            AppendString(item.Z.ToString());
+            AppendString(item.Position.Z.ToString());
             AppendVL64(0);
             AppendString(item.Data);
             AppendVL64(-1);

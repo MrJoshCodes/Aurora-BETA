@@ -14,12 +14,7 @@ namespace AuroraEmu.Network.Game.Packets.Events.Rooms.Items
 
             if (client.CurrentRoom.Items.TryRemove(itemId, out Item item))
             {
-                if(client.UserActor.Position.X == item.X && client.UserActor.Position.Y == item.Y)
-                    if (client.UserActor.Statusses.ContainsKey("sit"))
-                    {
-                        client.UserActor.Statusses.Remove("sit");
-                        client.UserActor.UpdateNeeded = true;
-                    }
+                client.CurrentRoom.Grid.PickupObject(item);
                 client.Items.Add(itemId, item);
                 client.QueueComposer(new FurniListUpdateComposer());
                 client.QueueComposer(new ObjectRemoveMessageComposer(itemId));
