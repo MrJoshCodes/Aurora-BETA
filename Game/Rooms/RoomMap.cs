@@ -1,5 +1,4 @@
-﻿using AuroraEmu.Game.Items;
-using MySql.Data.MySqlClient;
+﻿using MySql.Data.MySqlClient;
 
 namespace AuroraEmu.Game.Rooms
 {

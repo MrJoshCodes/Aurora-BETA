@@ -1,6 +1,8 @@
-﻿namespace AuroraEmu.Game.Rooms.Pathfinder
+﻿using System;
+
+namespace AuroraEmu.Game.Rooms.Pathfinder
 {
-    public class Point2D
+    public class Point2D : IEquatable<Point2D>
     {
         public int X { get; set; }
         public int Y { get; set; }
@@ -17,6 +19,11 @@
         {
             X = x;
             Y = y;
+        }
+
+        public bool Equals(Point2D other)
+        {
+            return (X == other.X && Y == other.Y);
         }
     }
 }

@@ -6,11 +6,11 @@ namespace AuroraEmu.Game.Rooms.Pathfinder
 {
     public static class Pathfinder
     {
-        public static List<Point2D> GetPath(Room room, Point2D start, Point2D end)
+        public static List<Point2D> GetPath(Room room, Point2D start, Point2D end, RoomActor actor)
         {
             List<Point2D> steps = new List<Point2D>();
 
-            var path = FindReversePath(room, start, end);
+            var path = FindReversePath(room, start, end, actor);
 
             Node current = path;
             while (current != null)
@@ -34,7 +34,7 @@ namespace AuroraEmu.Game.Rooms.Pathfinder
             new Point2D(-1, 0)
         };
 
-        public static Node FindReversePath(Room room, Point2D start, Point2D end)
+        public static Node FindReversePath(Room room, Point2D start, Point2D end, RoomActor actor)
         {
             PriorityQueue<Node> openList = new PriorityQueue<Node>();
             var brWorld = new Node[room.Map.MapSize.Item1, room.Map.MapSize.Item2];
@@ -59,7 +59,7 @@ namespace AuroraEmu.Game.Rooms.Pathfinder
 
                     try
                     {
-                        if (!room.BlockedTiles[tmpX, tmpY] && room.Map.PassableTiles[tmpX, tmpY])
+                        if (room.Grid.ValidStep(tmpX, tmpY, actor))
                         {
                             if (brWorld[tmpX, tmpY] == null)
                             {

@@ -1,11 +1,11 @@
 ﻿using AuroraEmu.Game.Items;
-using System.Collections.Concurrent;
+using System.Collections.Generic;
 
 namespace AuroraEmu.Network.Game.Packets.Composers.Rooms
 {
     class ObjectsMessageComposer : MessageComposer
     {
-        public ObjectsMessageComposer(ConcurrentBag<Item> floorItems)
+        public ObjectsMessageComposer(List<Item> floorItems)
             : base (32)
         {
             AppendVL64(floorItems.Count);
@@ -20,10 +20,10 @@ namespace AuroraEmu.Network.Game.Packets.Composers.Rooms
         {
             AppendVL64(item.Id);
             AppendVL64(item.Definition.SpriteId);
-            AppendVL64(item.X);
-            AppendVL64(item.Y);
+            AppendVL64(item.Position.X);
+            AppendVL64(item.Position.Y);
             AppendVL64(item.Rotation);
-            AppendString(item.Z.ToString());
+            AppendString(item.Position.Z.ToString());
             AppendVL64(0); // Not used AT ALL
             AppendString(item.Data);
             AppendVL64(-1); // Not used AT ALL

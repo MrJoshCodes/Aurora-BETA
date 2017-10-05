@@ -4,35 +4,32 @@ using DotNetty.Transport.Bootstrapping;
 using DotNetty.Transport.Channels;
 using DotNetty.Transport.Channels.Sockets;
 using System;
+using System.Threading.Tasks;
 
 namespace AuroraEmu.Network.Game
 {
     public class GameNetworkListener : IGameNetworkListener
     {
-        private readonly ServerBootstrap bootstrap;
-        private int port;
-
-        public GameNetworkListener()
+        public async Task RunServer()
         {
             try
             {
-                port = 30000;
-                bootstrap = new ServerBootstrap()
+                ServerBootstrap bootstrap = new ServerBootstrap()
                     .Group(new MultithreadEventLoopGroup(1), new MultithreadEventLoopGroup(10))
                     .Channel<TcpServerSocketChannel>()
-                    .ChildHandler(new ActionChannelInitializer<ISocketChannel>(channel =>
-                    {
-                        channel.Pipeline.AddLast("ClientHandler", new GameNetworkHandler());
-                    }))
+                    .ChildHandler(new ActionChannelInitializer<IChannel>(channel =>
+                        channel.Pipeline.AddLast("ClientHandler", new GameNetworkHandler())
+                    ))
                     .ChildOption(ChannelOption.TcpNodelay, true)
                     .ChildOption(ChannelOption.SoKeepalive, true)
                     .ChildOption(ChannelOption.SoReuseaddr, true)
                     .ChildOption(ChannelOption.SoRcvbuf, 1024)
                     .ChildOption(ChannelOption.RcvbufAllocator, new FixedRecvByteBufAllocator(1024))
-                    .ChildOption(ChannelOption.Allocator, new PooledByteBufferAllocator());
-                bootstrap.BindAsync(port);
-                Engine.Logger.Info($"Server is now listening on port: {port}!");
-            } catch (Exception e)
+                    .ChildOption(ChannelOption.Allocator, PooledByteBufferAllocator.Default);
+                await bootstrap.BindAsync(30000);
+                Engine.Logger.Info($"Server is now listening on port: {30000}!");
+            }
+            catch (Exception e)
             {
                 Engine.Logger.Error($"Failed to setup network listener... {e}");
             }

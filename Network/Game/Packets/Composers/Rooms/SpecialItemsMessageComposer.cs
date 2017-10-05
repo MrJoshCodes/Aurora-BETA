@@ -1,11 +1,11 @@
 ﻿using AuroraEmu.Game.Items;
-using System.Collections.Concurrent;
+using System.Collections.Generic;
 
 namespace AuroraEmu.Network.Game.Packets.Composers.Rooms
 {
     class SpecialItemsMessageComposer : MessageComposer
     {
-        public SpecialItemsMessageComposer(ConcurrentBag<Item> items)
+        public SpecialItemsMessageComposer(List<Item> items)
             : base(30)
         {
             AppendVL64(items.Count - 1);
@@ -21,9 +21,9 @@ namespace AuroraEmu.Network.Game.Packets.Composers.Rooms
             AppendVL64(false);
             AppendString(item.Data);
             AppendString(item.Definition.SwfName);
-            AppendVL64(item.X);
-            AppendVL64(item.Y);
-            AppendVL64((int)item.Z);
+            AppendVL64(item.Position.X);
+            AppendVL64(item.Position.Y);
+            AppendVL64((int)item.Position.Z);
             AppendVL64(item.Rotation);
         }
     }

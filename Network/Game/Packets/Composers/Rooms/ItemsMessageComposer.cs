@@ -1,11 +1,11 @@
 ﻿using AuroraEmu.Game.Items;
-using System.Collections.Concurrent;
+using System.Collections.Generic;
 
 namespace AuroraEmu.Network.Game.Packets.Composers.Rooms
 {
     class ItemsMessageComposer : MessageComposer
     {
-        public ItemsMessageComposer(ConcurrentBag<Item> wallItems)
+        public ItemsMessageComposer(List<Item> wallItems)
             : base(45)
         {
             AppendVL64(wallItems.Count);
