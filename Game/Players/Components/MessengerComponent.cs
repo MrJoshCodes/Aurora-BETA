@@ -61,11 +61,6 @@ namespace AuroraEmu.Game.Players.Components
             return Friends.ContainsKey(userTwoId);
         }
 
-        public MessageComposer UpdateFriendList()
-        {
-            return new FriendListUpdateMessageComposer(Friends);
-        }
-
         public void Dispose()
         {
             Friends.Clear();

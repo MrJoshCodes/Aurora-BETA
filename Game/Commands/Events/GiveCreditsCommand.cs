@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using AuroraEmu.Game.Clients;
+﻿using AuroraEmu.Game.Clients;
 using AuroraEmu.Network.Game.Packets.Composers.Misc;
 using AuroraEmu.Game.Players;
 
