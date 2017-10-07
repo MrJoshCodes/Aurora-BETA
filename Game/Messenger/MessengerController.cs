@@ -1,21 +1,16 @@
 ﻿using AuroraEmu.DI.Game.Messenger;
-using AuroraEmu.Game.Clients;
-using AuroraEmu.Network.Game.Packets;
-using AuroraEmu.Network.Game.Packets.Composers.Messenger;
+using AuroraEmu.Game.Players;
 using System.Collections.Generic;
 
 namespace AuroraEmu.Game.Messenger
 {
     public class MessengerController : IMessengerController
     {
-        public MessageComposer MessengerSearch(string searchString, Client client)
+        public void MessengerSearch(string searchString, Player player, List<MessengerSearch> friends, List<MessengerSearch> notFriends)
         {
-            List<MessengerSearch> friends = new List<MessengerSearch>();
-            List<MessengerSearch> notFriends = new List<MessengerSearch>();
-
             foreach (MessengerSearch searchResult in SearchForUsers(searchString))
             {
-                if (client.Player.MessengerComponent.IsFriends(searchResult.Id))
+                if (player.MessengerComponent.IsFriends(searchResult.Id))
                 {
                     friends.Add(searchResult);
                 }
@@ -24,7 +19,6 @@ namespace AuroraEmu.Game.Messenger
                     notFriends.Add(searchResult);
                 }
             }
-            return new HabboSearchResultMessageComposer(friends, notFriends);
         }
 
         public List<MessengerSearch> SearchForUsers(string searchString)

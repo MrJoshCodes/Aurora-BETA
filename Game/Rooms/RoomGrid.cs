@@ -9,20 +9,20 @@ namespace AuroraEmu.Game.Rooms
     public class RoomGrid : IDisposable
     {
         private Room _room;
-        private Dictionary<(int, int), Item> _itemsAt;
+        private Dictionary<(int, int), Item> _itemAt;
         public bool[,] EntityGrid { get; }
 
         public RoomGrid(Room room)
         {
             _room = room;
-            _itemsAt = new Dictionary<(int, int), Item>();
-            foreach (Item item in _room.GetFloorItems().Where(x => (x.Position.X != 0 && x.Position.Y != 0)))
+            _itemAt = new Dictionary<(int, int), Item>();
+            foreach (Item item in _room.Items.Values.Where(x => (x.Position.X != 0 && x.Position.Y != 0)))
             {
                 if (item.Definition.Width > 1 || item.Definition.Length > 1)
                     foreach (Point2D tile in item.AffectedTiles)
-                        _itemsAt.Add((tile.X, tile.Y), item);
+                        _itemAt.Add((tile.X, tile.Y), item);
 
-                _itemsAt.Add((item.Position.X, item.Position.Y), item);
+                _itemAt.Add((item.Position.X, item.Position.Y), item);
             }
             EntityGrid = new bool[_room.Map.MapSize.Item1, _room.Map.MapSize.Item2];
         }
@@ -36,8 +36,8 @@ namespace AuroraEmu.Game.Rooms
         {
             if (item.Definition.Length > 1 || item.Definition.Width > 1)
                 foreach (Point2D point in item.AffectedTiles)
-                    _itemsAt.Remove((point.X, point.Y));
-            _itemsAt.Remove((item.Position.X, item.Position.Y));
+                    _itemAt.Remove((point.X, point.Y));
+            _itemAt.Remove((item.Position.X, item.Position.Y));
         }
 
         /// <summary>
@@ -61,9 +61,9 @@ namespace AuroraEmu.Game.Rooms
                     if (ItemAt(point) != null)
                         return false;
                     else
-                        _itemsAt.Add((point.X, point.Y), item);
+                        _itemAt.Add((point.X, point.Y), item);
             }
-            _itemsAt.Add((x, y), item);
+            _itemAt.Add((x, y), item);
             return true;
         }
 
@@ -89,13 +89,13 @@ namespace AuroraEmu.Game.Rooms
                     if (ItemAt(point) != null)
                         return false;
                     else
-                        _itemsAt.Add((point.X, point.Y), item);
+                        _itemAt.Add((point.X, point.Y), item);
 
                 foreach (Point2D point in item.AffectedTiles)
-                    _itemsAt.Remove((point.X, point.Y));
+                    _itemAt.Remove((point.X, point.Y));
             }
-            _itemsAt.Remove((item.Position.X, item.Position.Y));
-            _itemsAt.Add((newX, newY), item);
+            _itemAt.Remove((item.Position.X, item.Position.Y));
+            _itemAt.Add((newX, newY), item);
             return true;
         }
 
@@ -114,10 +114,10 @@ namespace AuroraEmu.Game.Rooms
                     if (ItemAt(point.X, point.Y) != null)
                         return false;
                     else
-                        _itemsAt.Add((point.X, point.Y), item);
+                        _itemAt.Add((point.X, point.Y), item);
 
                 foreach (Point2D point in item.AffectedTiles)
-                    _itemsAt.Remove((point.X, point.Y));
+                    _itemAt.Remove((point.X, point.Y));
             }
             return true;
         }
@@ -137,7 +137,7 @@ namespace AuroraEmu.Game.Rooms
             if (EntityGrid[x, y])
                 return false;
 
-            if (_itemsAt.TryGetValue((x, y), out Item item))
+            if (_itemAt.TryGetValue((x, y), out Item item))
             {
                 if (actor.TargetPoint.X == x && actor.TargetPoint.Y == y)
                     if (item.Definition.ItemType == "seat")
@@ -160,22 +160,22 @@ namespace AuroraEmu.Game.Rooms
         /// <returns>The item if it exists else null</returns>
         public Item ItemAt(Point2D point)
         {
-            if (_itemsAt.TryGetValue((point.X, point.Y), out Item item))
+            if (_itemAt.TryGetValue((point.X, point.Y), out Item item))
                 return item;
             return null;
         }
 
         public Item ItemAt(int x, int y)
         {
-            if (_itemsAt.TryGetValue((x, y), out Item item))
+            if (_itemAt.TryGetValue((x, y), out Item item))
                 return item;
             return null;
         }
 
         public void Dispose()
         {
-            _itemsAt.Clear();
-            _itemsAt = null;
+            _itemAt.Clear();
+            _itemAt = null;
         }
     }
 }

@@ -2,6 +2,7 @@
 using AuroraEmu.Game.Players;
 using DotNetty.Transport.Channels;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace AuroraEmu.Game.Clients
 {
@@ -66,24 +67,12 @@ namespace AuroraEmu.Game.Clients
 
         public Client GetClientByHabbo(int habboId)
         {
-            foreach (Client client in Clients.Values)
-            {
-                if (client.Player.Id == habboId)
-                    return client;
-            }
-
-            return null;
+            return Clients.Values.Where(x => x.Player.Id == habboId).SingleOrDefault();
         }
 
         public Client GetClientByHabbo(string habboName)
         {
-            foreach (Client client in Clients.Values)
-            {
-                if (client.Player.Username == habboName)
-                    return client;
-            }
-
-            return null;
+            return Clients.Values.Where(x => x.Player.Username == habboName).SingleOrDefault();
         }
     }
 }

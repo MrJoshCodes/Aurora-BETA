@@ -14,6 +14,7 @@ using AuroraEmu.Network.Game.Packets.Events.Users.Clothing;
 using DotNetty.Buffers;
 using System.Collections.Generic;
 using AuroraEmu.Network.Game.Packets.Events.Moderation;
+using AuroraEmu.Network.Game.Packets.Events.Rooms.Action;
 
 namespace AuroraEmu.Network.Game.Packets
 {
@@ -91,7 +92,8 @@ namespace AuroraEmu.Network.Game.Packets
                 { 342, new RoomDimmerSavePresetMessageEvent() },
                 { 343, new RoomDimmerChangeStateMessageEvent() },
 
-                { 454, new GetModeratorUserInfoMessageEvent() }
+                { 454, new GetModeratorUserInfoMessageEvent() },
+                { 96, new AssignRightsMessageEvent() }
             };
         }
 
