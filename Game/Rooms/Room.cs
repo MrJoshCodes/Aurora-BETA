@@ -7,6 +7,7 @@ using AuroraEmu.Game.Rooms.User;
 using AuroraEmu.Network.Game.Packets;
 using AuroraEmu.Network.Game.Packets.Composers.Rooms;
 using MySql.Data.MySqlClient;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
@@ -17,8 +18,6 @@ namespace AuroraEmu.Game.Rooms
     public class Room : IDisposable
     {
         private int _virtualId;
-        private ConcurrentDictionary<int, Item> _items;
-
         public int Id { get; set; }
         public int OwnerId { get; set; }
         public int PlayersIn { get; set; }
@@ -49,7 +48,7 @@ namespace AuroraEmu.Game.Rooms
                 return Engine.MainDI.NavigatorController.FrontpageItems[Id];
             }
         }
-
+        private ConcurrentDictionary<int, Item> _items;
         public ConcurrentDictionary<int, Item> Items
         {
             get
@@ -62,8 +61,9 @@ namespace AuroraEmu.Game.Rooms
         public ConcurrentDictionary<int, RoomActor> Actors { get; set; }
         private ProcessComponent ProcessComponent { get; set; }
         public RoomGrid Grid { get; }
-        public RoomState State { get; set; }
         public RoomMap Map { get; set; }
+        public RoomState State { get; set; }
+        public List<int> UserRights { get; }
 
         public Room()
         {
@@ -93,7 +93,7 @@ namespace AuroraEmu.Game.Rooms
             Floor = reader.GetInt32("floor");
             Wallpaper = reader.GetInt32("wallpaper");
             Landscape = reader.GetDouble("landscape");
-
+            UserRights = new List<int>(JsonConvert.DeserializeObject<List<int>>(reader.GetString("user_rights")));
             if (Engine.MainDI.RoomController.RoomMaps.TryGetValue(Model, out RoomMap map))
             {
                 Map = map;
