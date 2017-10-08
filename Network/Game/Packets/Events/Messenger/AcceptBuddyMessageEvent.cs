@@ -1,6 +1,7 @@
 ﻿using System;
 using AuroraEmu.Game.Clients;
 using AuroraEmu.Game.Messenger;
+using AuroraEmu.Network.Game.Packets.Composers.Messenger;
 
 namespace AuroraEmu.Network.Game.Packets.Events.Messenger
 {
@@ -21,10 +22,10 @@ namespace AuroraEmu.Network.Game.Packets.Events.Messenger
                 Engine.MainDI.MessengerDao.DestroyRequest(client.Player.Id, requestId);
                 Console.WriteLine(client.Player.Id + " " + requestId);
                 client.Player.MessengerComponent.AddFriend(requestId, new MessengerFriend(requestId));
-                client.SendComposer(client.Player.MessengerComponent.UpdateFriendList());
+                client.SendComposer(new FriendListUpdateMessageComposer(client.Player.MessengerComponent.Friends));
 
                 if (targetClient != null)
-                    targetClient.SendComposer(targetClient.Player.MessengerComponent.UpdateFriendList());
+                    targetClient.SendComposer(new FriendListUpdateMessageComposer(targetClient.Player.MessengerComponent.Friends));
             }
         }
     }
