@@ -19,6 +19,7 @@ namespace AuroraEmu.Game.Catalog
         public bool IsDeal { get; set; }
         public int DealId { get; set; }
         public string Data { get; set; }
+        public int Order { get; set; }
 
         public CatalogProduct(MySqlDataReader reader)
         {
@@ -26,12 +27,13 @@ namespace AuroraEmu.Game.Catalog
             Name = reader.GetString("name");
             PriceCoins = reader.GetInt32("price_coins");
             PricePixels = reader.GetInt32("price_pixels");
-            PageId = reader.GetInt32("page_id");
+            PageId = reader.IsDBNull(reader.GetOrdinal("page_id")) ? 0 : reader.GetInt32("page_id");
             IsDeal = reader.GetBoolean("is_deal");
             Amount = IsDeal ? -1 : reader.GetInt32("amount");
             TemplateId = IsDeal ? -1 : reader.GetInt32("Template_id");
             DealId = IsDeal ? reader.GetInt32("deal_id") : -1;
             Data = reader.GetString("data");
+            Order = reader.GetInt32("order");
         }
 
         public List<CatalogDealItem> DealItems

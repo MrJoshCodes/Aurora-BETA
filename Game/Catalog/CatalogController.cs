@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using AuroraEmu.DI.Game.Catalog;
 using System;
+using System.Linq;
 
 namespace AuroraEmu.Game.Catalog
 {
@@ -111,7 +112,7 @@ namespace AuroraEmu.Game.Catalog
                     productsInPage.Add(product);
             }
 
-            return productsInPage;
+            return productsInPage.OrderBy(item => item.Order).ToList();
         }
     }
 }
