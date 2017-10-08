@@ -59,7 +59,7 @@ namespace AuroraEmu.Game.Rooms
                 return _items;
             }
         }
-        public ConcurrentDictionary<int, RoomActor> Actors { get; private set; }
+        public ConcurrentDictionary<int, RoomActor> Actors { get; set; }
         private ProcessComponent ProcessComponent { get; set; }
         public RoomGrid Grid { get; }
         public RoomState State { get; set; }

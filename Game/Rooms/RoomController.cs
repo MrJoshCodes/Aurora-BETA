@@ -37,7 +37,7 @@ namespace AuroraEmu.Game.Rooms
             return Engine.MainDI.RoomDao.GetUserRoomCount(userId);
         }
 
-        public bool TryCreateRoom(string name, string model, int ownerId, out Room room)
+        public bool TryCreateRoom(string name, string model, int ownerId, out int roomId)
         {
             Room tmpRoom = new Room()
             {
@@ -51,12 +51,11 @@ namespace AuroraEmu.Game.Rooms
 
             if (tmpRoom.Id > 0)
             {
-                Rooms.TryAdd(tmpRoom.Id, tmpRoom);
-                room = tmpRoom;
+                roomId = tmpRoom.Id;
                 return true;
             }
 
-            room = null;
+            roomId = -1;
             return false;
         }
     }

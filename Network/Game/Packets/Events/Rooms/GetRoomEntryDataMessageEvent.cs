@@ -25,7 +25,7 @@ namespace AuroraEmu.Network.Game.Packets.Events.Rooms
             }
 
             new GetHeightMapMessageEvent().Run(client, null);
-
+            
             client.QueueComposer(new UsersMessageComposer(room.Actors.Values));
             room.AddUserActor(client);
             client.CurrentRoom.SendComposer(new UsersMessageComposer(client.UserActor));
