@@ -27,6 +27,8 @@ namespace AuroraEmu.Game.Catalog
 
         public void ReloadPages()
         {
+            _pages.Clear();
+
             Engine.MainDI.CatalogDao.ReloadCatalogPage(_pages);
 
             Engine.Logger.Info($"Loaded {_pages.Count} catalogue pages.");
@@ -57,6 +59,8 @@ namespace AuroraEmu.Game.Catalog
 
         public void ReloadProducts()
         {
+            _products.Clear();
+
             Engine.MainDI.CatalogDao.ReloadProducts(_products);
 
             Engine.Logger.Info($"Loaded {_products.Count} catalogue products.");
@@ -64,6 +68,8 @@ namespace AuroraEmu.Game.Catalog
 
         public void ReloadDeals()
         {
+            _deals.Clear();
+
             Engine.MainDI.CatalogDao.ReloadDeals(_deals);
 
             Engine.Logger.Info($"Loaded {_deals.Count} deals.");
@@ -71,6 +77,8 @@ namespace AuroraEmu.Game.Catalog
 
         public void ReloadVouchers()
         {
+            Vouchers.Clear();
+
             Engine.MainDI.CatalogDao.ReloadVouchers(Vouchers);
 
             Engine.Logger.Info($"Loaded {Vouchers.Count} vouchers.");

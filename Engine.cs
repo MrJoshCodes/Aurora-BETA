@@ -73,9 +73,11 @@ namespace AuroraEmu
                         MainDI.RoomController.LoadRoomMaps();
                         break;
                         case "reload_catalog":
+                        MainDI.ItemController.ReloadTemplates();
                         MainDI.CatalogController.ReloadPages();
                         MainDI.CatalogController.ReloadProducts();
                         MainDI.CatalogController.ReloadDeals();
+                        MainDI.CatalogController.ReloadVouchers();
                         break;
                 }
             }

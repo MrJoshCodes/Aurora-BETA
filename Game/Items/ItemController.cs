@@ -35,6 +35,7 @@ namespace AuroraEmu.Game.Items
 
         public void ReloadTemplates()
         {
+            _items.Clear();
             Engine.MainDI.ItemDao.ReloadTemplates(_items);
             Engine.Logger.Info($"Loaded {_items.Count} item templates.");
         }
