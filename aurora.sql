@@ -5360,6 +5360,7 @@ CREATE TABLE IF NOT EXISTS `rooms` (
   `floor` int(3) NOT NULL DEFAULT '0',
   `wallpaper` int(3) NOT NULL DEFAULT '0',
   `landscape` double NOT NULL DEFAULT '0',
+  `user_rights` varchar(255) NOT NULL DEFAULT '[]',
   PRIMARY KEY (`id`),
   KEY `owner_id` (`owner_id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=2 ;
