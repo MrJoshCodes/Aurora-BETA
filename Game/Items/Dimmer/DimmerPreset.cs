@@ -40,9 +40,7 @@
             }
         }
 
-        public string PresetData()
-        {
-            return ColorCode + "," + ColorIntensity + "," + (BackgroundOnly ? 1 : 0);
-        }
+        public string PresetData() =>
+            ColorCode + "," + ColorIntensity + "," + (BackgroundOnly ? 1 : 0);
     }
 }

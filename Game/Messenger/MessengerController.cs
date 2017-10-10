@@ -21,9 +21,7 @@ namespace AuroraEmu.Game.Messenger
             }
         }
 
-        public List<MessengerSearch> SearchForUsers(string searchString)
-        {
-            return Engine.MainDI.MessengerDao.SearchForUsers(searchString);
-        }
+        public List<MessengerSearch> SearchForUsers(string searchString) =>
+            Engine.MainDI.MessengerDao.SearchForUsers(searchString);
     }
 }

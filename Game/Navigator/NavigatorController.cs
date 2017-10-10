@@ -1,6 +1,7 @@
 ﻿using AuroraEmu.Game.Rooms;
 using System.Collections.Generic;
 using AuroraEmu.DI.Game.Navigator;
+using System.Linq;
 
 namespace AuroraEmu.Game.Navigator
 {
@@ -31,32 +32,16 @@ namespace AuroraEmu.Game.Navigator
             Engine.Logger.Info($"Loaded {Categories.Count} room categories.");
         }
 
-        public List<Room> GetRoomsByOwner(int ownerId)
-        {
-            return Engine.MainDI.NavigatorDao.GetRoomsByOwner(ownerId);
-        }
+        public List<Room> GetRoomsByOwner(int ownerId) =>
+            Engine.MainDI.NavigatorDao.GetRoomsByOwner(ownerId);
 
-        public List<Room> SearchRooms(string search)
-        {
-            return Engine.MainDI.NavigatorDao.SearchRooms(search);
-        }
+        public List<Room> SearchRooms(string search) =>
+            Engine.MainDI.NavigatorDao.SearchRooms(search);
 
-        public List<Room> GetRoomsByFriends(int playerId)
-        {
-            return Engine.MainDI.NavigatorDao.GetRoomsByFriends(playerId);
-        }
+        public List<Room> GetRoomsByFriends(int playerId) =>
+            Engine.MainDI.NavigatorDao.GetRoomsByFriends(playerId);
 
-        public List<RoomCategory> GetUserCategories(byte rank)
-        {
-            List<RoomCategory> categories = new List<RoomCategory>();
-
-            foreach (RoomCategory category in Categories.Values)
-            {
-                if (category.MinRank <= rank)
-                    categories.Add(category);
-            }
-
-            return categories;
-        }
+        public List<RoomCategory> GetUserCategories(byte rank) =>
+            Categories.Values.Where(catecory => catecory.MinRank <= rank).ToList();
     }
 }

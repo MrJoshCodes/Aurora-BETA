@@ -5,8 +5,8 @@ namespace AuroraEmu.Game.Badges
     public class Badge
     {
         public int Id { get; private set; }
-        public string Code { get; private set; }
         public int Slot { get; set; }
+        public string Code { get; private set; }
 
         public Badge(MySqlDataReader reader)
         {

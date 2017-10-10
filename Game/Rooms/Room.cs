@@ -34,25 +34,14 @@ namespace AuroraEmu.Game.Rooms
         public bool DiagEnabled { get; set; } = true;
         public bool ShowOwner { get; set; }
         public bool AllPlayerRights { get; set; }
-        public bool IsFrontpageItem 
-        { 
-            get
-            {
-                return Engine.MainDI.NavigatorController.FrontpageItems.ContainsKey(Id);
-            }
-        }
-        public FrontpageItem FrontpageItem 
-        { 
-            get
-            {
-                return Engine.MainDI.NavigatorController.FrontpageItems[Id];
-            }
-        }
+        public bool IsFrontpageItem =>
+            Engine.MainDI.NavigatorController.FrontpageItems.ContainsKey(Id);
+        public RoomState State { get; set; }
+        public FrontpageItem FrontpageItem =>
+            Engine.MainDI.NavigatorController.FrontpageItems[Id];
         private ConcurrentDictionary<int, Item> _items;
-        public ConcurrentDictionary<int, Item> Items
-        {
-            get
-            {
+        public ConcurrentDictionary<int, Item> Items {
+            get {
                 if (_items == null)
                     _items = Engine.MainDI.ItemController.GetItemsInRoom(Id);
                 return _items;
@@ -62,7 +51,6 @@ namespace AuroraEmu.Game.Rooms
         private ProcessComponent ProcessComponent { get; set; }
         public RoomGrid Grid { get; }
         public RoomMap Map { get; set; }
-        public RoomState State { get; set; }
         public List<int> UserRights { get; }
 
         public Room()
@@ -144,30 +132,20 @@ namespace AuroraEmu.Game.Rooms
             }
         }
 
-        public string Owner
-        {
-            get { return Engine.MainDI.PlayerController.GetPlayerNameById(OwnerId); }
-        }
+        public string Owner =>
+            Engine.MainDI.PlayerController.GetPlayerNameById(OwnerId);
 
-        public int GetStateNumber()
-        {
-            return (int) State;
-        }
+        public int GetStateNumber() =>
+            (int)State;
 
-        public List<Item> GetFloorItems()
-        {
-            return Items.Values.Where(x => x.Definition.SpriteType.ToLower().Equals("s")).ToList();
-        }
+        public List<Item> GetFloorItems() =>
+            Items.Values.Where(x => x.Definition.SpriteType.ToLower().Equals("s")).ToList();
 
-         public List<Item> GetItems()
-        {
-            return Items.Values.ToList();
-        }
+        public List<Item> GetItems() =>
+           Items.Values.ToList();
 
-        public List<Item> GetWallItems()
-        {
-            return Items.Values.Where(x => x.Definition.SpriteType.ToLower().Equals("i")).ToList();
-        }
+        public List<Item> GetWallItems() =>
+            Items.Values.Where(x => x.Definition.SpriteType.ToLower().Equals("i")).ToList();
 
         public void Save(string[] columns, object[] values)
         {
@@ -225,6 +203,7 @@ namespace AuroraEmu.Game.Rooms
             ProcessComponent.Dispose();
             ProcessComponent = null;
             Grid.Dispose();
+            GC.SuppressFinalize(this);
         }
     }
 }

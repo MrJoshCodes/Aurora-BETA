@@ -1,7 +1,5 @@
 ﻿using System.Collections.Generic;
 using AuroraEmu.Game.Messenger;
-using AuroraEmu.Network.Game.Packets;
-using AuroraEmu.Network.Game.Packets.Composers.Messenger;
 using System;
 
 namespace AuroraEmu.Game.Players.Components
@@ -21,10 +19,8 @@ namespace AuroraEmu.Game.Players.Components
             GetRequests();
         }
 
-        public Dictionary<int, MessengerFriend> GetFriends()
-        {
-            return Engine.MainDI.MessengerDao.GetFriendsById(Player.Id, Friends);
-        }
+        public Dictionary<int, MessengerFriend> GetFriends() =>
+            Engine.MainDI.MessengerDao.GetFriendsById(Player.Id, Friends);
 
         public void AddFriend(int id, MessengerFriend friend)
         {
@@ -51,21 +47,16 @@ namespace AuroraEmu.Game.Players.Components
             return null;
         }
 
-        public Dictionary<int, MessengerRequest> GetRequests()
-        {
-            return Engine.MainDI.MessengerDao.GetRequestsByPlayerId(Player.Id, Requests);
-        }
+        public Dictionary<int, MessengerRequest> GetRequests() =>
+            Engine.MainDI.MessengerDao.GetRequestsByPlayerId(Player.Id, Requests);
 
-        public bool IsFriends(int userTwoId)
-        {
-            return Friends.ContainsKey(userTwoId);
-        }
+        public bool IsFriends(int userTwoId) =>
+            Friends.ContainsKey(userTwoId);
 
         public void Dispose()
         {
             Friends.Clear();
             Requests.Clear();
-            GC.SuppressFinalize(this);
         }
     }
 }

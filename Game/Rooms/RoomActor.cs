@@ -8,27 +8,22 @@ namespace AuroraEmu.Game.Rooms
 {
     public abstract class RoomActor : IDisposable
     {
-        public Client Client { get; }
         public int VirtualId { get; }
         public int Rotation { get; set; }
-        public Dictionary<string, string> Statusses { get; set; }
-
+        public int StepsOnPath { get; set; }
+        public bool QuitRoom { get; set; }
         public bool SetStep { get; set; }
         public bool UpdateNeeded { get; set; }
-        public bool IsWalking {
-            get {
-                return (Path.Count > 0);
-            }
-        }
+        public bool IsWalking =>
+            (Path.Count > 0);
         public bool CalcPath { get; set; }
-        public IList<Point2D> Path { get; set; }
-        public int StepsOnPath { get; set; }
+        public Client Client { get; }
+        public Dictionary<string, string> Statusses { get; set; }
         public Point2D TargetPoint { get; set; }
         public Point2D Position { get; set; }
         public Point2D NextTile { get; set; }
-
+        public IList<Point2D> Path { get; set; }
         public ActorType Type { get; private set; }
-        public bool QuitRoom { get; set; }
 
         public RoomActor(Client client, int virtualId)
         {

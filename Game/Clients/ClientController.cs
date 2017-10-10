@@ -43,11 +43,9 @@ namespace AuroraEmu.Game.Clients
             }
         }
 
-        public void RemoveClient(IChannel channel)
-        {
+        public void RemoveClient(IChannel channel) =>
             Clients.Remove(channel.Id);
-        }
-        
+
         public bool TryGetPlayer(int playerId, out Player player)
         {
             foreach (Client client in Clients.Values)
@@ -65,14 +63,10 @@ namespace AuroraEmu.Game.Clients
             return false;
         }
 
-        public Client GetClientByHabbo(int habboId)
-        {
-            return Clients.Values.Where(x => x.Player.Id == habboId).SingleOrDefault();
-        }
+        public Client GetClientByHabbo(int habboId) =>
+            Clients.Values.Where(x => x.Player.Id == habboId).SingleOrDefault();
 
-        public Client GetClientByHabbo(string habboName)
-        {
-            return Clients.Values.Where(x => x.Player.Username == habboName).SingleOrDefault();
-        }
+        public Client GetClientByHabbo(string habboName) =>
+            Clients.Values.Where(x => x.Player.Username == habboName).SingleOrDefault();
     }
 }

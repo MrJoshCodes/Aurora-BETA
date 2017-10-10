@@ -32,10 +32,8 @@ namespace AuroraEmu.Game.Rooms
             return room;
         }
 
-        public int GetUserRoomCount(int userId)
-        {
-            return Engine.MainDI.RoomDao.GetUserRoomCount(userId);
-        }
+        public int GetUserRoomCount(int userId) =>
+            Engine.MainDI.RoomDao.GetUserRoomCount(userId);
 
         public bool TryCreateRoom(string name, string model, int ownerId, out int roomId)
         {

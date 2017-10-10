@@ -10,10 +10,8 @@ namespace AuroraEmu.Game.Messenger
         public string Figure { get; set; }
         public string Motto { get; set; }
 
-        public Client Client()
-        {
-            return Engine.MainDI.ClientController.GetClientByHabbo(Id);
-        }
+        public Client Client() =>
+            Engine.MainDI.ClientController.GetClientByHabbo(Id);
         
         public MessengerSearch(MySqlDataReader reader)
         {

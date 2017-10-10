@@ -22,11 +22,8 @@ namespace AuroraEmu.Game.Items
         public bool Cycling { get; private set; } = false;
         public RoomActor ActorOnItem { get; set; }
         public Point2D Position { get; set; }
-        public IList<Point2D> AffectedTiles {
-            get {
-                return Utilities.Extensions.AffectedTiles(Definition.Length, Definition.Width, Position.X, Position.Y, Rotation);
-            }
-        }
+        public IList<Point2D> AffectedTiles =>
+            Utilities.Extensions.AffectedTiles(Definition.Length, Definition.Width, Position.X, Position.Y, Rotation);
 
         public Item(int id, int ownerId, int definitionId, string data)
         {
@@ -48,10 +45,8 @@ namespace AuroraEmu.Game.Items
             Wallposition = reader.GetString("wallposition");
         }
 
-        public ItemDefinition Definition
-        {
-            get
-            {
+        public ItemDefinition Definition {
+            get {
                 if (_definition == null)
                     _definition = Engine.MainDI.ItemController.GetTemplate(DefinitionId);
 
@@ -61,7 +56,7 @@ namespace AuroraEmu.Game.Items
 
         public IItemHandler Handler {
             get {
-                if(Engine.MainDI.ItemController.Handlers.TryGetValue(Definition.HandleType, out IItemHandler handler))
+                if (Engine.MainDI.ItemController.Handlers.TryGetValue(Definition.HandleType, out IItemHandler handler))
                 {
                     return handler;
                 }

@@ -40,40 +40,26 @@ namespace AuroraEmu.Game.Items
             Engine.Logger.Info($"Loaded {_items.Count} item templates.");
         }
 
-        public ItemDefinition GetTemplate(int id)
-        {
-            return _items.TryGetValue(id, out ItemDefinition item) ? item : null;
-        }
+        public ItemDefinition GetTemplate(int id) =>
+            _items.TryGetValue(id, out ItemDefinition item) ? item : null;
 
-        public void GiveItem(Client client, CatalogProduct product, string extraData)
-        {
+        public void GiveItem(Client client, CatalogProduct product, string extraData) =>
             Engine.MainDI.ItemDao.GiveItem(client, product, extraData);
-        }
         
-        public void GiveItem(Client client, ItemDefinition template, string extraData)
-        {
+        public void GiveItem(Client client, ItemDefinition template, string extraData) =>
             Engine.MainDI.ItemDao.GiveItem(client, template, extraData);
-        }
 
-        public ConcurrentDictionary<int, Item> GetItemsInRoom(int roomId)
-        {
-            return Engine.MainDI.ItemDao.GetItemsInRoom(roomId);
-        }
+        public ConcurrentDictionary<int, Item> GetItemsInRoom(int roomId) =>
+            Engine.MainDI.ItemDao.GetItemsInRoom(roomId);
 
-        public Dictionary<int, Item> GetItemsFromOwner(int ownerId)
-        {
-            return Engine.MainDI.ItemDao.GetItemsFromOwner(ownerId);
-        }
+        public Dictionary<int, Item> GetItemsFromOwner(int ownerId) =>
+            Engine.MainDI.ItemDao.GetItemsFromOwner(ownerId);
 
-        public void AddFloorItem(int itemId, int x, int y, int rot, int roomId)
-        {
+        public void AddFloorItem(int itemId, int x, int y, int rot, int roomId) =>
             Engine.MainDI.ItemDao.AddFloorItem(itemId, x, y, rot, roomId);
-        }
 
-        public void AddWallItem(int itemId, string wallposition, int roomId)
-        {
+        public void AddWallItem(int itemId, string wallposition, int roomId) =>
             Engine.MainDI.ItemDao.AddWallItem(itemId, wallposition, roomId);
-        }
 
         public DimmerData GetDimmerData(int itemId)
         {
