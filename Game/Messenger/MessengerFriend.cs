@@ -5,10 +5,10 @@ namespace AuroraEmu.Game.Messenger
 {
     public class MessengerFriend
     {
+        public int UserTwoId { get; set; }
         public string Username { get; set; }
         public string Motto { get; set; }
         public string Figure { get; set; }
-        public int UserTwoId { get; set; }
 
         public MessengerFriend(MySqlDataReader reader)
         {

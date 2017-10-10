@@ -6,16 +6,15 @@ namespace AuroraEmu.Game.Catalog
     public class CatalogPage
     {
         public int Id { get; set; }
-        public string Name { get; set; }
         public int IconColor { get; set; }
         public int IconImage { get; set; }
-        public bool Development { get; set; }
-        public bool Visible { get; set; }
         public int ParentId { get; set; }
         public int MinRank { get; set; }
-        public string Layout { get; set; }
         public bool HasContent { get; set; }
-
+        public bool Development { get; set; }
+        public bool Visible { get; set; }
+        public string Layout { get; set; }
+        public string Name { get; set; }
         public Dictionary<string, List<string>> Data { get; set; }
 
         public CatalogPage(MySqlDataReader reader)

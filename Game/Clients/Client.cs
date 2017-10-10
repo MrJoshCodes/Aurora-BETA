@@ -37,20 +37,14 @@ namespace AuroraEmu.Game.Clients
             SubscriptionData = new Dictionary<string, SubscriptionData>();
         }
 
-        public void Disconnect()
-        {
+        public void Disconnect() =>
             _channel.DisconnectAsync();
-        }
 
-        public void SendComposer(MessageComposer composer)
-        {
+        public void SendComposer(MessageComposer composer) =>
             Send(composer, true);
-        }
 
-        public void QueueComposer(MessageComposer composer)
-        {
+        public void QueueComposer(MessageComposer composer) =>
             Send(composer, false);
-        }
 
         public void Send(MessageComposer composer, bool flush)
         {
@@ -64,10 +58,8 @@ namespace AuroraEmu.Game.Clients
             }
         }
 
-        public IChannel Flush()
-        {
-            return _channel.Flush();
-        }
+        public IChannel Flush() =>
+            _channel.Flush();
 
         public void Login(string sso)
         {

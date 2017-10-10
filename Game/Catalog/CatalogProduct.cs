@@ -10,16 +10,16 @@ namespace AuroraEmu.Game.Catalog
         private List<CatalogDealItem> _dealItems;
 
         public int Id { get; set; }
-        public string Name { get; set; }
         public int PriceCoins { get; set; }
         public int PricePixels { get; set; }
         public int Amount { get; set; }
         public int PageId { get; set; }
         public int TemplateId { get; set; }
-        public bool IsDeal { get; set; }
         public int DealId { get; set; }
-        public string Data { get; set; }
         public int Order { get; set; }
+        public bool IsDeal { get; set; }
+        public string Data { get; set; }
+        public string Name { get; set; }
 
         public CatalogProduct(MySqlDataReader reader)
         {

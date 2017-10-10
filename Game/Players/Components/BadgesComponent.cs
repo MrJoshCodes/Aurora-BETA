@@ -32,30 +32,13 @@ namespace AuroraEmu.Game.Players.Components
             Engine.MainDI.BadgesDao.ClearBadgeSlots(_playerId);
         }
 
-        public void UpdateBadgeSlots(List<(int, int)> list)
-        {
+        public void UpdateBadgeSlots(List<(int, int)> list) =>
             Engine.MainDI.BadgesDao.UpdateBadgeSlots(_playerId, list);
-        }
 
-        public List<Badge> GetEquippedBadges()
-        {
-            List<Badge> badges = new List<Badge>();
+        public List<Badge> GetEquippedBadges() =>
+            Badges.Values.Where(badge => badge.Slot != 0).ToList();
 
-            foreach (Badge badge in Badges.Values)
-            {
-                if (badge.Slot != 0)
-                {
-                    badges.Add(badge);
-                }
-            }
-
-            return badges;
-        }
-
-        public void Dispose()
-        {
+        public void Dispose() =>
             Badges.Clear();
-            GC.SuppressFinalize(this);
-        }
     }
 }

@@ -4,24 +4,20 @@ namespace AuroraEmu.Game.Rooms
 {
     public class RoomMap
     {
-        public string Name { get; }
+        public int DoorRotation { get; }
         public int DoorX { get; }
         public int DoorY { get; }
         public double DoorZ { get; }
-        public int DoorRotation { get; }
+        public bool DisableDiagonal { get; }
         public string RawMap { get; }
+        public string Name { get; }
+        public string RelativeHeightMap { get; private set; }
 
         private string[] _splitMap;
-
-        public (int, int) MapSize { get; }
-
         public bool[,] PassableTiles { get; }
         public double[,] TileHeights { get; }
-
         public char[,] HeightMap { get; }
-
-        public string RelativeHeightMap { get; private set; }
-        public bool DisableDiagonal { get; }
+        public (int, int) MapSize { get; }
 
         public RoomMap(MySqlDataReader reader)
         {

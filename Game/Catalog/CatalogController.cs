@@ -49,13 +49,8 @@ namespace AuroraEmu.Game.Catalog
             }
         }
 
-        public List<CatalogDealItem> GetDeal(int dealId)
-        {
-            if (_deals.TryGetValue(dealId, out List<CatalogDealItem> dealItems))
-                return dealItems;
-
-            return null;
-        }
+        public List<CatalogDealItem> GetDeal(int dealId) =>
+            _deals.TryGetValue(dealId, out List<CatalogDealItem> dealItems) ? dealItems : null;
 
         public void ReloadProducts()
         {
@@ -84,43 +79,16 @@ namespace AuroraEmu.Game.Catalog
             Engine.Logger.Info($"Loaded {Vouchers.Count} vouchers.");
         }
 
-        public CatalogPage GetPage(int id)
-        {
-            if (_pages.TryGetValue(id, out CatalogPage page))
-                return page;
+        public CatalogPage GetPage(int id) =>
+            _pages.TryGetValue(id, out CatalogPage page) ? page : null;
 
-            return null;
-        }
+        public CatalogProduct GetProduct(int id) =>
+            _products.TryGetValue(id, out CatalogProduct product) ? product : null;
 
-        public CatalogProduct GetProduct(int id)
-        {
-            return _products.TryGetValue(id, out CatalogProduct product) ? product : null;
-        }
+        public List<CatalogPage> GetPages(int parent) =>
+            _pages.Values.Where(page => page.ParentId == parent).ToList();
 
-        public List<CatalogPage> GetPages(int parent)
-        {
-            List<CatalogPage> pagesInParent = new List<CatalogPage>();
-
-            foreach (CatalogPage page in _pages.Values)
-            {
-                if (page.ParentId == parent)
-                    pagesInParent.Add(page);
-            }
-
-            return pagesInParent;
-        }
-
-        public List<CatalogProduct> GetProducts(int pageId)
-        {
-            List<CatalogProduct> productsInPage = new List<CatalogProduct>();
-
-            foreach (CatalogProduct product in _products.Values)
-            {
-                if (product.PageId == pageId)
-                    productsInPage.Add(product);
-            }
-
-            return productsInPage.OrderBy(item => item.Order).ToList();
-        }
+        public List<CatalogProduct> GetProducts(int pageId) =>
+            _products.Values.Where(product => product.PageId == pageId).ToList();
     }
 }
