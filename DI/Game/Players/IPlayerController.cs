@@ -1,4 +1,4 @@
-﻿using AuroraEmu.Game.Players;
+﻿using AuroraEmu.Game.Players.Models;
 
 namespace AuroraEmu.DI.Game.Players
 {

@@ -1,9 +1,4 @@
-﻿using AuroraEmu.Game.Catalog;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using AuroraEmu.Game.Catalog.Models;
 
 namespace AuroraEmu.Network.Game.Packets.Composers.Catalogue
 {

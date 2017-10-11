@@ -1,4 +1,4 @@
-﻿using AuroraEmu.Game.Rooms;
+﻿using AuroraEmu.Game.Rooms.Models;
 
 namespace AuroraEmu.Network.Game.Packets.Composers.Rooms
 {

@@ -1,7 +1,4 @@
-﻿using AuroraEmu.Game.Items;
-using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using AuroraEmu.Game.Items.Models;
 
 namespace AuroraEmu.Network.Game.Packets.Composers.Items
 {

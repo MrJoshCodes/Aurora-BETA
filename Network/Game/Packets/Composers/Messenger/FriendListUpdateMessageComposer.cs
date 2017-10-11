@@ -1,7 +1,6 @@
-﻿using AuroraEmu.Game.Clients;
-using AuroraEmu.Game.Messenger;
-using System.Collections.Generic;
-using AuroraEmu.Game.Players;
+﻿using System.Collections.Generic;
+using AuroraEmu.Game.Messenger.Models;
+using AuroraEmu.Game.Players.Models;
 
 namespace AuroraEmu.Network.Game.Packets.Composers.Messenger
 {

@@ -1,4 +1,4 @@
-﻿using AuroraEmu.Game.Badges;
+﻿using AuroraEmu.Game.Badges.Models;
 using System.Collections.Generic;
 
 namespace AuroraEmu.DI.Database.DAO

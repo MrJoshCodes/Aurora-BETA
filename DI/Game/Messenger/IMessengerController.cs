@@ -1,5 +1,5 @@
-﻿using AuroraEmu.Game.Messenger;
-using AuroraEmu.Game.Players;
+﻿using AuroraEmu.Game.Messenger.Models;
+using AuroraEmu.Game.Players.Models;
 using System.Collections.Generic;
 
 namespace AuroraEmu.DI.Game.Messenger

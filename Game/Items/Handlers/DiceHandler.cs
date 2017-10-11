@@ -1,4 +1,5 @@
 ﻿using AuroraEmu.Game.Clients;
+using AuroraEmu.Game.Items.Models;
 using System;
 
 namespace AuroraEmu.Game.Items.Handlers

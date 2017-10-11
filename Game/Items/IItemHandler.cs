@@ -1,4 +1,5 @@
 ﻿using AuroraEmu.Game.Clients;
+using AuroraEmu.Game.Items.Models;
 
 namespace AuroraEmu.Game.Items
 {

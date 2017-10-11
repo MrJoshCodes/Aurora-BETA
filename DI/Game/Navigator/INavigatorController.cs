@@ -1,5 +1,5 @@
-﻿using AuroraEmu.Game.Navigator;
-using AuroraEmu.Game.Rooms;
+﻿using AuroraEmu.Game.Navigator.Models;
+using AuroraEmu.Game.Rooms.Models;
 using System.Collections.Generic;
 
 namespace AuroraEmu.DI.Game.Navigator

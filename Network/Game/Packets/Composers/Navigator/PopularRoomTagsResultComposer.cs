@@ -1,4 +1,4 @@
-﻿using AuroraEmu.Game.Rooms;
+﻿using AuroraEmu.Game.Rooms.Models;
 using System.Collections.Generic;
 using System.Linq;
 

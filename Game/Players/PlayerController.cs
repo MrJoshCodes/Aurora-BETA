@@ -1,4 +1,5 @@
 ﻿using AuroraEmu.DI.Game.Players;
+using AuroraEmu.Game.Players.Models;
 using System.Collections.Concurrent;
 
 namespace AuroraEmu.Game.Players

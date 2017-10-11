@@ -1,5 +1,5 @@
 ﻿using AuroraEmu.Game.Clients;
-using AuroraEmu.Game.Rooms;
+using AuroraEmu.Game.Rooms.Models;
 using AuroraEmu.Network.Game.Packets.Composers.Rooms;
 
 namespace AuroraEmu.Network.Game.Packets.Events.Rooms

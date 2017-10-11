@@ -1,7 +1,8 @@
-﻿using AuroraEmu.Game.Rooms;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using AuroraEmu.DI.Game.Navigator;
 using System.Linq;
+using AuroraEmu.Game.Navigator.Models;
+using AuroraEmu.Game.Rooms.Models;
 
 namespace AuroraEmu.Game.Navigator
 {

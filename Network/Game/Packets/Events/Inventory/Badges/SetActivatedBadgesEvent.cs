@@ -1,4 +1,4 @@
-﻿using AuroraEmu.Game.Badges;
+﻿using AuroraEmu.Game.Badges.Models;
 using AuroraEmu.Game.Clients;
 using AuroraEmu.Network.Game.Packets.Composers.Inventory.Badges;
 using System.Collections.Generic;

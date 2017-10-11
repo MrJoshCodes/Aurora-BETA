@@ -1,8 +1,8 @@
 ﻿using AuroraEmu.Game.Clients;
-using AuroraEmu.Game.Items.Dimmer;
-using AuroraEmu.Game.Items;
-using System.Linq;
+using AuroraEmu.Game.Items.Models;
+using AuroraEmu.Game.Items.Models.Dimmer;
 using AuroraEmu.Network.Game.Packets.Composers.Items;
+using System.Linq;
 
 namespace AuroraEmu.Network.Game.Packets.Events.Items
 {

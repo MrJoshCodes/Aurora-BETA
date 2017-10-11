@@ -1,4 +1,5 @@
 ﻿using AuroraEmu.DI.Game.Rooms;
+using AuroraEmu.Game.Rooms.Models;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 

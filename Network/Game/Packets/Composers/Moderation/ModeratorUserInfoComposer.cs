@@ -1,4 +1,4 @@
-﻿using AuroraEmu.Game.Players;
+﻿using AuroraEmu.Game.Players.Models;
 
 namespace AuroraEmu.Network.Game.Packets.Composers.Moderation
 {

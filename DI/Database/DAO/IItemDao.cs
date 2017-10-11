@@ -1,9 +1,9 @@
 ﻿using System.Collections.Concurrent;
 using System.Collections.Generic;
-using AuroraEmu.Game.Catalog;
 using AuroraEmu.Game.Clients;
-using AuroraEmu.Game.Items;
-using AuroraEmu.Game.Items.Dimmer;
+using AuroraEmu.Game.Catalog.Models;
+using AuroraEmu.Game.Items.Models;
+using AuroraEmu.Game.Items.Models.Dimmer;
 
 namespace AuroraEmu.DI.Database.DAO
 {

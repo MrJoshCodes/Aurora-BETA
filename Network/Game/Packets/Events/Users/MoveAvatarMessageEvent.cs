@@ -1,5 +1,5 @@
 ﻿using AuroraEmu.Game.Clients;
-using AuroraEmu.Game.Rooms;
+using AuroraEmu.Game.Rooms.Models;
 
 namespace AuroraEmu.Network.Game.Packets.Events.Users
 {

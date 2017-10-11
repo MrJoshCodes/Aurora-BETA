@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using AuroraEmu.DI.Database.DAO;
-using AuroraEmu.Game.Navigator;
-using AuroraEmu.Game.Rooms;
+using AuroraEmu.Game.Navigator.Models;
+using AuroraEmu.Game.Rooms.Models;
 
 namespace AuroraEmu.Database.DAO
 {

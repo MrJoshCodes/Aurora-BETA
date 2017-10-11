@@ -1,4 +1,5 @@
-﻿using DotNetty.Common.Utilities;
+﻿using AuroraEmu.Game.Rooms.Models;
+using DotNetty.Common.Utilities;
 using System;
 using System.Collections.Generic;
 

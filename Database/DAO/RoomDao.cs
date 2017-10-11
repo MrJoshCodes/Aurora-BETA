@@ -1,6 +1,6 @@
 ﻿using AuroraEmu.DI.Database.DAO;
 using System.Collections.Generic;
-using AuroraEmu.Game.Rooms;
+using AuroraEmu.Game.Rooms.Models;
 
 namespace AuroraEmu.Database.DAO
 {
@@ -34,9 +34,7 @@ namespace AuroraEmu.Database.DAO
                     }
                 }
             }
-            if (room != null)
-                return room;
-            return null;
+            return room ?? null;
         }
 
         public int GetUserRoomCount(int userId)

@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
-using AuroraEmu.Game.Messenger;
 using System;
+using AuroraEmu.Game.Messenger.Models;
+using AuroraEmu.Game.Players.Models;
 
 namespace AuroraEmu.Game.Players.Components
 {
