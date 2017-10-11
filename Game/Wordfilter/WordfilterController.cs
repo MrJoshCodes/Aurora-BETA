@@ -7,11 +7,11 @@ namespace AuroraEmu.Game.Wordfilter
 {
     public class WordfilterController : IWordfilterController
     {
-        private readonly List<Wordfilter> _filteredWords;
+        private readonly List<Models.Wordfilter> _filteredWords;
 
         public WordfilterController()
         {
-            _filteredWords = new List<Wordfilter>();
+            _filteredWords = new List<Models.Wordfilter>();
 
             Init();
         }
@@ -25,7 +25,7 @@ namespace AuroraEmu.Game.Wordfilter
 
         public string CheckString(string message)
         {
-            foreach (Wordfilter filter in _filteredWords.ToList())
+            foreach (Models.Wordfilter filter in _filteredWords.ToList())
             {
                 if (message.ToLower().Contains(filter.Word) || message == filter.Word)
                 {

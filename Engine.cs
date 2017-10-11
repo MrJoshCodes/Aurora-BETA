@@ -28,6 +28,7 @@ using AuroraEmu.Game.Navigator;
 using AuroraEmu.Game.Players;
 using AuroraEmu.Game.Rooms;
 using AuroraEmu.Game.Subscription;
+using AuroraEmu.Game.Tasks;
 using AuroraEmu.Game.Wordfilter;
 using AuroraEmu.Network.Game;
 using AuroraEmu.Network.Game.Packets;
@@ -43,7 +44,7 @@ namespace AuroraEmu
     {
         public static ILog Logger { get; private set; }
         public static IContainer Container { get; set; }
-        public static MainDi MainDI { get; set; }
+        public static DILocator MainDI { get; set; }
 
         static void Main(string[] args)
         {
@@ -72,7 +73,7 @@ namespace AuroraEmu
                     case "reload_models":
                         MainDI.RoomController.LoadRoomMaps();
                         break;
-                        case "reload_catalog":
+                    case "reload_catalog":
                         MainDI.ItemController.ReloadTemplates();
                         MainDI.CatalogController.ReloadPages();
                         MainDI.CatalogController.ReloadProducts();
@@ -87,7 +88,7 @@ namespace AuroraEmu
         {
             ContainerBuilder builder = new ContainerBuilder();
 
-            builder.RegisterType<MainDi>();
+            builder.RegisterType<DILocator>();
             builder.RegisterType<DependencyLocator>().As<IDependencyLocator>();
 
             //Config controller
@@ -126,7 +127,7 @@ namespace AuroraEmu
             builder.RegisterType<ConnectionPool>().As<IConnectionPool>();
 
             Container = builder.Build();
-            MainDI = Container.Resolve<MainDi>();
+            MainDI = Container.Resolve<DILocator>();
             MainDI.SetupDaos();
             MainDI.SetupControllers();
         }

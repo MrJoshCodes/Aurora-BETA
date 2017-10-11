@@ -1,5 +1,5 @@
 ﻿using AuroraEmu.Game.Clients;
-using AuroraEmu.Game.Items;
+using AuroraEmu.Game.Items.Models;
 using AuroraEmu.Network.Game.Packets.Composers.Items;
 
 namespace AuroraEmu.Network.Game.Packets.Events.Items

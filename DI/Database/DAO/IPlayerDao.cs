@@ -1,5 +1,4 @@
-﻿using AuroraEmu.Database.DAO;
-using AuroraEmu.Game.Players;
+﻿using AuroraEmu.Game.Players.Models;
 
 namespace AuroraEmu.DI.Database.DAO
 {

@@ -1,4 +1,4 @@
-﻿using AuroraEmu.Game.Catalog;
+﻿using AuroraEmu.Game.Catalog.Models;
 using AuroraEmu.Game.Clients;
 using AuroraEmu.Network.Game.Packets.Composers.Catalogue;
 using System.Collections.Generic;

@@ -1,4 +1,4 @@
-﻿using AuroraEmu.Game.Items;
+﻿using AuroraEmu.Game.Items.Models;
 
 namespace AuroraEmu.Network.Game.Packets.Composers.Items
 {

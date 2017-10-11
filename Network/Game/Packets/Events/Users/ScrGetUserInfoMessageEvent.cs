@@ -1,5 +1,5 @@
 ﻿using AuroraEmu.Game.Clients;
-using AuroraEmu.Game.Subscription;
+using AuroraEmu.Game.Subscription.Models;
 using AuroraEmu.Network.Game.Packets.Composers.Users;
 
 namespace AuroraEmu.Network.Game.Packets.Events.Users

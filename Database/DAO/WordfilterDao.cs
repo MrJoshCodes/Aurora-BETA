@@ -1,6 +1,6 @@
 ﻿using AuroraEmu.DI.Database.DAO;
 using System.Collections.Generic;
-using AuroraEmu.Game.Wordfilter;
+using AuroraEmu.Game.Wordfilter.Models;
 
 namespace AuroraEmu.Database.DAO
 {

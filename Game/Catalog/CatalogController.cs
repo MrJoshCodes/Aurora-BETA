@@ -2,6 +2,8 @@
 using AuroraEmu.DI.Game.Catalog;
 using System;
 using System.Linq;
+using AuroraEmu.Game.Catalog.Vouchers;
+using AuroraEmu.Game.Catalog.Models;
 
 namespace AuroraEmu.Game.Catalog
 {
@@ -10,14 +12,14 @@ namespace AuroraEmu.Game.Catalog
         private readonly Dictionary<int, List<CatalogDealItem>> _deals;
         private readonly Dictionary<int, CatalogPage> _pages;
         private readonly Dictionary<int, CatalogProduct> _products;
-        public Dictionary<string, Voucher.Voucher> Vouchers { get; }
+        public Dictionary<string, Voucher> Vouchers { get; }
 
         public CatalogController()
         {
             _deals = new Dictionary<int, List<CatalogDealItem>>();
             _pages = new Dictionary<int, CatalogPage>();
             _products = new Dictionary<int, CatalogProduct>();
-            Vouchers = new Dictionary<string, Voucher.Voucher>();
+            Vouchers = new Dictionary<string, Voucher>();
 
             ReloadPages();
             ReloadProducts();
@@ -48,9 +50,6 @@ namespace AuroraEmu.Game.Catalog
                     return "";
             }
         }
-
-        public List<CatalogDealItem> GetDeal(int dealId) =>
-            _deals.TryGetValue(dealId, out List<CatalogDealItem> dealItems) ? dealItems : null;
 
         public void ReloadProducts()
         {
@@ -84,6 +83,9 @@ namespace AuroraEmu.Game.Catalog
 
         public CatalogProduct GetProduct(int id) =>
             _products.TryGetValue(id, out CatalogProduct product) ? product : null;
+
+        public List<CatalogDealItem> GetDeal(int dealId) =>
+            _deals.TryGetValue(dealId, out List<CatalogDealItem> dealItems) ? dealItems : null;
 
         public List<CatalogPage> GetPages(int parent) =>
             _pages.Values.Where(page => page.ParentId == parent).ToList();

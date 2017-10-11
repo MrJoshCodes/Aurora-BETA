@@ -1,7 +1,5 @@
-﻿using AuroraEmu.Game.Badges;
-using System;
+﻿using AuroraEmu.Game.Badges.Models;
 using System.Collections.Generic;
-using System.Text;
 
 namespace AuroraEmu.Network.Game.Packets.Composers.Inventory.Badges
 {

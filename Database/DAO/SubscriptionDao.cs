@@ -1,5 +1,5 @@
 ﻿using AuroraEmu.DI.Database.DAO;
-using AuroraEmu.Game.Subscription;
+using AuroraEmu.Game.Subscription.Models;
 using MySql.Data.MySqlClient;
 using System.Collections.Generic;
 

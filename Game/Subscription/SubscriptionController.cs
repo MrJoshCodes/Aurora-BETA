@@ -1,4 +1,5 @@
 ﻿using AuroraEmu.DI.Game.Subscription;
+using AuroraEmu.Game.Subscription.Models;
 using System.Collections.Generic;
 
 namespace AuroraEmu.Game.Subscription

@@ -1,17 +1,17 @@
-﻿using AuroraEmu.Game.Players;
-using AuroraEmu.Network.Game.Packets;
+﻿using AuroraEmu.Network.Game.Packets;
 using DotNetty.Transport.Channels;
 using System.Collections.Generic;
-using AuroraEmu.Game.Rooms;
-using AuroraEmu.Game.Items;
 using AuroraEmu.Game.Rooms.User;
 using AuroraEmu.Game.Players.Components;
 using DotNetty.Buffers;
-using AuroraEmu.Game.Subscription;
 using System;
 using AuroraEmu.Network.Game.Packets.Composers.Users;
 using AuroraEmu.Network.Game.Packets.Composers.Misc;
 using AuroraEmu.Network.Game.Packets.Composers.Moderation;
+using AuroraEmu.Game.Items.Models;
+using AuroraEmu.Game.Players.Models;
+using AuroraEmu.Game.Rooms.Models;
+using AuroraEmu.Game.Subscription.Models;
 
 namespace AuroraEmu.Game.Clients
 {

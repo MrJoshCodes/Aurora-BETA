@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
 using AuroraEmu.DI.Database.DAO;
 using AuroraEmu.Game.Clients;
-using AuroraEmu.Game.Messenger;
-using AuroraEmu.Game.Players;
+using AuroraEmu.Game.Messenger.Models;
+using AuroraEmu.Game.Players.Models;
 
 namespace AuroraEmu.Database.DAO
 {

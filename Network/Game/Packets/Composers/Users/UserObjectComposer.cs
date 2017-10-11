@@ -1,4 +1,4 @@
-﻿using AuroraEmu.Game.Players;
+﻿using AuroraEmu.Game.Players.Models;
 
 namespace AuroraEmu.Network.Game.Packets.Composers.Users
 {
@@ -7,7 +7,7 @@ namespace AuroraEmu.Network.Game.Packets.Composers.Users
         public UserObjectComposer(Player player)
             : base(5)
         {
-            AppendString($"{player.Id}");
+            AppendString(player.Id.ToString());
             AppendString(player.Username);
             AppendString(player.Figure);
             AppendString(player.Gender);

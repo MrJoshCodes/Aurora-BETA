@@ -1,5 +1,5 @@
 ﻿using AuroraEmu.Game.Clients;
-using AuroraEmu.Game.Items.Dimmer;
+using AuroraEmu.Game.Items.Models.Dimmer;
 using AuroraEmu.Network.Game.Packets.Composers.Items;
 using System.Linq;
 

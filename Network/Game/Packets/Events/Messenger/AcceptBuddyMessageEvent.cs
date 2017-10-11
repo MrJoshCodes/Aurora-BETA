@@ -1,7 +1,7 @@
 ﻿using System;
 using AuroraEmu.Game.Clients;
-using AuroraEmu.Game.Messenger;
 using AuroraEmu.Network.Game.Packets.Composers.Messenger;
+using AuroraEmu.Game.Messenger.Models;
 
 namespace AuroraEmu.Network.Game.Packets.Events.Messenger
 {

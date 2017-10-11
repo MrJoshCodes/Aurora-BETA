@@ -1,5 +1,5 @@
 ﻿using AuroraEmu.DI.Game.Clients;
-using AuroraEmu.Game.Players;
+using AuroraEmu.Game.Players.Models;
 using DotNetty.Transport.Channels;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,7 +8,7 @@ namespace AuroraEmu.Game.Clients
 {
     public class ClientController : IClientController
     {
-        public Dictionary<IChannelId, Client> Clients { get; private set; }
+        public Dictionary<IChannelId, Client> Clients { get; }
 
         public ClientController()
         {
@@ -46,6 +46,12 @@ namespace AuroraEmu.Game.Clients
         public void RemoveClient(IChannel channel) =>
             Clients.Remove(channel.Id);
 
+        public Client GetClientByHabbo(int habboId) =>
+            Clients.Values.Where(x => x.Player.Id == habboId).SingleOrDefault();
+
+        public Client GetClientByHabbo(string habboName) =>
+            Clients.Values.Where(x => x.Player.Username == habboName).SingleOrDefault();
+
         public bool TryGetPlayer(int playerId, out Player player)
         {
             foreach (Client client in Clients.Values)
@@ -62,11 +68,5 @@ namespace AuroraEmu.Game.Clients
 
             return false;
         }
-
-        public Client GetClientByHabbo(int habboId) =>
-            Clients.Values.Where(x => x.Player.Id == habboId).SingleOrDefault();
-
-        public Client GetClientByHabbo(string habboName) =>
-            Clients.Values.Where(x => x.Player.Username == habboName).SingleOrDefault();
     }
 }

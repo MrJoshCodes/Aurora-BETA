@@ -1,4 +1,4 @@
-﻿using AuroraEmu.Game.Items.Dimmer;
+﻿using AuroraEmu.Game.Items.Models.Dimmer;
 
 namespace AuroraEmu.Network.Game.Packets.Composers.Items
 {

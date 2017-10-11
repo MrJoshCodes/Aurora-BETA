@@ -1,4 +1,5 @@
-﻿using AuroraEmu.Network.Game.Packets.Composers.Users;
+﻿using AuroraEmu.Game.Rooms.Models;
+using AuroraEmu.Network.Game.Packets.Composers.Users;
 using System;
 using System.Collections.Generic;
 using System.Threading;
@@ -31,8 +32,8 @@ namespace AuroraEmu.Game.Rooms.Components
         private void Loop()
         {
             room.Loop();
-            if (idleRoom > 120)
-                room.Dispose();
+
+            if (idleRoom > 120) room.Dispose();
 
             if (!(room.Actors.Count > 0))
                 idleRoom++;

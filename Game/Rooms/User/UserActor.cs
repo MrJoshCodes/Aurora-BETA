@@ -1,4 +1,5 @@
 ﻿using AuroraEmu.Game.Clients;
+using AuroraEmu.Game.Rooms.Models;
 
 namespace AuroraEmu.Game.Rooms.User
 {
@@ -6,6 +7,7 @@ namespace AuroraEmu.Game.Rooms.User
     {
         public Client UserClient;
         public int UserVirtualId;
+        public override ActorType Type => ActorType.User;
 
         public UserActor(Client client, int virtualId)
             : base(client, virtualId)

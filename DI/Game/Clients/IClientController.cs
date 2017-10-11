@@ -1,5 +1,5 @@
 ﻿using AuroraEmu.Game.Clients;
-using AuroraEmu.Game.Players;
+using AuroraEmu.Game.Players.Models;
 using DotNetty.Transport.Channels;
 using System.Collections.Generic;
 

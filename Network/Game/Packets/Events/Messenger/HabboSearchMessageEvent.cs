@@ -1,5 +1,5 @@
 ﻿using AuroraEmu.Game.Clients;
-using AuroraEmu.Game.Messenger;
+using AuroraEmu.Game.Messenger.Models;
 using AuroraEmu.Network.Game.Packets.Composers.Messenger;
 using System.Collections.Generic;
 

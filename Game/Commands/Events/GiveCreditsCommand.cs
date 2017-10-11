@@ -1,6 +1,6 @@
 ﻿using AuroraEmu.Game.Clients;
 using AuroraEmu.Network.Game.Packets.Composers.Misc;
-using AuroraEmu.Game.Players;
+using AuroraEmu.Game.Players.Models;
 
 namespace AuroraEmu.Game.Commands.Events
 {

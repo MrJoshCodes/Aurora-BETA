@@ -1,4 +1,4 @@
-﻿using AuroraEmu.Game;
+﻿using AuroraEmu.Game.Tasks;
 using System;
 using System.Threading;
 using System.Threading.Tasks;

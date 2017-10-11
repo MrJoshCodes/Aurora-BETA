@@ -1,4 +1,4 @@
-﻿using AuroraEmu.Game.Subscription;
+﻿using AuroraEmu.Game.Subscription.Models;
 
 namespace AuroraEmu.Network.Game.Packets.Composers.Users
 {
