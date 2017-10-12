@@ -10,20 +10,27 @@ namespace AuroraEmu.Game.Rooms
     public class RoomGrid : IDisposable
     {
         private Room _room;
-        private Dictionary<(int, int), Item> _itemAt;
+        private Dictionary<(int, int), RoomPoint> _tileAt;
         public bool[,] EntityGrid { get; }
 
         public RoomGrid(Room room)
         {
             _room = room;
-            _itemAt = new Dictionary<(int, int), Item>();
+            _tileAt = new Dictionary<(int, int), RoomPoint>();
+            for (int x = 0; x < _room.Map.MapSize.Item1; x++)
+            {
+                for (int y = 0; y < _room.Map.MapSize.Item2; y++)
+                {
+                    _tileAt.Add((x, y), new RoomPoint(x, y));
+                }
+            }
+
             foreach (Item item in _room.Items.Values.Where(x => (x.Position.X != 0 && x.Position.Y != 0)))
             {
-                if (item.Definition.Width > 1 || item.Definition.Length > 1)
-                    foreach (Point2D tile in item.AffectedTiles)
-                        _itemAt.Add((tile.X, tile.Y), item);
-
-                _itemAt.Add((item.Position.X, item.Position.Y), item);
+                foreach (Point2D tile in item.Tiles())
+                {
+                    _tileAt[(tile.X, tile.Y)].Items.Add(item);
+                }
             }
             EntityGrid = new bool[_room.Map.MapSize.Item1, _room.Map.MapSize.Item2];
         }
@@ -35,10 +42,10 @@ namespace AuroraEmu.Game.Rooms
         /// <param name="item">The object</param>
         public void PickupObject(Item item)
         {
-            if (item.Definition.Length > 1 || item.Definition.Width > 1)
-                foreach (Point2D point in item.AffectedTiles)
-                    _itemAt.Remove((point.X, point.Y));
-            _itemAt.Remove((item.Position.X, item.Position.Y));
+            foreach (Point2D point in item.Tiles())
+            {
+                _tileAt[(point.X, point.Y)].Items.Remove(item);
+            }
         }
 
         /// <summary>
@@ -51,7 +58,7 @@ namespace AuroraEmu.Game.Rooms
         /// <returns>true if it's able to place else false</returns>
         public bool PlaceObject(int x, int y, int rot, Item item)
         {
-            if (ItemAt(x, y) != null)
+            if (ItemsAt(x, y).Count > 0)
                 return false;
             if (EntityGrid[x, y])
                 return false;
@@ -59,12 +66,18 @@ namespace AuroraEmu.Game.Rooms
             if (item.Definition.Length > 1 || item.Definition.Width > 1)
             {
                 foreach (Point2D point in Utilities.Extensions.AffectedTiles(item.Definition.Length, item.Definition.Width, x, y, rot))
-                    if (ItemAt(point) != null)
+                {
+                    if (ItemsAt(point).Count > 0)
+                    {
                         return false;
+                    }
                     else
-                        _itemAt.Add((point.X, point.Y), item);
+                    {
+                        _tileAt[(point.X, point.Y)].Items.Add(item);
+                    }
+                }
             }
-            _itemAt.Add((x, y), item);
+            _tileAt[(x, y)].Items.Add(item);
             return true;
         }
 
@@ -78,7 +91,7 @@ namespace AuroraEmu.Game.Rooms
         /// <returns>True if it succeeded else false</returns>
         public bool MoveItem(Item item, int rot, int newX, int newY)
         {
-            if (ItemAt(newX, newY) != null)
+            if (ItemsAt(newX, newY).Count > 0)
                 return false;
             if (EntityGrid[newX, newY])
                 return false;
@@ -87,16 +100,23 @@ namespace AuroraEmu.Game.Rooms
             {
                 var affectedTiles = Utilities.Extensions.AffectedTiles(item.Definition.Length, item.Definition.Width, newX, newY, rot);
                 foreach (Point2D point in affectedTiles)
-                    if (ItemAt(point) != null)
+                {
+                    if (ItemsAt(point).Count > 0)
+                    {
                         return false;
+                    }
                     else
-                        _itemAt.Add((point.X, point.Y), item);
+                    {
+                        _tileAt[(point.X, point.Y)].Items.Add(item);
+                    }
+                }
 
                 foreach (Point2D point in item.AffectedTiles)
-                    _itemAt.Remove((point.X, point.Y));
+                    _tileAt[(point.X, point.Y)].Items.Remove(item);
             }
-            _itemAt.Remove((item.Position.X, item.Position.Y));
-            _itemAt.Add((newX, newY), item);
+
+            _tileAt[(item.Position.X, item.Position.Y)].Items.Remove(item);
+            _tileAt[(newX, newY)].Items.Add(item);
             return true;
         }
 
@@ -108,17 +128,23 @@ namespace AuroraEmu.Game.Rooms
         /// <returns>True if it succeeded else false</returns>
         public bool RotateItem(Item item, int rot)
         {
-           if (item.Definition.Length > 1 || item.Definition.Width > 1)
+            if (item.Definition.Length > 1 || item.Definition.Width > 1)
             {
                 var affectedTiles = Utilities.Extensions.AffectedTiles(item.Definition.Length, item.Definition.Width, item.Position.X, item.Position.Y, rot);
                 foreach (Point2D point in affectedTiles)
-                    if (ItemAt(point.X, point.Y) != null)
+                {
+                    if (ItemsAt(point.X, point.Y).Count > 0)
+                    {
                         return false;
+                    }
                     else
-                        _itemAt.Add((point.X, point.Y), item);
+                    {
+                        _tileAt[(point.X, point.Y)].Items.Add(item);
+                    }
+                }
 
                 foreach (Point2D point in item.AffectedTiles)
-                    _itemAt.Remove((point.X, point.Y));
+                    _tileAt[(point.X, point.Y)].Items.Remove(item);
             }
             return true;
         }
@@ -138,8 +164,11 @@ namespace AuroraEmu.Game.Rooms
             if (EntityGrid[x, y])
                 return false;
 
-            if (_itemAt.TryGetValue((x, y), out Item item))
+
+            if (ItemsAt(x, y).Count > 0)
             {
+                Item item = ItemsAt(x, y)[0];
+
                 if (actor.TargetPoint.X == x && actor.TargetPoint.Y == y)
                     if (item.Definition.ItemType == "seat")
                         return true;
@@ -155,28 +184,26 @@ namespace AuroraEmu.Game.Rooms
 
         /// <summary>
         /// Gets the item at a specific tile, instead of looping through all items
-        /// I use native method TryGetValue();
+        /// and checking by value.
         /// </summary>
         /// <param name="point">The Point (Coordination)</param>
         /// <returns>The item if it exists else null</returns>
-        public Item ItemAt(Point2D point)
+        public List<Item> ItemsAt(Point2D point)
         {
-            if (_itemAt.TryGetValue((point.X, point.Y), out Item item))
-                return item;
-            return null;
+            return _tileAt[(point.X, point.Y)].Items;
         }
 
-        public Item ItemAt(int x, int y)
+        public List<Item> ItemsAt(int x, int y)
         {
-            if (_itemAt.TryGetValue((x, y), out Item item))
-                return item;
-            return null;
+            return _tileAt[(x, y)].Items;
         }
 
         public void Dispose()
         {
-            _itemAt.Clear();
-            _itemAt = null;
+            foreach (RoomPoint point in _tileAt.Values)
+                point.Dispose();
+            _tileAt.Clear();
+            _tileAt = null;
         }
     }
 }

@@ -2,6 +2,7 @@
 using AuroraEmu.Game.Rooms.Models;
 using AuroraEmu.Game.Rooms.Pathfinder;
 using System;
+using System.Collections.Generic;
 
 namespace AuroraEmu.Game.Rooms.Components
 {
@@ -17,7 +18,7 @@ namespace AuroraEmu.Game.Rooms.Components
                 actor.Position.Z = Math.Round(room.Map.TileHeights[actor.Position.X, actor.Position.Y], 1);
 
                 if (actor.Position.Equals(actor.TargetPoint))
-                    UpdateUserStatus(actor, room.Grid.ItemAt(actor.Position));
+                    UpdateUserStatus(actor, room.Grid.ItemsAt(actor.Position));
 
                 actor.UpdateNeeded = true;
                 actor.SetStep = false;
@@ -84,10 +85,11 @@ namespace AuroraEmu.Game.Rooms.Components
             }
         }
 
-        private void UpdateUserStatus(RoomActor actor, Item item)
+        private void UpdateUserStatus(RoomActor actor, List<Item> items)
         {
-            if (item != null)
+            if (items.Count > 0)
             {
+                Item item = items[0];
                 item.ActorOnItem = actor;
                 if (item.Definition.ItemType == "seat")
                 {
