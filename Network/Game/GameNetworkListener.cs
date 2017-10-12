@@ -25,7 +25,7 @@ namespace AuroraEmu.Network.Game
                     .ChildOption(ChannelOption.SoReuseaddr, true)
                     .ChildOption(ChannelOption.SoRcvbuf, 1024)
                     .ChildOption(ChannelOption.RcvbufAllocator, new FixedRecvByteBufAllocator(1024))
-                    .ChildOption(ChannelOption.Allocator, PooledByteBufferAllocator.Default);
+                    .ChildOption(ChannelOption.Allocator, UnpooledByteBufferAllocator.Default);
                 await bootstrap.BindAsync(30000);
                 Engine.Logger.Info($"Server is now listening on port: {30000}!");
             }

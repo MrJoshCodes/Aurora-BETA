@@ -10,7 +10,7 @@ namespace AuroraEmu.Network.Game.Packets.Events.Rooms.Items
         {
             if (client.CurrentRoomId < 1)
                 return;
-            if (!client.CurrentRoom.UserRights.Contains(client.Player.Id) ||
+            if (!client.CurrentRoom.UserRights.Contains(client.Player.Id) &&
                 client.CurrentRoom.OwnerId != client.Player.Id) return;
 
             string placementData = msg.ReadString();
@@ -19,6 +19,7 @@ namespace AuroraEmu.Network.Game.Packets.Events.Rooms.Items
 
             if (client.Items.TryGetValue(itemId, out Item item))
             {
+
                 if (item != null)
                 {
                     if (dataBits[1].StartsWith(":"))

@@ -24,6 +24,12 @@ namespace AuroraEmu.Game.Items.Models
         public Point2D Position { get; set; }
         public IList<Point2D> AffectedTiles =>
             Utilities.Extensions.AffectedTiles(Definition.Length, Definition.Width, Position.X, Position.Y, Rotation);
+        public IList<Point2D> Tiles()
+        {
+            IList<Point2D> tiles = Utilities.Extensions.AffectedTiles(Definition.Length, Definition.Width, Position.X, Position.Y, Rotation);
+            tiles.Add(Position);
+            return tiles;
+        }
 
         public Item(int id, int ownerId, int definitionId, string data)
         {

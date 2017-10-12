@@ -19,10 +19,10 @@ namespace AuroraEmu.Game.Catalog
         public CatalogController(ICatalogDao dao)
         {
             Dao = dao;
+            Vouchers = new Dictionary<string, Voucher>();
             _deals = new Dictionary<int, List<CatalogDealItem>>();
             _pages = new Dictionary<int, CatalogPage>();
             _products = new Dictionary<int, CatalogProduct>();
-            Vouchers = new Dictionary<string, Voucher>();
 
             ReloadPages();
             ReloadProducts();
