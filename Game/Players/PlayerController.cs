@@ -1,4 +1,5 @@
-﻿using AuroraEmu.DI.Game.Players;
+﻿using AuroraEmu.DI.Database.DAO;
+using AuroraEmu.DI.Game.Players;
 using AuroraEmu.Game.Players.Models;
 using System.Collections.Concurrent;
 
@@ -9,9 +10,11 @@ namespace AuroraEmu.Game.Players
         private readonly ConcurrentDictionary<int, Player> _playersById;
         private readonly ConcurrentDictionary<int, string> _playerNamesById;
         private readonly ConcurrentDictionary<string, Player> _playersByName;
+        public IPlayerDao Dao { get; }
 
-        public PlayerController()
+        public PlayerController(IPlayerDao dao)
         {
+            Dao = dao;
             _playersById = new ConcurrentDictionary<int, Player>();
             _playerNamesById = new ConcurrentDictionary<int, string>();
             _playersByName = new ConcurrentDictionary<string, Player>();
@@ -22,7 +25,7 @@ namespace AuroraEmu.Game.Players
             if (_playersById.TryGetValue(id, out Player player))
                 return player;
 
-            Player result = Engine.MainDI.PlayerDao.GetPlayerById(id);
+            Player result = Dao.GetPlayerById(id);
             if (result != null)
             {
                 _playersById.TryAdd(player.Id, player);
@@ -34,7 +37,7 @@ namespace AuroraEmu.Game.Players
 
         public Player GetPlayerBySSO(string sso)
         {
-            Player newPlayer = Engine.MainDI.PlayerDao.GetPlayerBySSO(sso);
+            Player newPlayer = Dao.GetPlayerBySSO(sso);
             if (newPlayer != null)
             {
                 _playersById.AddOrUpdate(newPlayer.Id, newPlayer, (oldkey, oldvalue) => newPlayer);
@@ -50,7 +53,7 @@ namespace AuroraEmu.Game.Players
             if (_playerNamesById.TryGetValue(id, out string name))
                 return name;
 
-            Engine.MainDI.PlayerDao.GetPlayerNameById(id, out name);
+            Dao.GetPlayerNameById(id, out name);
             return name;
         }
 
@@ -59,7 +62,7 @@ namespace AuroraEmu.Game.Players
             if (_playersByName.TryGetValue(name, out Player player))
                 return player;
 
-            Player newPlayer = Engine.MainDI.PlayerDao.GetPlayerByName(name);
+            Player newPlayer = Dao.GetPlayerByName(name);
             if (newPlayer != null)
                 return newPlayer;
             return null;

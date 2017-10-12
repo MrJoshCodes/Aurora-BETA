@@ -10,7 +10,7 @@ namespace AuroraEmu.Database.DAO
         {
             wordFilter.Clear();
 
-            using (DatabaseConnection dbConnection = Engine.MainDI.ConnectionPool.PopConnection())
+            using (DatabaseConnection dbConnection = Engine.Locator.ConnectionPool.PopConnection())
             {
                 dbConnection.SetQuery("SELECT * FROM wordfilter");
                 using (var reader = dbConnection.ExecuteReader())

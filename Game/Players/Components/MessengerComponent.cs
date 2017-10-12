@@ -21,7 +21,13 @@ namespace AuroraEmu.Game.Players.Components
         }
 
         public Dictionary<int, MessengerFriend> GetFriends() =>
-            Engine.MainDI.MessengerDao.GetFriendsById(Player.Id, Friends);
+            Engine.Locator.MessengerController.Dao.GetFriendsById(Player.Id, Friends);
+
+        public Dictionary<int, MessengerRequest> GetRequests() =>
+            Engine.Locator.MessengerController.Dao.GetRequestsByPlayerId(Player.Id, Requests);
+
+        public bool IsFriends(int userTwoId) =>
+            Friends.ContainsKey(userTwoId);
 
         public void AddFriend(int id, MessengerFriend friend)
         {
@@ -47,12 +53,6 @@ namespace AuroraEmu.Game.Players.Components
                 return request;
             return null;
         }
-
-        public Dictionary<int, MessengerRequest> GetRequests() =>
-            Engine.MainDI.MessengerDao.GetRequestsByPlayerId(Player.Id, Requests);
-
-        public bool IsFriends(int userTwoId) =>
-            Friends.ContainsKey(userTwoId);
 
         public void Dispose()
         {

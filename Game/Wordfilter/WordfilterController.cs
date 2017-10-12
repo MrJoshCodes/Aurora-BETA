@@ -1,4 +1,5 @@
-﻿using AuroraEmu.DI.Game.Wordfilter;
+﻿using AuroraEmu.DI.Database.DAO;
+using AuroraEmu.DI.Game.Wordfilter;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
@@ -8,9 +9,11 @@ namespace AuroraEmu.Game.Wordfilter
     public class WordfilterController : IWordfilterController
     {
         private readonly List<Models.Wordfilter> _filteredWords;
+        public IWordfilterDao Dao { get; }
 
-        public WordfilterController()
+        public WordfilterController(IWordfilterDao dao)
         {
+            Dao = dao;
             _filteredWords = new List<Models.Wordfilter>();
 
             Init();
@@ -18,8 +21,7 @@ namespace AuroraEmu.Game.Wordfilter
 
         public void Init()
         {
-            Engine.MainDI.WordfilterDao.WordfilterData(_filteredWords);
-
+            Dao.WordfilterData(_filteredWords);
             Engine.Logger.Info($"Loaded {_filteredWords.Count} filtered words.");
         }
 

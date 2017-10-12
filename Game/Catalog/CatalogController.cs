@@ -2,8 +2,9 @@
 using AuroraEmu.DI.Game.Catalog;
 using System;
 using System.Linq;
-using AuroraEmu.Game.Catalog.Vouchers;
+using AuroraEmu.Game.Catalog.Models.Vouchers;
 using AuroraEmu.Game.Catalog.Models;
+using AuroraEmu.DI.Database.DAO;
 
 namespace AuroraEmu.Game.Catalog
 {
@@ -13,9 +14,11 @@ namespace AuroraEmu.Game.Catalog
         private readonly Dictionary<int, CatalogPage> _pages;
         private readonly Dictionary<int, CatalogProduct> _products;
         public Dictionary<string, Voucher> Vouchers { get; }
+        public ICatalogDao Dao { get; }
 
-        public CatalogController()
+        public CatalogController(ICatalogDao dao)
         {
+            Dao = dao;
             _deals = new Dictionary<int, List<CatalogDealItem>>();
             _pages = new Dictionary<int, CatalogPage>();
             _products = new Dictionary<int, CatalogProduct>();
@@ -30,8 +33,7 @@ namespace AuroraEmu.Game.Catalog
         public void ReloadPages()
         {
             _pages.Clear();
-
-            Engine.MainDI.CatalogDao.ReloadCatalogPage(_pages);
+            Dao.ReloadCatalogPage(_pages);
 
             Engine.Logger.Info($"Loaded {_pages.Count} catalogue pages.");
         }
@@ -54,8 +56,7 @@ namespace AuroraEmu.Game.Catalog
         public void ReloadProducts()
         {
             _products.Clear();
-
-            Engine.MainDI.CatalogDao.ReloadProducts(_products);
+            Dao.ReloadProducts(_products);
 
             Engine.Logger.Info($"Loaded {_products.Count} catalogue products.");
         }
@@ -63,8 +64,7 @@ namespace AuroraEmu.Game.Catalog
         public void ReloadDeals()
         {
             _deals.Clear();
-
-            Engine.MainDI.CatalogDao.ReloadDeals(_deals);
+            Dao.ReloadDeals(_deals);
 
             Engine.Logger.Info($"Loaded {_deals.Count} deals.");
         }
@@ -72,8 +72,7 @@ namespace AuroraEmu.Game.Catalog
         public void ReloadVouchers()
         {
             Vouchers.Clear();
-
-            Engine.MainDI.CatalogDao.ReloadVouchers(Vouchers);
+            Dao.ReloadVouchers(Vouchers);
 
             Engine.Logger.Info($"Loaded {Vouchers.Count} vouchers.");
         }

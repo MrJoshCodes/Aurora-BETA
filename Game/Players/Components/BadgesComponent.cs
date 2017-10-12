@@ -16,7 +16,7 @@ namespace AuroraEmu.Game.Players.Components
         {
             _playerId = playerId;
 
-            Badges = Engine.MainDI.BadgesDao.GetBadges(_playerId);
+            Badges = Engine.Locator.BadgeController.Dao.GetBadges(_playerId);
         }
 
         public bool TryGetBadge(string badge, out Badge b)
@@ -29,11 +29,11 @@ namespace AuroraEmu.Game.Players.Components
         public void ClearBadgeSlots()
         {
             Badges.Values.ForEach(badge => badge.Slot = 0);
-            Engine.MainDI.BadgesDao.ClearBadgeSlots(_playerId);
+            Engine.Locator.BadgeController.Dao.ClearBadgeSlots(_playerId);
         }
 
         public void UpdateBadgeSlots(List<(int, int)> list) =>
-            Engine.MainDI.BadgesDao.UpdateBadgeSlots(_playerId, list);
+            Engine.Locator.BadgeController.Dao.UpdateBadgeSlots(_playerId, list);
 
         public List<Badge> GetEquippedBadges() =>
             Badges.Values.Where(badge => badge.Slot != 0).ToList();

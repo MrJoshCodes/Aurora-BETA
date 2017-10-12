@@ -30,7 +30,7 @@ namespace AuroraEmu.Network.Game.Packets.Composers.Navigator
                         
                         break;
                     case 3:
-                        var room = Engine.MainDI.RoomController.GetRoom(item.RoomId);
+                        var room = Engine.Locator.RoomController.GetRoom(item.RoomId);
                         
                         AppendString("");
                         AppendVL64(room.Id);

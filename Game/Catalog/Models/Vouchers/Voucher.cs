@@ -1,7 +1,7 @@
 ﻿using MySql.Data.MySqlClient;
 using System;
 
-namespace AuroraEmu.Game.Catalog.Vouchers
+namespace AuroraEmu.Game.Catalog.Models.Vouchers
 {
     public class Voucher
     {

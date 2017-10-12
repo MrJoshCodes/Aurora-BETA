@@ -8,8 +8,8 @@ namespace AuroraEmu.Network.Game.Packets.Events.Messenger
         public void Run(Client client, MessageEvent msg)
         {
             int userId = msg.ReadVL64();
-            string message = Engine.MainDI.WorldfilterController.CheckString(msg.ReadString());
-            Client targetClient = Engine.MainDI.ClientController.GetClientByHabbo(userId);
+            string message = Engine.Locator.WorldfilterController.CheckString(msg.ReadString());
+            Client targetClient = Engine.Locator.ClientController.GetClientByHabbo(userId);
             targetClient.SendComposer(new NewConsoleMessageComposer(message, client.Player.Id));
         }
     }

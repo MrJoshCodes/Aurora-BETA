@@ -9,7 +9,7 @@ namespace AuroraEmu.Network.Game.Packets.Events.Navigator
         {
             string search = msgEvent.ReadString();
 
-            client.SendComposer(new GuestRoomSearchResultComposer(9, search, Engine.MainDI.NavigatorController.SearchRooms(search)));
+            client.SendComposer(new GuestRoomSearchResultComposer(9, search, Engine.Locator.NavigatorController.SearchRooms(search)));
         }
     }
 }

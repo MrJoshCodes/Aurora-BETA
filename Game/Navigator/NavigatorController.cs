@@ -3,6 +3,7 @@ using AuroraEmu.DI.Game.Navigator;
 using System.Linq;
 using AuroraEmu.Game.Navigator.Models;
 using AuroraEmu.Game.Rooms.Models;
+using AuroraEmu.DI.Database.DAO;
 
 namespace AuroraEmu.Game.Navigator
 {
@@ -10,10 +11,11 @@ namespace AuroraEmu.Game.Navigator
     {
         public Dictionary<int, FrontpageItem> FrontpageItems { get; set; }
         public Dictionary<int, RoomCategory> Categories { get; set; }
+        public INavigatorDao Dao { get; }
 
-
-        public NavigatorController()
+        public NavigatorController(INavigatorDao dao)
         {
+            Dao = dao;
             FrontpageItems = new Dictionary<int, FrontpageItem>();
             Categories = new Dictionary<int, RoomCategory>();
 
@@ -23,24 +25,24 @@ namespace AuroraEmu.Game.Navigator
 
         public void ReloadFrontpageItems()
         {
-            Engine.MainDI.NavigatorDao.ReloadFrontpageItems(FrontpageItems);
+            Dao.ReloadFrontpageItems(FrontpageItems);
             Engine.Logger.Info($"Loaded {FrontpageItems.Count} navigator frontpage items.");
         }
 
         public void ReloadCategories()
         {
-            Engine.MainDI.NavigatorDao.ReloadCategories(Categories);
+            Dao.ReloadCategories(Categories);
             Engine.Logger.Info($"Loaded {Categories.Count} room categories.");
         }
 
         public List<Room> GetRoomsByOwner(int ownerId) =>
-            Engine.MainDI.NavigatorDao.GetRoomsByOwner(ownerId);
+            Dao.GetRoomsByOwner(ownerId);
 
         public List<Room> SearchRooms(string search) =>
-            Engine.MainDI.NavigatorDao.SearchRooms(search);
+            Dao.SearchRooms(search);
 
         public List<Room> GetRoomsByFriends(int playerId) =>
-            Engine.MainDI.NavigatorDao.GetRoomsByFriends(playerId);
+            Dao.GetRoomsByFriends(playerId);
 
         public List<RoomCategory> GetUserCategories(byte rank) =>
             Categories.Values.Where(catecory => catecory.MinRank <= rank).ToList();

@@ -7,7 +7,7 @@ namespace AuroraEmu.Network.Game.Packets.Events.Navigator
     {
         public void Run(Client client, MessageEvent msgEvent)
         {
-            client.SendComposer(new PopularRoomTagsResultComposer(Engine.MainDI.NavigatorController.Categories.Values));
+            client.SendComposer(new PopularRoomTagsResultComposer(Engine.Locator.NavigatorController.Categories.Values));
         }
     }
 }

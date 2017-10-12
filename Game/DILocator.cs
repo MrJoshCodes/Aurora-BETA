@@ -1,7 +1,7 @@
 ﻿using AuroraEmu.DI.Config;
 using AuroraEmu.DI.Database;
-using AuroraEmu.DI.Database.DAO;
 using AuroraEmu.DI.Game;
+using AuroraEmu.DI.Game.Badges;
 using AuroraEmu.DI.Game.Catalog;
 using AuroraEmu.DI.Game.Clients;
 using AuroraEmu.DI.Game.Commands;
@@ -21,6 +21,7 @@ namespace AuroraEmu.Game
     public class DILocator
     {
         private readonly IDependencyLocator _locator;
+        public IBadgeController BadgeController { get; private set; }
         public ICatalogController CatalogController { get; private set; }
         public IClientController ClientController { get; private set; } 
         public IItemController ItemController { get; private set; }
@@ -38,16 +39,6 @@ namespace AuroraEmu.Game
         public IGameNetworkListener GameNetworkListener { get; private set; }
         public ISubscriptionController SubscriptionController { get; private set; }
 
-        public ICatalogDao CatalogDao { get; private set; }
-        public IItemDao ItemDao { get; private set; }
-        public IMessengerDao MessengerDao { get; private set; }
-        public INavigatorDao NavigatorDao { get; private set; }
-        public IPlayerDao PlayerDao { get; private set; }
-        public IRoomDao RoomDao { get; private set; }
-        public IWordfilterDao WordfilterDao { get; private set; }
-        public IBadgesDao BadgesDao { get; private set; }
-        public ISubscriptionDao SubscriptionDao { get; private set; }
-
         public DILocator(IDependencyLocator locator)
         {
             _locator = locator;
@@ -55,6 +46,7 @@ namespace AuroraEmu.Game
 
         public void SetupControllers()
         {
+            BadgeController = _locator.Resolve<IBadgeController>();
             ConfigController = _locator.Resolve<IConfigController>();
             ConnectionPool = _locator.Resolve<IConnectionPool>();
             PlayerController = _locator.Resolve<IPlayerController>();
@@ -71,19 +63,6 @@ namespace AuroraEmu.Game
             CommandController = _locator.Resolve<ICommandController>();
             GameNetworkListener = _locator.Resolve<IGameNetworkListener>();
             SubscriptionController = _locator.Resolve<ISubscriptionController>();
-        }
-
-        public void SetupDaos()
-        {
-            CatalogDao = _locator.Resolve<ICatalogDao>();
-            ItemDao = _locator.Resolve<IItemDao>();
-            MessengerDao = _locator.Resolve<IMessengerDao>();
-            NavigatorDao = _locator.Resolve<INavigatorDao>();
-            PlayerDao = _locator.Resolve<IPlayerDao>();
-            RoomDao = _locator.Resolve<IRoomDao>();
-            WordfilterDao = _locator.Resolve<IWordfilterDao>();
-            BadgesDao = _locator.Resolve<IBadgesDao>();
-            SubscriptionDao = _locator.Resolve<ISubscriptionDao>();
         }
     }
 }

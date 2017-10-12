@@ -29,7 +29,7 @@ namespace AuroraEmu.Network.Game.Packets.Events.Rooms.Items
 
                         client.Items.Remove(itemId);
                         client.CurrentRoom.Items.AddOrUpdate(itemId, item, (oldkey, newkey) => item);
-                        Engine.MainDI.ItemController.AddWallItem(itemId, wallPosition, client.CurrentRoom.Id);
+                        Engine.Locator.ItemController.AddWallItem(itemId, wallPosition, client.CurrentRoom.Id);
                         client.CurrentRoom.SendComposer(new ItemAddMessageComposer(item));
                         client.CurrentRoom.SendComposer(new ItemUpdateMessageComposer(item));
                     }
@@ -48,7 +48,7 @@ namespace AuroraEmu.Network.Game.Packets.Events.Rooms.Items
                         if (client.CurrentRoom.Items.TryAdd(itemId, item))
                         {
                             client.Items.Remove(itemId);
-                            Engine.MainDI.ItemDao.UpdateItem(itemId, x, y, rot, client.CurrentRoom.Id);
+                            Engine.Locator.ItemController.Dao.UpdateItem(itemId, x, y, rot, client.CurrentRoom.Id);
                             client.SendComposer(new Composers.Rooms.FurniListUpdateComposer());
                             client.CurrentRoom.SendComposer(new ObjectAddMessageComposer(item));
                         }

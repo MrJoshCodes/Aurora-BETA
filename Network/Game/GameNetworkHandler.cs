@@ -13,7 +13,7 @@ namespace AuroraEmu.Network.Game
         {
             base.ChannelActive(ctx);
 
-            Engine.MainDI.ClientController.AddClient(ctx.Channel);
+            Engine.Locator.ClientController.AddClient(ctx.Channel);
 
             Engine.Logger.Debug($"Client connected to client: {ctx.Channel.RemoteAddress}");
         }
@@ -21,11 +21,11 @@ namespace AuroraEmu.Network.Game
         public override void ChannelInactive(IChannelHandlerContext ctx)
         {
             base.ChannelInactive(ctx);
-            using (Client client = Engine.MainDI.ClientController.GetClient(ctx.Channel))
+            using (Client client = Engine.Locator.ClientController.GetClient(ctx.Channel))
             {
                 client.Disconnect();
             }
-            Engine.MainDI.ClientController.RemoveClient(ctx.Channel);
+            Engine.Locator.ClientController.RemoveClient(ctx.Channel);
 
             Engine.Logger.Debug($"Client disconnected from client: {ctx.Channel.RemoteAddress}");
         }
@@ -34,7 +34,7 @@ namespace AuroraEmu.Network.Game
 
         public override void ChannelRead(IChannelHandlerContext ctx, object msg)
         {
-            Client client = Engine.MainDI.ClientController.GetClient(ctx.Channel);
+            Client client = Engine.Locator.ClientController.GetClient(ctx.Channel);
             IByteBuffer message = msg as IByteBuffer;
             if (message.GetByte(0) == 60)
             {
@@ -52,7 +52,7 @@ namespace AuroraEmu.Network.Game
                     {
                         IByteBuffer packet = message.ReadBytes(length);
 
-                        Engine.MainDI.PacketController.Handle(client, packet);
+                        Engine.Locator.PacketController.Handle(client, packet);
                     }
                 }
             }

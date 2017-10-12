@@ -14,7 +14,7 @@ namespace AuroraEmu.Network.Game.Packets.Composers.Messenger
 
             foreach (MessengerRequest request in requests.Values)
             {
-                Player senderPlayer = Engine.MainDI.PlayerController.GetPlayerById(request.FromId);
+                Player senderPlayer = Engine.Locator.PlayerController.GetPlayerById(request.FromId);
 
                 AppendVL64(request.FromId);
                 AppendString(senderPlayer.Username);

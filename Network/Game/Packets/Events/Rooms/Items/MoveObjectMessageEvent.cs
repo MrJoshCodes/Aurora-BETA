@@ -27,7 +27,7 @@ namespace AuroraEmu.Network.Game.Packets.Events.Rooms.Items
                 item.Position.Y = y;
                 item.Rotation = rotation;
                 client.CurrentRoom.SendComposer(new ObjectUpdateMessageComposer(item));
-                Engine.MainDI.ItemDao.UpdateItem(itemId, x, y, rotation, client.CurrentRoom.Id);
+                Engine.Locator.ItemController.Dao.UpdateItem(itemId, x, y, rotation, client.CurrentRoom.Id);
             }
         }
     }

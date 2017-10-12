@@ -41,7 +41,7 @@ namespace AuroraEmu.Game.Catalog.Models
             get
             {
                 if (_dealItems == null)
-                    _dealItems = Engine.MainDI.CatalogController.GetDeal(DealId);
+                    _dealItems = Engine.Locator.CatalogController.GetDeal(DealId);
 
                 return _dealItems;
             }
@@ -52,7 +52,7 @@ namespace AuroraEmu.Game.Catalog.Models
             get
             {
                 if (_template == null)
-                    _template = Engine.MainDI.ItemController.GetTemplate(TemplateId);
+                    _template = Engine.Locator.ItemController.GetTemplate(TemplateId);
 
                 return _template;
             }

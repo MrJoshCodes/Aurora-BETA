@@ -11,7 +11,7 @@ namespace AuroraEmu.Game.Messenger.Models
         public string Motto { get; set; }
 
         public Client Client() =>
-            Engine.MainDI.ClientController.GetClientByHabbo(Id);
+            Engine.Locator.ClientController.GetClientByHabbo(Id);
         
         public MessengerSearch(MySqlDataReader reader)
         {

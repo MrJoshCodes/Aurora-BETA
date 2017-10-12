@@ -13,7 +13,7 @@ namespace AuroraEmu.Network.Game.Packets.Events.Rooms.Action
             int userId = msgEvent.ReadVL64();
 
             if (client.CurrentRoom.UserRights.Contains(userId)) return;
-            Client player = Engine.MainDI.ClientController.GetClientByHabbo(userId);
+            Client player = Engine.Locator.ClientController.GetClientByHabbo(userId);
             if (player != null)
             {
                 client.SendComposer(new FlatControllerAddedComposer(player.UserActor));
@@ -24,7 +24,7 @@ namespace AuroraEmu.Network.Game.Packets.Events.Rooms.Action
                 player.SendComposer(new YouAreControllerMessageComposer());
 
                 string json = JsonConvert.SerializeObject(client.CurrentRoom.UserRights);
-                using (DatabaseConnection dbConnection = Engine.MainDI.ConnectionPool.PopConnection())
+                using (DatabaseConnection dbConnection = Engine.Locator.ConnectionPool.PopConnection())
                 {
                     dbConnection.SetQuery("UPDATE rooms SET user_rights = @data WHERE id = @roomId LIMIT 1");
                     dbConnection.AddParameter("@data", json);

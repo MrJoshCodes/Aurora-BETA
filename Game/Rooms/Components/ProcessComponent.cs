@@ -25,7 +25,7 @@ namespace AuroraEmu.Game.Rooms.Components
         {
             _wtoken = new CancellationTokenSource();
 
-            _task = Engine.MainDI.TaskController.ExecutePeriodic(now => Loop(), _wtoken.Token, 500);
+            _task = Engine.Locator.TaskController.ExecutePeriodic(now => Loop(), _wtoken.Token, 500);
             _task.Post(DateTimeOffset.Now);
         }
 

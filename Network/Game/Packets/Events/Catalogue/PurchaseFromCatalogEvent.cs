@@ -15,7 +15,7 @@ namespace AuroraEmu.Network.Game.Packets.Events.Catalogue
             var data = msgEvent.ReadString();
             var unk = msgEvent.ReadVL64(); // TODO: Find this out perhaps..?
 
-            var product = Engine.MainDI.CatalogController.GetProduct(productId);
+            var product = Engine.Locator.CatalogController.GetProduct(productId);
 
             if (product == null) 
                 return;
@@ -41,23 +41,23 @@ namespace AuroraEmu.Network.Game.Packets.Events.Catalogue
 
                 if (product.IsDeal)
                 {
-                    var dealItems = Engine.MainDI.CatalogController.GetDeal(product.DealId);
+                    var dealItems = Engine.Locator.CatalogController.GetDeal(product.DealId);
 
                     foreach (var dealItem in dealItems)
                     {
                         for (var i = 0; i < dealItem.Amount; i++)
                         {
-                            Engine.MainDI.ItemController.GiveItem(client, dealItem.Template, string.Empty);
+                            Engine.Locator.ItemController.GiveItem(client, dealItem.Template, string.Empty);
                         }
                     }
                 }
                 else
                 {
-                    var extraData = Engine.MainDI.CatalogController.GenerateExtraData(product, data).Replace("{USERNAME}", client.Player.Username);
+                    var extraData = Engine.Locator.CatalogController.GenerateExtraData(product, data).Replace("{USERNAME}", client.Player.Username);
                     
                     for (var i = 0; i < product.Amount; i++)
                     {
-                        Engine.MainDI.ItemController.GiveItem(client, product, extraData);
+                        Engine.Locator.ItemController.GiveItem(client, product, extraData);
                     }
                 }
 

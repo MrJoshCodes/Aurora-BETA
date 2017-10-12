@@ -12,11 +12,11 @@ namespace AuroraEmu.Network.Game.Packets.Events.Moderation
             
             var playerId = msgEvent.ReadVL64();
 
-            var player = Engine.MainDI.PlayerController.GetPlayerById(playerId);
+            var player = Engine.Locator.PlayerController.GetPlayerById(playerId);
 
             if (player == null) return;
             
-            client.SendComposer(new ModeratorUserInfoComposer(player, Engine.MainDI.ClientController.GetClientByHabbo(playerId) != null));
+            client.SendComposer(new ModeratorUserInfoComposer(player, Engine.Locator.ClientController.GetClientByHabbo(playerId) != null));
         }
     }
 }

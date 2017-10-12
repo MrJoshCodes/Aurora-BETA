@@ -10,15 +10,15 @@ namespace AuroraEmu.Network.Game.Packets.Events.Messenger
         public void Run(Client client, MessageEvent msg)
         {
             string username = msg.ReadString();
-            Player targetPlayer = Engine.MainDI.PlayerController.GetPlayerByName(username);
+            Player targetPlayer = Engine.Locator.PlayerController.GetPlayerByName(username);
 
-            Engine.MainDI.MessengerDao.CreateRequest(targetPlayer.Id, client);
+            Engine.Locator.MessengerController.Dao.CreateRequest(targetPlayer.Id, client);
             client.Player.MessengerComponent.AddRequest(targetPlayer.Id,
                 new MessengerRequest(client.Player.Id, targetPlayer.Id));
 
             MessengerRequest messengerRequest = client.Player.MessengerComponent.GetRequest(targetPlayer.Id);
 
-            Client targetClient = Engine.MainDI.ClientController.GetClientByHabbo(targetPlayer.Id);
+            Client targetClient = Engine.Locator.ClientController.GetClientByHabbo(targetPlayer.Id);
 
             if (targetClient != null && messengerRequest != null)
                 targetClient.SendComposer(

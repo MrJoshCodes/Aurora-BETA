@@ -29,7 +29,7 @@ namespace AuroraEmu.Game.Rooms.Models
             if (client.LoadingRoomId < 1)
                 return;
 
-            Room room = Engine.MainDI.RoomController.GetRoom(client.LoadingRoomId);
+            Room room = Engine.Locator.RoomController.GetRoom(client.LoadingRoomId);
             Client = client;
             VirtualId = virtualId;
             Rotation = room.Map.DoorRotation;

@@ -8,7 +8,7 @@ namespace AuroraEmu.Database.DAO
         public Player GetPlayerById(int id)
         {
             Player player = null;
-            using (DatabaseConnection dbConnection = Engine.MainDI.ConnectionPool.PopConnection())
+            using (DatabaseConnection dbConnection = Engine.Locator.ConnectionPool.PopConnection())
             {
                 dbConnection.SetQuery(
                     "SELECT id, username, password, email, gender, figure, motto, coins, pixels, rank, home_room, block_friendrequests, sso_ticket FROM players WHERE id = @id;");
@@ -24,7 +24,7 @@ namespace AuroraEmu.Database.DAO
         public Player GetPlayerBySSO(string sso)
         {
             Player player = null;
-            using (DatabaseConnection dbConnection = Engine.MainDI.ConnectionPool.PopConnection())
+            using (DatabaseConnection dbConnection = Engine.Locator.ConnectionPool.PopConnection())
             {
                 dbConnection.SetQuery("SELECT id, username, password, email, gender, figure, motto, coins, pixels, rank, home_room, block_friendrequests, sso_ticket FROM players WHERE sso_ticket = @sso_ticket;");
                 dbConnection.AddParameter("@sso_ticket", sso);
@@ -38,7 +38,7 @@ namespace AuroraEmu.Database.DAO
 
         public string GetPlayerNameById(int id, out string name)
         {
-            using (DatabaseConnection dbConnection = Engine.MainDI.ConnectionPool.PopConnection())
+            using (DatabaseConnection dbConnection = Engine.Locator.ConnectionPool.PopConnection())
             {
                 dbConnection.SetQuery("SELECT username FROM players WHERE id = @id LIMIT 1");
                 dbConnection.AddParameter("@id", id);
@@ -51,7 +51,7 @@ namespace AuroraEmu.Database.DAO
         public Player GetPlayerByName(string username)
         {
             Player player = null;
-            using (DatabaseConnection dbConnection = Engine.MainDI.ConnectionPool.PopConnection())
+            using (DatabaseConnection dbConnection = Engine.Locator.ConnectionPool.PopConnection())
             {
                 dbConnection.SetQuery("SELECT id, username, password, email, gender, figure, motto, coins, pixels, rank, home_room, block_friendrequests, sso_ticket FROM players WHERE username = @username;");
                 dbConnection.AddParameter("@username", username);
@@ -64,7 +64,7 @@ namespace AuroraEmu.Database.DAO
 
         public void UpdateCurrency(int playerId, int amount, string type)
         {
-            using (DatabaseConnection dbConnection = Engine.MainDI.ConnectionPool.PopConnection())
+            using (DatabaseConnection dbConnection = Engine.Locator.ConnectionPool.PopConnection())
             {
                 dbConnection.SetQuery($"UPDATE players SET {type} = @amount WHERE id = @playerId");
                 dbConnection.AddParameter("@amount", amount);

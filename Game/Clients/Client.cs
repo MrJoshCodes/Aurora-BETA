@@ -63,7 +63,7 @@ namespace AuroraEmu.Game.Clients
 
         public void Login(string sso)
         {
-            Player = Engine.MainDI.PlayerController.GetPlayerBySSO(sso);
+            Player = Engine.Locator.PlayerController.GetPlayerBySSO(sso);
 
             if (Player != null)
             {
@@ -80,7 +80,7 @@ namespace AuroraEmu.Game.Clients
                 
                 Player.BadgesComponent = new BadgesComponent(Player.Id);
                 Player.MessengerComponent = new MessengerComponent(Player);
-                Engine.MainDI.SubscriptionController.GetSubscriptionData(SubscriptionData, Player.Id);
+                Engine.Locator.SubscriptionController.GetSubscriptionData(SubscriptionData, Player.Id);
             }
             else
             {
@@ -122,7 +122,7 @@ namespace AuroraEmu.Game.Clients
                 {
                     SubscriptionData.Clear();
                     Items.Clear();
-                    using (var dbConnection = Engine.MainDI.ConnectionPool.PopConnection())
+                    using (var dbConnection = Engine.Locator.ConnectionPool.PopConnection())
                     {
                         dbConnection.SetQuery("UPDATE players SET coins = @coins, pixels = @pixels WHERE id = @id");
                         dbConnection.AddParameter("@coins", player.Coins);

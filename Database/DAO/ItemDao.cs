@@ -12,7 +12,7 @@ namespace AuroraEmu.Database.DAO
     {
         public void ReloadTemplates(Dictionary<int, ItemDefinition> items)
         {
-            using (DatabaseConnection dbConnection = Engine.MainDI.ConnectionPool.PopConnection())
+            using (DatabaseConnection dbConnection = Engine.Locator.ConnectionPool.PopConnection())
             {
                 dbConnection.SetQuery("SELECT * FROM item_definitions;");
                 using (var reader = dbConnection.ExecuteReader())
@@ -25,7 +25,7 @@ namespace AuroraEmu.Database.DAO
         {
             int id = -1;
 
-            using (DatabaseConnection dbConnection = Engine.MainDI.ConnectionPool.PopConnection())
+            using (DatabaseConnection dbConnection = Engine.Locator.ConnectionPool.PopConnection())
             {
                 dbConnection.SetQuery("INSERT INTO items (owner_id, definition_id, data) VALUES (@ownerId, @definitionId, @data)");
                 dbConnection.AddParameter("@ownerId", client.Player.Id);
@@ -44,7 +44,7 @@ namespace AuroraEmu.Database.DAO
         {
             int id = -1;
 
-            using (DatabaseConnection dbConnection = Engine.MainDI.ConnectionPool.PopConnection())
+            using (DatabaseConnection dbConnection = Engine.Locator.ConnectionPool.PopConnection())
             {
                 dbConnection.SetQuery("INSERT INTO items (owner_id, definition_id, data) VALUES (@ownerId, @definitionId, @data)");
                 dbConnection.AddParameter("@ownerId", client.Player.Id);
@@ -62,7 +62,7 @@ namespace AuroraEmu.Database.DAO
         public ConcurrentDictionary<int, Item> GetItemsInRoom(int roomId)
         {
             ConcurrentDictionary<int, Item> items = new ConcurrentDictionary<int, Item>();
-            using (DatabaseConnection dbConnection = Engine.MainDI.ConnectionPool.PopConnection())
+            using (DatabaseConnection dbConnection = Engine.Locator.ConnectionPool.PopConnection())
             {
                 dbConnection.SetQuery("SELECT * FROM items WHERE room_id = @roomId");
                 dbConnection.AddParameter("@roomId", roomId);
@@ -77,7 +77,7 @@ namespace AuroraEmu.Database.DAO
         {
             Dictionary<int, Item> items = new Dictionary<int, Item>();
 
-            using (DatabaseConnection dbConnection = Engine.MainDI.ConnectionPool.PopConnection())
+            using (DatabaseConnection dbConnection = Engine.Locator.ConnectionPool.PopConnection())
             {
                 dbConnection.SetQuery("SELECT * FROM items WHERE owner_id = @ownerId AND room_id IS NULL");
                 dbConnection.AddParameter("@ownerId", ownerId);
@@ -91,7 +91,7 @@ namespace AuroraEmu.Database.DAO
 
         public void UpdateItem(int itemId, int x, int y, int rot, object roomId)
         {
-            using (DatabaseConnection dbConnection = Engine.MainDI.ConnectionPool.PopConnection())
+            using (DatabaseConnection dbConnection = Engine.Locator.ConnectionPool.PopConnection())
             {
                 dbConnection.SetQuery("UPDATE items SET room_id = @roomId, x = @x, y = @y, rotation = @rot WHERE id = @itemId LIMIT 1");
                 dbConnection.AddParameter("@roomId", roomId);
@@ -105,7 +105,7 @@ namespace AuroraEmu.Database.DAO
 
         public void AddFloorItem(int itemId, int x, int y, int rot, int roomId)
         {
-            using (DatabaseConnection dbConnection = Engine.MainDI.ConnectionPool.PopConnection())
+            using (DatabaseConnection dbConnection = Engine.Locator.ConnectionPool.PopConnection())
             {
                 dbConnection.SetQuery("UPDATE items SET room_id = @roomId, x = @x, y = @y, rotation = @rot WHERE id = @itemId LIMIT 1");
                 dbConnection.AddParameter("@roomId", roomId);
@@ -119,7 +119,7 @@ namespace AuroraEmu.Database.DAO
 
         public void AddWallItem(int itemId, string wallposition, int roomId)
         {
-            using (DatabaseConnection dbConnection = Engine.MainDI.ConnectionPool.PopConnection())
+            using (DatabaseConnection dbConnection = Engine.Locator.ConnectionPool.PopConnection())
             {
                 dbConnection.SetQuery("UPDATE items SET room_id = @roomId, wallposition = @wallposition WHERE id = @itemId LIMIT 1");
                 dbConnection.AddParameter("@roomId", roomId);
@@ -131,7 +131,7 @@ namespace AuroraEmu.Database.DAO
 
         public void UpdateItemData(int itemId, string data)
         {
-            using (DatabaseConnection dbConnection = Engine.MainDI.ConnectionPool.PopConnection())
+            using (DatabaseConnection dbConnection = Engine.Locator.ConnectionPool.PopConnection())
             {
                 dbConnection.SetQuery("UPDATE items SET data = @extraData WHERE id = @id LIMIT 1");
                 dbConnection.AddParameter("@extraData", data);
@@ -142,7 +142,7 @@ namespace AuroraEmu.Database.DAO
 
         public void UpdateDimmerPreset(DimmerData data)
         {
-            using (DatabaseConnection dbConnection = Engine.MainDI.ConnectionPool.PopConnection())
+            using (DatabaseConnection dbConnection = Engine.Locator.ConnectionPool.PopConnection())
             {
                 dbConnection.SetQuery("UPDATE room_dimmer SET enabled = @enabled, current_preset = @cur_preset, preset_one = @pres_one, preset_two = @pres_two, preset_three = @pres_three WHERE item_id = @item_id");
                 dbConnection.AddParameter("@enabled", data.Enabled ? 1 : 0);

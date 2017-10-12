@@ -24,7 +24,7 @@ namespace AuroraEmu.Game.Commands.Events
                     return;
                 }
 
-                Client target = Engine.MainDI.ClientController.GetClientByHabbo(targetUser);
+                Client target = Engine.Locator.ClientController.GetClientByHabbo(targetUser);
                 
                 if (target != null)
                 {
@@ -34,11 +34,11 @@ namespace AuroraEmu.Game.Commands.Events
                 }
                 else
                 {
-                    Player player = Engine.MainDI.PlayerDao.GetPlayerByName(targetUser);
+                    Player player = Engine.Locator.PlayerController.Dao.GetPlayerByName(targetUser);
 
                     if (player != null)
                     {
-                        Engine.MainDI.PlayerDao.UpdateCurrency(player.Id, +amount, "coins");
+                        Engine.Locator.PlayerController.Dao.UpdateCurrency(player.Id, +amount, "coins");
                     }
                 }
             }
