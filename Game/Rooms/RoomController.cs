@@ -1,4 +1,5 @@
-﻿using AuroraEmu.DI.Game.Rooms;
+﻿using AuroraEmu.DI.Database.DAO;
+using AuroraEmu.DI.Game.Rooms;
 using AuroraEmu.Game.Rooms.Models;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
@@ -9,9 +10,11 @@ namespace AuroraEmu.Game.Rooms
     {
         public ConcurrentDictionary<int, Room> Rooms { get; set; }
         public Dictionary<string, RoomMap> RoomMaps { get; set; }
+        public IRoomDao Dao { get; }
 
-        public RoomController()
+        public RoomController(IRoomDao dao)
         {
+            Dao = dao;
             Rooms = new ConcurrentDictionary<int, Room>();
             RoomMaps = new Dictionary<string, RoomMap>();
             LoadRoomMaps();
@@ -19,7 +22,7 @@ namespace AuroraEmu.Game.Rooms
 
         public void LoadRoomMaps()
         {
-            Engine.MainDI.RoomDao.LoadRoomMaps(RoomMaps);
+            Dao.LoadRoomMaps(RoomMaps);
 
             Engine.Logger.Info($"Loaded {RoomMaps.Count} room maps.");
         }
@@ -29,12 +32,12 @@ namespace AuroraEmu.Game.Rooms
             if (Rooms.TryGetValue(id, out Room room))
                 return room;
 
-            room = Engine.MainDI.RoomDao.GetRoom(id);
+            room = Dao.GetRoom(id);
             return room;
         }
 
         public int GetUserRoomCount(int userId) =>
-            Engine.MainDI.RoomDao.GetUserRoomCount(userId);
+            Dao.GetUserRoomCount(userId);
 
         public bool TryCreateRoom(string name, string model, int ownerId, out int roomId)
         {
@@ -43,10 +46,10 @@ namespace AuroraEmu.Game.Rooms
                 Name = name,
                 Model = model,
                 OwnerId = ownerId,
-                Map = Engine.MainDI.RoomController.RoomMaps[model]
+                Map = Engine.Locator.RoomController.RoomMaps[model]
             };
 
-            tmpRoom.Id = Engine.MainDI.RoomDao.GetRoomId(name, model, ownerId);
+            tmpRoom.Id = Dao.GetRoomId(name, model, ownerId);
 
             if (tmpRoom.Id > 0)
             {

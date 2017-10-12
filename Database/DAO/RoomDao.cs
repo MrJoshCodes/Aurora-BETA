@@ -9,7 +9,7 @@ namespace AuroraEmu.Database.DAO
         public void LoadRoomMaps(Dictionary<string, RoomMap> roomMaps)
         {
             roomMaps.Clear();
-            using (DatabaseConnection dbConnection = Engine.MainDI.ConnectionPool.PopConnection())
+            using (DatabaseConnection dbConnection = Engine.Locator.ConnectionPool.PopConnection())
             {
                 dbConnection.SetQuery("SELECT * FROM room_maps");
                 using (var reader = dbConnection.ExecuteReader())
@@ -21,7 +21,7 @@ namespace AuroraEmu.Database.DAO
         public Room GetRoom(int id)
         {
             Room room = null;
-            using (DatabaseConnection dbConnection = Engine.MainDI.ConnectionPool.PopConnection())
+            using (DatabaseConnection dbConnection = Engine.Locator.ConnectionPool.PopConnection())
             {
                 dbConnection.SetQuery("SELECT * FROM rooms WHERE id = @id LIMIT 1");
                 dbConnection.AddParameter("@id", id);
@@ -30,7 +30,7 @@ namespace AuroraEmu.Database.DAO
                     if (reader.Read())
                     {
                         room = new Room(reader);
-                        Engine.MainDI.RoomController.Rooms.TryAdd(id, room);
+                        Engine.Locator.RoomController.Rooms.TryAdd(id, room);
                     }
                 }
             }
@@ -40,7 +40,7 @@ namespace AuroraEmu.Database.DAO
         public int GetUserRoomCount(int userId)
         {
             int roomCount;
-            using (DatabaseConnection dbConnection = Engine.MainDI.ConnectionPool.PopConnection())
+            using (DatabaseConnection dbConnection = Engine.Locator.ConnectionPool.PopConnection())
             {
                 dbConnection.SetQuery("SELECT COUNT(*) FROM rooms WHERE owner_id = @ownerId");
                 dbConnection.AddParameter("@ownerId", userId);
@@ -53,7 +53,7 @@ namespace AuroraEmu.Database.DAO
         {
             int tmpRoomId;
             
-            using (DatabaseConnection dbConnection = Engine.MainDI.ConnectionPool.PopConnection())
+            using (DatabaseConnection dbConnection = Engine.Locator.ConnectionPool.PopConnection())
             {
                 dbConnection.SetQuery("INSERT INTO rooms (owner_id,name,model,description,ccts) VALUES (@ownerId, @name, @model, '', '')");
                 dbConnection.AddParameter("@ownerId", ownerId);

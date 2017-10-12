@@ -1,6 +1,6 @@
 ﻿using AuroraEmu.DI.Database.DAO;
 using AuroraEmu.Game.Catalog.Models;
-using AuroraEmu.Game.Catalog.Vouchers;
+using AuroraEmu.Game.Catalog.Models.Vouchers;
 using System.Collections.Generic;
 
 namespace AuroraEmu.Database.DAO
@@ -11,7 +11,7 @@ namespace AuroraEmu.Database.DAO
         {
             pages.Clear();
 
-            using (DatabaseConnection dbConnection = Engine.MainDI.ConnectionPool.PopConnection())
+            using (DatabaseConnection dbConnection = Engine.Locator.ConnectionPool.PopConnection())
             {
                 dbConnection.SetQuery("SELECT * FROM catalog_pages;");
                 using (var reader = dbConnection.ExecuteReader())
@@ -27,7 +27,7 @@ namespace AuroraEmu.Database.DAO
 
         public void ReloadProducts(Dictionary<int, CatalogProduct> products)
         {
-            using (DatabaseConnection dbConnection = Engine.MainDI.ConnectionPool.PopConnection())
+            using (DatabaseConnection dbConnection = Engine.Locator.ConnectionPool.PopConnection())
             {
                 dbConnection.SetQuery("SELECT * FROM catalog_products;");
                 using (var reader = dbConnection.ExecuteReader())
@@ -38,7 +38,7 @@ namespace AuroraEmu.Database.DAO
         
         public void ReloadDeals(Dictionary<int, List<CatalogDealItem>> deals)
         {
-            using (DatabaseConnection dbConnection = Engine.MainDI.ConnectionPool.PopConnection())
+            using (DatabaseConnection dbConnection = Engine.Locator.ConnectionPool.PopConnection())
             {
                 dbConnection.SetQuery("SELECT * FROM catalog_deals;");
                 using (var reader = dbConnection.ExecuteReader())
@@ -58,7 +58,7 @@ namespace AuroraEmu.Database.DAO
 
         public void ReloadVouchers(Dictionary<string, Voucher> vouchers)
         {
-            using (DatabaseConnection dbConnection = Engine.MainDI.ConnectionPool.PopConnection())
+            using (DatabaseConnection dbConnection = Engine.Locator.ConnectionPool.PopConnection())
             {
                 dbConnection.SetQuery("SELECT * FROM catalog_vouchers;");
                 using (var reader = dbConnection.ExecuteReader())

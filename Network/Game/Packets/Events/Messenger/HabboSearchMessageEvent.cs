@@ -12,7 +12,7 @@ namespace AuroraEmu.Network.Game.Packets.Events.Messenger
             string search = msg.ReadString();
             List<MessengerSearch> friends = new List<MessengerSearch>();
             List<MessengerSearch> notFriends = new List<MessengerSearch>(); 
-            Engine.MainDI.MessengerController.MessengerSearch(search, client.Player, friends, notFriends);
+            Engine.Locator.MessengerController.MessengerSearch(search, client.Player, friends, notFriends);
             client.SendComposer(new HabboSearchResultMessageComposer(friends, notFriends));
         }
     }

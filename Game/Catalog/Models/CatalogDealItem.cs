@@ -23,7 +23,7 @@ namespace AuroraEmu.Game.Catalog.Models
             get
             {
                 if (_template == null)
-                    _template = Engine.MainDI.ItemController.GetTemplate(TemplateId);
+                    _template = Engine.Locator.ItemController.GetTemplate(TemplateId);
 
                 return _template;
             }

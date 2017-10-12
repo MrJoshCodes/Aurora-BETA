@@ -12,10 +12,10 @@ namespace AuroraEmu.Network.Game.Packets.Events.Rooms
             
             string input = msgEvent.ReadString();
 
-            if (input.StartsWith(":") && Engine.MainDI.CommandController.TryHandleCommand(client, input.Substring(1)))
+            if (input.StartsWith(":") && Engine.Locator.CommandController.TryHandleCommand(client, input.Substring(1)))
                 return;
 
-            client.CurrentRoom.SendComposer(new ChatMessageComposer(client.UserActor.VirtualId, Engine.MainDI.WorldfilterController.CheckString(input)));
+            client.CurrentRoom.SendComposer(new ChatMessageComposer(client.UserActor.VirtualId, Engine.Locator.WorldfilterController.CheckString(input)));
         }
     }
 }

@@ -11,13 +11,13 @@ namespace AuroraEmu.Network.Game.Packets.Events.Rooms
             int roomId = msgEvent.ReadVL64();
             string password = msgEvent.ReadString();
 
-            Room room = Engine.MainDI.RoomController.GetRoom(roomId);
+            Room room = Engine.Locator.RoomController.GetRoom(roomId);
 
             if (room == null)
                 return;
             
             if (client.CurrentRoomId != 0 &&
-                Engine.MainDI.RoomController.Rooms.TryGetValue(client.CurrentRoomId, out Room currentRoom))
+                Engine.Locator.RoomController.Rooms.TryGetValue(client.CurrentRoomId, out Room currentRoom))
                 currentRoom.RemoveActor(client.UserActor, false);
 
             client.QueueComposer(new OpenConnectionMessageComposer());

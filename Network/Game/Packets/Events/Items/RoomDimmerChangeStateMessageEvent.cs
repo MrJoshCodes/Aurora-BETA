@@ -11,7 +11,7 @@ namespace AuroraEmu.Network.Game.Packets.Events.Items
         public void Run(Client client, MessageEvent msgEvent)
         {
             Item item = client.CurrentRoom.GetWallItems().Where(x => x.Definition.HandleType == AuroraEmu.Game.Items.Handlers.HandleType.DIMMER).ToList()[0];
-            DimmerData data = Engine.MainDI.ItemController.GetDimmerData(item.Id);
+            DimmerData data = Engine.Locator.ItemController.GetDimmerData(item.Id);
 
             if (data.Enabled)
                 data.Enabled = false;
@@ -19,7 +19,7 @@ namespace AuroraEmu.Network.Game.Packets.Events.Items
                 data.Enabled = true;
             item.Data = data.GenerateExtradata();
             client.CurrentRoom.SendComposer(new ItemUpdateMessageComposer(item));
-            Engine.MainDI.ItemDao.UpdateItemData(item.Id, item.Data);
+            Engine.Locator.ItemController.Dao.UpdateItemData(item.Id, item.Data);
         }
     }
 }

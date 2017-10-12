@@ -12,7 +12,7 @@ namespace AuroraEmu.Database.DAO
         {
             List<MessengerSearch> searchResult = new List<MessengerSearch>();
 
-            using (DatabaseConnection dbConnection = Engine.MainDI.ConnectionPool.PopConnection())
+            using (DatabaseConnection dbConnection = Engine.Locator.ConnectionPool.PopConnection())
             {
                 dbConnection.SetQuery(
                     "SELECT id, username, figure, motto FROM players WHERE username LIKE @searchString LIMIT 30;");
@@ -27,7 +27,7 @@ namespace AuroraEmu.Database.DAO
 
         public Dictionary<int, MessengerFriend> GetFriendsById(int id, Dictionary<int, MessengerFriend> friends)
         {
-            using (DatabaseConnection dbConnection = Engine.MainDI.ConnectionPool.PopConnection())
+            using (DatabaseConnection dbConnection = Engine.Locator.ConnectionPool.PopConnection())
             {
                 dbConnection.SetQuery(
                     "SELECT messenger_friends.user_two_id, players.username, players.figure, players.motto FROM messenger_friends LEFT JOIN players ON players.id = messenger_friends.user_two_id WHERE messenger_friends.user_one_id = @userId;");
@@ -43,7 +43,7 @@ namespace AuroraEmu.Database.DAO
         public Dictionary<int, MessengerRequest> GetRequestsByPlayerId(int playerId,
             Dictionary<int, MessengerRequest> requests)
         {
-            using (DatabaseConnection dbConnection = Engine.MainDI.ConnectionPool.PopConnection())
+            using (DatabaseConnection dbConnection = Engine.Locator.ConnectionPool.PopConnection())
             {
                 dbConnection.SetQuery("SELECT from_id, to_id FROM messenger_requests WHERE to_id = @playerId;");
                 dbConnection.AddParameter("@playerId", playerId);
@@ -58,7 +58,7 @@ namespace AuroraEmu.Database.DAO
 
         public void CreateFriendship(Player player, int userTwo)
         {
-            using (DatabaseConnection dbConnection = Engine.MainDI.ConnectionPool.PopConnection())
+            using (DatabaseConnection dbConnection = Engine.Locator.ConnectionPool.PopConnection())
             {
                 dbConnection.SetQuery(
                     "INSERT INTO messenger_friends (user_one_id, user_two_id) VALUES(@userOne, @userTwo), (@userTwo, @userOne);");
@@ -70,7 +70,7 @@ namespace AuroraEmu.Database.DAO
 
         public void DestroyRequest(int userOne, int userTwo)
         {
-            using (DatabaseConnection dbConnection = Engine.MainDI.ConnectionPool.PopConnection())
+            using (DatabaseConnection dbConnection = Engine.Locator.ConnectionPool.PopConnection())
             {
                 dbConnection.SetQuery("DELETE FROM messenger_requests WHERE to_id = @userOne AND from_id = @userTwo;");
                 dbConnection.AddParameter("@userOne", userOne);
@@ -81,7 +81,7 @@ namespace AuroraEmu.Database.DAO
 
         public void DestroyAllRequests(int userOne)
         {
-            using (DatabaseConnection dbConnection = Engine.MainDI.ConnectionPool.PopConnection())
+            using (DatabaseConnection dbConnection = Engine.Locator.ConnectionPool.PopConnection())
             {
                 dbConnection.SetQuery("DELETE FROM messenger_requests WHERE to_id = @userOne;");
                 dbConnection.AddParameter("@userOne", userOne);
@@ -91,7 +91,7 @@ namespace AuroraEmu.Database.DAO
 
         public void CreateRequest(int toId, Client client)
         {
-            using (DatabaseConnection dbConnection = Engine.MainDI.ConnectionPool.PopConnection())
+            using (DatabaseConnection dbConnection = Engine.Locator.ConnectionPool.PopConnection())
             {
                 dbConnection.SetQuery("INSERT INTO messenger_requests (to_id, from_id) VALUES (@toId, @fromId);");
                 dbConnection.AddParameter("@toId", toId);
@@ -102,7 +102,7 @@ namespace AuroraEmu.Database.DAO
 
         public void DestroyFriendship(int userOne, int userTwo)
         {
-            using (DatabaseConnection dbConnection = Engine.MainDI.ConnectionPool.PopConnection())
+            using (DatabaseConnection dbConnection = Engine.Locator.ConnectionPool.PopConnection())
             {
                 dbConnection.SetQuery(
                     "DELETE FROM messenger_friends WHERE user_one_id = @userOne AND user_two_id = @userTwo LIMIT 1");

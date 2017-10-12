@@ -18,7 +18,7 @@ namespace AuroraEmu.Game.Commands.Events
             MessageComposer composer = new MessageComposer(139);
             composer.AppendString(string.Join(" ", args) + "\r\n - " + client.Player.Username);
 
-            foreach (Client target in Engine.MainDI.ClientController.Clients.Values)
+            foreach (Client target in Engine.Locator.ClientController.Clients.Values)
             {
                 target.SendComposer(composer);
             }

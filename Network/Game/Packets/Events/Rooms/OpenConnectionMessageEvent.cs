@@ -12,12 +12,12 @@ namespace AuroraEmu.Network.Game.Packets.Events.Rooms
             int id = msgEvent.ReadVL64();
             msgEvent.ReadVL64();
 
-            Room room = Engine.MainDI.RoomController.GetRoom(id);
+            Room room = Engine.Locator.RoomController.GetRoom(id);
 
             if (room == null) return;
 
             if (client.CurrentRoomId != 0 &&
-                Engine.MainDI.RoomController.Rooms.TryGetValue(client.CurrentRoomId, out Room currentRoom))
+                Engine.Locator.RoomController.Rooms.TryGetValue(client.CurrentRoomId, out Room currentRoom))
                 currentRoom.RemoveActor(client.UserActor, false);
 
             client.LoadingRoomId = id;

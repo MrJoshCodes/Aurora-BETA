@@ -136,7 +136,7 @@ namespace AuroraEmu.Database
             _command.Parameters?.Clear();
             _transaction?.Dispose();
             _command.Dispose();
-            Engine.MainDI.ConnectionPool.ReturnConnection(this);
+            Engine.Locator.ConnectionPool.ReturnConnection(this);
             GC.SuppressFinalize(this);
         }
     }

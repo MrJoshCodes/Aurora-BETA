@@ -7,7 +7,7 @@ namespace AuroraEmu.Network.Game.Packets.Events.Navigator
     {
         public void Run(Client client, MessageEvent msgEvent)
         {
-            client.SendComposer(new GuestRoomSearchResultComposer(4, "", Engine.MainDI.NavigatorController.GetRoomsByFriends(client.Player.Id)));
+            client.SendComposer(new GuestRoomSearchResultComposer(4, "", Engine.Locator.NavigatorController.GetRoomsByFriends(client.Player.Id)));
         }
     }
 }

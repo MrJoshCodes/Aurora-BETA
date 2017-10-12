@@ -11,7 +11,7 @@ namespace AuroraEmu.Network.Game.Packets.Events.Users
             int y = msg.ReadVL64();
 
             if (client.CurrentRoomId == 0) return;
-            if (!Engine.MainDI.RoomController.Rooms.TryGetValue(client.CurrentRoomId, out Room room)) return;
+            if (!Engine.Locator.RoomController.Rooms.TryGetValue(client.CurrentRoomId, out Room room)) return;
             
             RoomActor actor = client.UserActor;
 

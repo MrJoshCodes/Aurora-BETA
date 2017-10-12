@@ -11,7 +11,7 @@ namespace AuroraEmu.Network.Game.Packets.Events.Items
         public void Run(Client client, MessageEvent msgEvent)
         {
             Item item = client.CurrentRoom.GetWallItems().Where(x => x.Definition.HandleType == AuroraEmu.Game.Items.Handlers.HandleType.DIMMER).ToList()[0];
-            DimmerData data = Engine.MainDI.ItemController.GetDimmerData(item.Id);
+            DimmerData data = Engine.Locator.ItemController.GetDimmerData(item.Id);
 
             int preset = msgEvent.ReadVL64();
             int bgMode = msgEvent.ReadVL64();
@@ -26,7 +26,7 @@ namespace AuroraEmu.Network.Game.Packets.Events.Items
             dimmerPreset.ColorCode = colorCode;
             item.Data = data.GenerateExtradata();
             client.SendComposer(new ItemUpdateMessageComposer(item));
-            Engine.MainDI.ItemDao.UpdateDimmerPreset(data);
+            Engine.Locator.ItemController.Dao.UpdateDimmerPreset(data);
         }
     }
 }

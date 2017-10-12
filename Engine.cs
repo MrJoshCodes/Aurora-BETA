@@ -5,6 +5,7 @@ using AuroraEmu.DI.Config;
 using AuroraEmu.DI.Database;
 using AuroraEmu.DI.Database.DAO;
 using AuroraEmu.DI.Game;
+using AuroraEmu.DI.Game.Badges;
 using AuroraEmu.DI.Game.Catalog;
 using AuroraEmu.DI.Game.Clients;
 using AuroraEmu.DI.Game.Commands;
@@ -19,6 +20,7 @@ using AuroraEmu.DI.Locator;
 using AuroraEmu.DI.Network.Game;
 using AuroraEmu.DI.Network.Game.Packets;
 using AuroraEmu.Game;
+using AuroraEmu.Game.Badges;
 using AuroraEmu.Game.Catalog;
 using AuroraEmu.Game.Clients;
 using AuroraEmu.Game.Commands;
@@ -44,7 +46,7 @@ namespace AuroraEmu
     {
         public static ILog Logger { get; private set; }
         public static IContainer Container { get; set; }
-        public static DILocator MainDI { get; set; }
+        public static DILocator Locator { get; set; }
 
         static void Main(string[] args)
         {
@@ -62,23 +64,23 @@ namespace AuroraEmu
                                                                                  ");
 
             ContainerBuilder();
-            MainDI.GameNetworkListener.RunServer().Wait();
+            Locator.GameNetworkListener.RunServer().Wait();
             while (true)
             {
                 switch (System.Console.ReadLine())
                 {
                     case "reload_packets":
-                        MainDI.PacketController.LoadPackets();
+                        Locator.PacketController.LoadPackets();
                         break;
                     case "reload_models":
-                        MainDI.RoomController.LoadRoomMaps();
+                        Locator.RoomController.LoadRoomMaps();
                         break;
                     case "reload_catalog":
-                        MainDI.ItemController.ReloadTemplates();
-                        MainDI.CatalogController.ReloadPages();
-                        MainDI.CatalogController.ReloadProducts();
-                        MainDI.CatalogController.ReloadDeals();
-                        MainDI.CatalogController.ReloadVouchers();
+                        Locator.ItemController.ReloadTemplates();
+                        Locator.CatalogController.ReloadPages();
+                        Locator.CatalogController.ReloadProducts();
+                        Locator.CatalogController.ReloadDeals();
+                        Locator.CatalogController.ReloadVouchers();
                         break;
                 }
             }
@@ -90,17 +92,11 @@ namespace AuroraEmu
 
             builder.RegisterType<DILocator>();
             builder.RegisterType<DependencyLocator>().As<IDependencyLocator>();
-
-            //Config controller
+            
             builder.RegisterType<ConfigController>().As<IConfigController>();
-
-            //Packet controller
             builder.RegisterType<PacketController>().As<IPacketController>();
-
-            //Network listener
             builder.RegisterType<GameNetworkListener>().As<IGameNetworkListener>();
-
-            //Main Controllers
+            builder.RegisterType<BadgeController>().As<IBadgeController>();
             builder.RegisterType<CatalogController>().As<ICatalogController>();
             builder.RegisterType<ClientController>().As<IClientController>();
             builder.RegisterType<ItemController>().As<IItemController>();
@@ -127,9 +123,8 @@ namespace AuroraEmu
             builder.RegisterType<ConnectionPool>().As<IConnectionPool>();
 
             Container = builder.Build();
-            MainDI = Container.Resolve<DILocator>();
-            MainDI.SetupDaos();
-            MainDI.SetupControllers();
+            Locator = Container.Resolve<DILocator>();
+            Locator.SetupControllers();
         }
 
         public static int GetUnixTimeStamp()

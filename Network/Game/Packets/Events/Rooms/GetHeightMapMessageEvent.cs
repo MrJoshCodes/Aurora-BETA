@@ -11,7 +11,7 @@ namespace AuroraEmu.Network.Game.Packets.Events.Rooms
             if (client.LoadingRoomId < 1)
                 return;
 
-            Room room = Engine.MainDI.RoomController.GetRoom(client.LoadingRoomId);
+            Room room = Engine.Locator.RoomController.GetRoom(client.LoadingRoomId);
             client.QueueComposer(new HeightMapMessageComposer(room.Map.RawMap));
             client.QueueComposer(new FloorHeightMapMessageComposer(room.Map.RelativeHeightMap));
             client.Flush();

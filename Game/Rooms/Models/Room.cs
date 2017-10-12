@@ -35,13 +35,13 @@ namespace AuroraEmu.Game.Rooms.Models
         public bool ShowOwner { get; set; }
         public bool AllPlayerRights { get; set; }
         public bool IsFrontpageItem =>
-            Engine.MainDI.NavigatorController.FrontpageItems.ContainsKey(Id);
+            Engine.Locator.NavigatorController.FrontpageItems.ContainsKey(Id);
         public RoomState State { get; set; }
         public FrontpageItem FrontpageItem =>
-            Engine.MainDI.NavigatorController.FrontpageItems[Id];
+            Engine.Locator.NavigatorController.FrontpageItems[Id];
         private ConcurrentDictionary<int, Item> _items;
         public ConcurrentDictionary<int, Item> Items =>
-            _items ?? (_items = Engine.MainDI.ItemController.GetItemsInRoom(Id));
+            _items ?? (_items = Engine.Locator.ItemController.GetItemsInRoom(Id));
         public ConcurrentDictionary<int, RoomActor> Actors { get; set; }
         private ProcessComponent ProcessComponent { get; set; }
         public RoomGrid Grid { get; }
@@ -77,7 +77,7 @@ namespace AuroraEmu.Game.Rooms.Models
             Wallpaper = reader.GetInt32("wallpaper");
             Landscape = reader.GetDouble("landscape");
             UserRights = new List<int>(JsonConvert.DeserializeObject<List<int>>(reader.GetString("user_rights")));
-            if (Engine.MainDI.RoomController.RoomMaps.TryGetValue(Model, out RoomMap map))
+            if (Engine.Locator.RoomController.RoomMaps.TryGetValue(Model, out RoomMap map))
             {
                 Map = map;
             }
@@ -90,7 +90,7 @@ namespace AuroraEmu.Game.Rooms.Models
         }
 
         public string Owner =>
-            Engine.MainDI.PlayerController.GetPlayerNameById(OwnerId);
+            Engine.Locator.PlayerController.GetPlayerNameById(OwnerId);
 
         public int GetStateNumber() =>
             (int)State;
@@ -135,11 +135,11 @@ namespace AuroraEmu.Game.Rooms.Models
             UserActor actor = new UserActor(client, newVirtualId);
             Actors.TryAdd(newVirtualId, actor);
             client.CurrentRoomId = this.Id;
-            client.CurrentRoom = Engine.MainDI.RoomController.GetRoom(client.CurrentRoomId);
+            client.CurrentRoom = Engine.Locator.RoomController.GetRoom(client.CurrentRoomId);
             client.UserActor = actor;
             PlayersIn++;
 
-            Engine.MainDI.NavigatorController.Categories[CategoryId].PlayersInside++;
+            Engine.Locator.NavigatorController.Categories[CategoryId].PlayersInside++;
         }
 
         public void Save(string[] columns, object[] values)
@@ -164,7 +164,7 @@ namespace AuroraEmu.Game.Rooms.Models
             query += " WHERE id = @roomId";
             parameters[parameters.Length - 1] = new MySqlParameter("@roomId", Id);
 
-            using (DatabaseConnection dbConnection = Engine.MainDI.ConnectionPool.PopConnection())
+            using (DatabaseConnection dbConnection = Engine.Locator.ConnectionPool.PopConnection())
             {
                 dbConnection.SetQuery(query);
                 dbConnection.AddParameters(parameters);
@@ -191,7 +191,7 @@ namespace AuroraEmu.Game.Rooms.Models
 
         public void Dispose()
         {
-            Engine.MainDI.RoomController.Rooms.TryRemove(Id, out Room room);
+            Engine.Locator.RoomController.Rooms.TryRemove(Id, out Room room);
             Actors.Clear();
             _items.Clear();
             Items.Clear();

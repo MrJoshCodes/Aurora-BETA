@@ -1,4 +1,5 @@
-﻿using AuroraEmu.Game.Catalog.Models;
+﻿using AuroraEmu.DI.Database.DAO;
+using AuroraEmu.Game.Catalog.Models;
 using AuroraEmu.Game.Clients;
 using AuroraEmu.Game.Items;
 using AuroraEmu.Game.Items.Handlers;
@@ -11,6 +12,8 @@ namespace AuroraEmu.DI.Game.Items
 {
     public interface IItemController
     {
+        IItemDao Dao { get; }
+
         Dictionary<HandleType, IItemHandler> Handlers { get; set; }
 
         void ReloadHandlers();

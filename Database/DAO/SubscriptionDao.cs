@@ -9,7 +9,7 @@ namespace AuroraEmu.Database.DAO
     {
         public void GetSubscriptionData(Dictionary<string, SubscriptionData> data, int userId)
         {
-            using (DatabaseConnection dbConnection = Engine.MainDI.ConnectionPool.PopConnection())
+            using (DatabaseConnection dbConnection = Engine.Locator.ConnectionPool.PopConnection())
             {
                 dbConnection.SetQuery("SELECT * FROM player_subscriptions WHERE user_id = @userId;");
                 dbConnection.AddParameter("@userId", userId);

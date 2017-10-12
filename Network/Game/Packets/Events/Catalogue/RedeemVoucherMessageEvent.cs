@@ -1,4 +1,4 @@
-﻿using AuroraEmu.Game.Catalog.Vouchers;
+﻿using AuroraEmu.Game.Catalog.Models.Vouchers;
 using AuroraEmu.Game.Clients;
 using AuroraEmu.Network.Game.Packets.Composers.Catalogue;
 
@@ -10,7 +10,7 @@ namespace AuroraEmu.Network.Game.Packets.Events.Catalogue
         {
             string voucherText = msg.ReadString();
             
-            if(Engine.MainDI.CatalogController.Vouchers.TryGetValue(voucherText, out Voucher voucher))
+            if(Engine.Locator.CatalogController.Vouchers.TryGetValue(voucherText, out Voucher voucher))
             {
                 switch (voucher.Type)
                 {

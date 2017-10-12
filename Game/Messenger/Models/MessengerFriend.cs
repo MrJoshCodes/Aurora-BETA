@@ -20,7 +20,7 @@ namespace AuroraEmu.Game.Messenger.Models
 
         public MessengerFriend(int id)
         {
-            Player player = Engine.MainDI.PlayerController.GetPlayerById(id);
+            Player player = Engine.Locator.PlayerController.GetPlayerById(id);
             Username = player.Username;
             Motto = player.Motto;
             UserTwoId = player.Id;

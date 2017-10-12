@@ -7,7 +7,7 @@ namespace AuroraEmu.Network.Game.Packets.Events.Navigator
     {
         public void Run(Client client, MessageEvent msgEvent)
         {
-            client.SendComposer(new OfficialRoomsComposer(Engine.MainDI.NavigatorController.FrontpageItems));
+            client.SendComposer(new OfficialRoomsComposer(Engine.Locator.NavigatorController.FrontpageItems));
         }
     }
 }

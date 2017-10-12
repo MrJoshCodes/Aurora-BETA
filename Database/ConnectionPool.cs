@@ -7,11 +7,11 @@ namespace AuroraEmu.Database
     {
         private Stack<DatabaseConnection> connections;
         private readonly string _connectionString =
-            $"Server={Engine.MainDI.ConfigController.DbConfig.Server};" +
-            $"Port={Engine.MainDI.ConfigController.DbConfig.Port}; " +
-            $"Uid={Engine.MainDI.ConfigController.DbConfig.User}; " +
-            $"Password={Engine.MainDI.ConfigController.DbConfig.Password}; " +
-            $"Database={Engine.MainDI.ConfigController.DbConfig.Database}; " +
+            $"Server={Engine.Locator.ConfigController.DbConfig.Server};" +
+            $"Port={Engine.Locator.ConfigController.DbConfig.Port}; " +
+            $"Uid={Engine.Locator.ConfigController.DbConfig.User}; " +
+            $"Password={Engine.Locator.ConfigController.DbConfig.Password}; " +
+            $"Database={Engine.Locator.ConfigController.DbConfig.Database}; " +
             "Pooling=true;" +
             "MinimumPoolSize=5; " +
             "MaximumPoolSize=15";

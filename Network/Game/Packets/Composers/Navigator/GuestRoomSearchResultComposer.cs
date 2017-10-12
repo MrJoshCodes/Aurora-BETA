@@ -29,7 +29,7 @@ namespace AuroraEmu.Network.Game.Packets.Composers.Navigator
             composer.AppendVL64(room.PlayersMax);
             composer.AppendString(room.Description);
             composer.AppendVL64(0);
-            composer.AppendVL64(Engine.MainDI.NavigatorController.Categories[room.CategoryId].TradeAllowed);
+            composer.AppendVL64(Engine.Locator.NavigatorController.Categories[room.CategoryId].TradeAllowed);
             composer.AppendVL64(0); // score
             composer.AppendVL64(0); // tags
             composer.AppendString("");

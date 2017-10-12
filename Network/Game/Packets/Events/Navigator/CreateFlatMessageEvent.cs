@@ -19,7 +19,7 @@ namespace AuroraEmu.Network.Game.Packets.Events.Navigator
             //    return;
             //}
 
-            if (Engine.MainDI.RoomController.TryCreateRoom(roomName, modelName, client.Player.Id, out int roomId))
+            if (Engine.Locator.RoomController.TryCreateRoom(roomName, modelName, client.Player.Id, out int roomId))
             {
                 client.SendComposer(new FlatCreatedComposer(roomId, roomName));
             }

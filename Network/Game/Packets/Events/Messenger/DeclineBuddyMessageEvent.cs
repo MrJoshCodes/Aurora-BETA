@@ -1,5 +1,4 @@
 ﻿using AuroraEmu.Game.Clients;
-using AuroraEmu.Game.Messenger;
 
 namespace AuroraEmu.Network.Game.Packets.Events.Messenger
 {
@@ -14,11 +13,11 @@ namespace AuroraEmu.Network.Game.Packets.Events.Messenger
             {
                 int requestId = msg.ReadVL64();
 
-                Engine.MainDI.MessengerDao.DestroyRequest(requestId, client.Player.Id);
+                Engine.Locator.MessengerController.Dao.DestroyRequest(requestId, client.Player.Id);
             }
             else if(mode == 1)
             {
-                Engine.MainDI.MessengerDao.DestroyAllRequests(client.Player.Id);
+                Engine.Locator.MessengerController.Dao.DestroyAllRequests(client.Player.Id);
             }
         }
     }

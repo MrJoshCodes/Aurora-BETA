@@ -48,7 +48,7 @@ namespace AuroraEmu.Game.Items.Models
         public ItemDefinition Definition {
             get {
                 if (_definition == null)
-                    _definition = Engine.MainDI.ItemController.GetTemplate(DefinitionId);
+                    _definition = Engine.Locator.ItemController.GetTemplate(DefinitionId);
 
                 return _definition;
             }
@@ -56,7 +56,7 @@ namespace AuroraEmu.Game.Items.Models
 
         public IItemHandler Handler {
             get {
-                if (Engine.MainDI.ItemController.Handlers.TryGetValue(Definition.HandleType, out IItemHandler handler))
+                if (Engine.Locator.ItemController.Handlers.TryGetValue(Definition.HandleType, out IItemHandler handler))
                 {
                     return handler;
                 }
@@ -70,7 +70,7 @@ namespace AuroraEmu.Game.Items.Models
             {
                 Cycling = true;
                 await Task.Delay(cycles * 500);
-                if (Engine.MainDI.ItemController.Handlers.TryGetValue(Definition.HandleType, out IItemHandler itemHandler))
+                if (Engine.Locator.ItemController.Handlers.TryGetValue(Definition.HandleType, out IItemHandler itemHandler))
                 {
                     itemHandler.Handle(this, interactor);
                 }

@@ -1,5 +1,5 @@
 ﻿using AuroraEmu.Game.Catalog.Models;
-using AuroraEmu.Game.Catalog.Vouchers;
+using AuroraEmu.Game.Catalog.Models.Vouchers;
 using System.Collections.Generic;
 
 namespace AuroraEmu.DI.Game.Catalog

@@ -12,7 +12,7 @@ namespace AuroraEmu.Network.Game.Packets.Events.Rooms
             if (client.LoadingRoomId < 1)
                 return;
 
-            Room room = Engine.MainDI.RoomController.GetRoom(client.LoadingRoomId);
+            Room room = Engine.Locator.RoomController.GetRoom(client.LoadingRoomId);
 
             if (room.Map == null)
             {

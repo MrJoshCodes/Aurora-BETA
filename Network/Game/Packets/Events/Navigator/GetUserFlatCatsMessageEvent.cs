@@ -7,7 +7,7 @@ namespace AuroraEmu.Network.Game.Packets.Events.Navigator
     {
         public void Run(Client client, MessageEvent msgEvent)
         {
-            client.SendComposer(new UserFlatCatsComposer(Engine.MainDI.NavigatorController.GetUserCategories(client.Player.Rank)));
+            client.SendComposer(new UserFlatCatsComposer(Engine.Locator.NavigatorController.GetUserCategories(client.Player.Rank)));
         }
     }
 }

@@ -1,4 +1,4 @@
-﻿namespace AuroraEmu.Game.Catalog.Vouchers
+﻿namespace AuroraEmu.Game.Catalog.Models.Vouchers
 {
     public enum VoucherType
     {
