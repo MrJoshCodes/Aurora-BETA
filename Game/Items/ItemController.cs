@@ -1,5 +1,7 @@
-﻿using System.Collections.Concurrent;
+﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Linq;
 using AuroraEmu.Game.Clients;
 using AuroraEmu.DI.Game.Items;
 using AuroraEmu.Database;
@@ -8,6 +10,7 @@ using AuroraEmu.Game.Catalog.Models;
 using AuroraEmu.Game.Items.Models;
 using AuroraEmu.Game.Items.Models.Dimmer;
 using AuroraEmu.DI.Database.DAO;
+using AuroraEmu.Game.Players.Models;
 
 namespace AuroraEmu.Game.Items
 {
@@ -52,6 +55,12 @@ namespace AuroraEmu.Game.Items
         
         public void GiveItem(Client client, ItemDefinition template, string extraData) =>
             Dao.GiveItem(client, template, extraData);
+        
+        public void GiveItem(Player targetUser, CatalogProduct product, string extraData) =>
+            Dao.GiveItem(targetUser, product, extraData);
+        
+        public int GiveItem(Player targetUser, ItemDefinition template, string extraData) =>
+            Dao.GiveItem(targetUser, template, extraData);
 
         public ConcurrentDictionary<int, Item> GetItemsInRoom(int roomId) =>
             Dao.GetItemsInRoom(roomId);
@@ -98,6 +107,27 @@ namespace AuroraEmu.Game.Items
                 dbConnection.Execute();
                 return GetDimmerData(itemId);
             }
+        }
+
+        public ItemDefinition GetRandomPresent()
+        {
+            var allGifts = _items.Values.Where(x => x.SwfName.Equals("present_gen"));
+            return allGifts.ElementAt(new Random(Environment.TickCount).Next(0, allGifts.Count() - 1));
+        }
+
+        public void CreatePresent(int definitionId, int playerId, int giftId, string data)
+        {
+            Dao.CreatePresent(definitionId, playerId, giftId, data);
+        }
+
+        public (int, string) GetPresent(int presentId, int playerId)
+        {
+            return Dao.GetPresent(presentId, playerId);
+        }
+
+        public void DeletePresent(int presentId)
+        {
+            Dao.DeletePresent(presentId);
         }
     }
 }

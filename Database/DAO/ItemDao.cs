@@ -1,10 +1,13 @@
 ﻿using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Runtime.InteropServices;
 using AuroraEmu.DI.Database.DAO;
 using AuroraEmu.Game.Clients;
 using AuroraEmu.Game.Catalog.Models;
 using AuroraEmu.Game.Items.Models;
 using AuroraEmu.Game.Items.Models.Dimmer;
+using AuroraEmu.Game.Players.Models;
+using MySql.Data.MySqlClient;
 
 namespace AuroraEmu.Database.DAO
 {
@@ -59,6 +62,50 @@ namespace AuroraEmu.Database.DAO
             }
         }
         
+        public void GiveItem(Player targetUser, CatalogProduct product, string extraData)
+        {
+            int id = -1;
+
+            using (DatabaseConnection dbConnection = Engine.Locator.ConnectionPool.PopConnection())
+            {
+                dbConnection.SetQuery("INSERT INTO items (owner_id, definition_id, data) VALUES (@ownerId, @definitionId, @data)");
+                dbConnection.AddParameter("@ownerId", targetUser.Id);
+                dbConnection.AddParameter("@definitionId", product.TemplateId);
+                dbConnection.AddParameter("@data", extraData);
+                id = dbConnection.Insert();
+            }
+
+            Client client = Engine.Locator.ClientController.GetClientByHabbo(targetUser.Id);
+
+            if (id > 0 && client != null && client.Items != null)
+            {
+                client.Items.Add(id, new Item(id, client.Player.Id, product.TemplateId, extraData));
+            }
+        }
+        
+        public int GiveItem(Player targetUser, ItemDefinition template, string extraData)
+        {
+            int id = -1;
+
+            using (DatabaseConnection dbConnection = Engine.Locator.ConnectionPool.PopConnection())
+            {
+                dbConnection.SetQuery("INSERT INTO items (owner_id, definition_id, data) VALUES (@ownerId, @definitionId, @data)");
+                dbConnection.AddParameter("@ownerId", targetUser.Id);
+                dbConnection.AddParameter("@definitionId", template.Id);
+                dbConnection.AddParameter("@data", extraData);
+                id = dbConnection.Insert();
+            }
+            
+            Client client = Engine.Locator.ClientController.GetClientByHabbo(targetUser.Id);
+
+            if (id > 0 && client != null && client.Items != null)
+            {
+                client.Items.Add(id, new Item(id, client.Player.Id, template.Id, extraData));
+            }
+
+            return id;
+        }
+        
         public ConcurrentDictionary<int, Item> GetItemsInRoom(int roomId)
         {
             ConcurrentDictionary<int, Item> items = new ConcurrentDictionary<int, Item>();
@@ -99,6 +146,16 @@ namespace AuroraEmu.Database.DAO
                 dbConnection.AddParameter("@y", y);
                 dbConnection.AddParameter("@rot", rot);
                 dbConnection.AddParameter("@itemId", itemId);
+                dbConnection.Execute();
+            }
+        }
+
+        public void DeleteItem(int itemId)
+        {
+            using (DatabaseConnection dbConnection = Engine.Locator.ConnectionPool.PopConnection())
+            {
+                dbConnection.SetQuery("DELETE FROM `items` WHERE `id` = @itemid");
+                dbConnection.AddParameter("@itemid", itemId);
                 dbConnection.Execute();
             }
         }
@@ -151,6 +208,52 @@ namespace AuroraEmu.Database.DAO
                 dbConnection.AddParameter("@pres_two", data.Presets[1].PresetData());
                 dbConnection.AddParameter("@pres_three", data.Presets[2].PresetData());
                 dbConnection.AddParameter("@item_id", data.ItemId);
+                dbConnection.Execute();
+            }
+        }
+
+        public void CreatePresent(int definitionId, int playerId, int giftId, string data)
+        {
+            using (DatabaseConnection dbConnection = Engine.Locator.ConnectionPool.PopConnection())
+            {
+                dbConnection.SetQuery("INSERT INTO `item_presents` VALUES (@giftid, @playerid, @definitionid, @data)");
+                dbConnection.AddParameter("@giftid", giftId);
+                dbConnection.AddParameter("@playerid", playerId);
+                dbConnection.AddParameter("@definitionid", definitionId);
+                dbConnection.AddParameter("@data", data);
+                dbConnection.Execute();
+            }
+        }
+
+        public (int, string) GetPresent(int presentId, int playerId)
+        {
+            using (DatabaseConnection dbConnection = Engine.Locator.ConnectionPool.PopConnection())
+            {
+                dbConnection.SetQuery("SELECT `definition_id`, `data` FROM `item_presents` WHERE `furni_id` = @presentid AND `player_id` = @playerid LIMIT 1");
+                dbConnection.AddParameter("@presentid", presentId);
+                dbConnection.AddParameter("@playerid", playerId);
+
+                using (var reader = dbConnection.ExecuteReader())
+                {
+                    if (reader.Read())
+                    {
+                        var definitionId = reader.GetInt32(0);
+                        var data = reader.GetString(1);
+                
+                        return (definitionId, data);
+                    }
+                }
+            }
+        
+            return (-1, string.Empty);
+        }
+
+        public void DeletePresent(int presentId)
+        {
+            using (DatabaseConnection dbConnection = Engine.Locator.ConnectionPool.PopConnection())
+            {
+                dbConnection.SetQuery("DELETE FROM `item_presents` WHERE `furni_id` = @presentid");
+                dbConnection.AddParameter("@presentid", presentId);
                 dbConnection.Execute();
             }
         }

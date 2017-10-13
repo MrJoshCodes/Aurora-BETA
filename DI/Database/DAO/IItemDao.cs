@@ -4,6 +4,7 @@ using AuroraEmu.Game.Clients;
 using AuroraEmu.Game.Catalog.Models;
 using AuroraEmu.Game.Items.Models;
 using AuroraEmu.Game.Items.Models.Dimmer;
+using AuroraEmu.Game.Players.Models;
 
 namespace AuroraEmu.DI.Database.DAO
 {
@@ -15,11 +16,17 @@ namespace AuroraEmu.DI.Database.DAO
         
         void GiveItem(Client client, ItemDefinition template, string extraData);
         
+        void GiveItem(Player targetUser, CatalogProduct product, string extraData);
+        
+        int GiveItem(Player targetUser, ItemDefinition template, string extraData);
+        
         ConcurrentDictionary<int, Item> GetItemsInRoom(int roomId);
 
         Dictionary<int, Item> GetItemsFromOwner(int ownerId);
 
         void UpdateItem(int itemId, int x, int y, int rot, object roomId);
+
+        void DeleteItem(int itemId);
 
         void AddFloorItem(int itemId, int x, int y, int rot, int roomId);
 
@@ -28,5 +35,10 @@ namespace AuroraEmu.DI.Database.DAO
         void UpdateItemData(int itemId, string data);
 
         void UpdateDimmerPreset(DimmerData data);
+
+        void CreatePresent(int definitionId, int playerId, int giftId, string data);
+        
+        (int, string) GetPresent(int presentId, int playerId);
+        void DeletePresent(int presentId);
     }
 }

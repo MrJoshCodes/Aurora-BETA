@@ -7,6 +7,7 @@ using AuroraEmu.Game.Items.Models;
 using AuroraEmu.Game.Items.Models.Dimmer;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using AuroraEmu.Game.Players.Models;
 
 namespace AuroraEmu.DI.Game.Items
 {
@@ -25,6 +26,10 @@ namespace AuroraEmu.DI.Game.Items
         void GiveItem(Client client, CatalogProduct product, string extraData);
         
         void GiveItem(Client client, ItemDefinition template, string extraData);
+        
+        void GiveItem(Player targetUser, CatalogProduct product, string extraData);
+        
+        int GiveItem(Player targetUser, ItemDefinition template, string extraData);
 
         ConcurrentDictionary<int, Item> GetItemsInRoom(int roomId);
 
@@ -35,5 +40,13 @@ namespace AuroraEmu.DI.Game.Items
         void AddWallItem(int itemId, string wallposition, int roomId);
 
         DimmerData GetDimmerData(int itemId);
+
+        ItemDefinition GetRandomPresent();
+
+        void CreatePresent(int definitionId, int playerId, int giftId, string data);
+        
+        (int, string) GetPresent(int presentId, int playerId);
+
+        void DeletePresent(int presentId);
     }
 }
