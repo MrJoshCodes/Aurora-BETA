@@ -91,6 +91,7 @@ namespace AuroraEmu.Network.Game.Packets
                 { 341, new RoomDimmerGetPresetsMessageEvent() },
                 { 342, new RoomDimmerSavePresetMessageEvent() },
                 { 343, new RoomDimmerChangeStateMessageEvent() },
+                {78, new PresentOpenMessageEvent()},
 
                 { 454, new GetModeratorUserInfoMessageEvent() },
                 { 96, new AssignRightsMessageEvent() }

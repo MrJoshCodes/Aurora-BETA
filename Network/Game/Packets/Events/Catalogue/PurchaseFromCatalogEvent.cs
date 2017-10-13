@@ -1,5 +1,7 @@
 ﻿using AuroraEmu.Game.Catalog;
 using AuroraEmu.Game.Clients;
+using AuroraEmu.Game.Items.Models;
+using AuroraEmu.Game.Players.Models;
 using AuroraEmu.Network.Game.Packets.Composers.Catalogue;
 using AuroraEmu.Network.Game.Packets.Composers.Inventory;
 using AuroraEmu.Network.Game.Packets.Composers.Users;
@@ -13,10 +15,10 @@ namespace AuroraEmu.Network.Game.Packets.Events.Catalogue
             var pageId = msgEvent.ReadVL64();
             var productId = msgEvent.ReadVL64();
             var data = msgEvent.ReadString();
-            var unk = msgEvent.ReadVL64(); // TODO: Find this out perhaps..?
-
+            var isGift = msgEvent.ReadVL64();
+            
             var product = Engine.Locator.CatalogController.GetProduct(productId);
-
+            
             if (product == null) 
                 return;
             
@@ -26,6 +28,47 @@ namespace AuroraEmu.Network.Game.Packets.Events.Catalogue
             if (shortOnCoins || shortOnPixels)
             {
                 client.SendComposer(new NotEnoughBalanceMessageComposer(shortOnCoins, shortOnPixels));
+                return;
+            }
+
+            if (isGift == 1)
+            {
+                var targetUsername = msgEvent.ReadString();
+                var message = msgEvent.ReadString();
+                
+                // First, check if username exists
+                Player player = Engine.Locator.PlayerController.GetPlayerByName(targetUsername);
+
+                if (player == null)
+                {
+                    // TODO: Send error 
+                    return;
+                }
+                
+                if (product.PriceCoins > 0)
+                {
+                    client.DecreaseCredits(product.PriceCoins);
+                }
+
+                if (product.PricePixels > 0)
+                {
+                    client.DecreasePixels(product.PricePixels);
+                }
+
+                ItemDefinition definition = Engine.Locator.ItemController.GetRandomPresent();
+
+                int giftId = Engine.Locator.ItemController.GiveItem(player, definition, "!" + message);
+                
+                Engine.Locator.ItemController.CreatePresent(product.TemplateId, player.Id, giftId, data);
+                
+                client.QueueComposer(new PurchaseOKMessageComposer(product));
+
+                Client targetClient = Engine.Locator.ClientController.GetClientByHabbo(player.Id);
+                
+                if (targetClient != null && targetClient.Items != null)
+                    targetClient.SendComposer(new FurniListUpdateComposer());
+
+                client.Flush();
             }
             else
             {
@@ -38,7 +81,7 @@ namespace AuroraEmu.Network.Game.Packets.Events.Catalogue
                 {
                     client.DecreasePixels(product.PricePixels);
                 }
-
+                
                 if (product.IsDeal)
                 {
                     var dealItems = Engine.Locator.CatalogController.GetDeal(product.DealId);
