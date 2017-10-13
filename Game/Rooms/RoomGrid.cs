@@ -29,7 +29,7 @@ namespace AuroraEmu.Game.Rooms
             {
                 foreach (Point2D tile in item.Tiles())
                 {
-                    _tileAt[(tile.X, tile.Y)].Items.Add(item);
+                    _tileAt[(tile.X, tile.Y)].AddItem(item);
                 }
             }
             EntityGrid = new bool[_room.Map.MapSize.Item1, _room.Map.MapSize.Item2];
@@ -59,7 +59,14 @@ namespace AuroraEmu.Game.Rooms
         public bool PlaceObject(int x, int y, int rot, Item item)
         {
             if (ItemsAt(x, y).Count > 0)
-                return false;
+                if (ItemsAt(x, y)[0].Definition.CanStack)
+                {
+                    _tileAt[(x, y)].AddItem(item);
+                    return true;
+                }
+                else
+                    return false;
+
             if (EntityGrid[x, y])
                 return false;
 
@@ -69,15 +76,17 @@ namespace AuroraEmu.Game.Rooms
                 {
                     if (ItemsAt(point).Count > 0)
                     {
-                        return false;
+                        if (ItemsAt(x, y)[0].Definition.CanStack)
+                            return true;
+                        else
+                            return false;
                     }
                     else
                     {
-                        _tileAt[(point.X, point.Y)].Items.Add(item);
+                        _tileAt[(point.X, point.Y)].AddItem(item);
                     }
                 }
             }
-            _tileAt[(x, y)].Items.Add(item);
             return true;
         }
 
@@ -91,32 +100,26 @@ namespace AuroraEmu.Game.Rooms
         /// <returns>True if it succeeded else false</returns>
         public bool MoveItem(Item item, int rot, int newX, int newY)
         {
-            if (ItemsAt(newX, newY).Count > 0)
-                return false;
-            if (EntityGrid[newX, newY])
-                return false;
-
-            if (item.Definition.Length > 1 || item.Definition.Width > 1)
+            foreach (Point2D point in Utilities.Extensions.Tiles(item.Definition.Length, item.Definition.Width, newX, newY, rot))
             {
-                var affectedTiles = Utilities.Extensions.AffectedTiles(item.Definition.Length, item.Definition.Width, newX, newY, rot);
-                foreach (Point2D point in affectedTiles)
+                if (EntityGrid[point.X, point.Y])
+                    return false;
+
+                if (ItemsAt(point.X, point.Y).Count > 0)
                 {
-                    if (ItemsAt(point).Count > 0)
-                    {
-                        return false;
-                    }
+                    if (ItemsAt(point.X, point.Y)[0].Definition.CanStack)
+                        _tileAt[(point.X, point.Y)].AddItem(item);
                     else
-                    {
-                        _tileAt[(point.X, point.Y)].Items.Add(item);
-                    }
+                        return false;
                 }
-
-                foreach (Point2D point in item.AffectedTiles)
-                    _tileAt[(point.X, point.Y)].Items.Remove(item);
+                else
+                {
+                    _tileAt[(point.X, point.Y)].AddItem(item);
+                }
             }
-
+            foreach (Point2D point in item.AffectedTiles)
+                _tileAt[(point.X, point.Y)].Items.Remove(item);
             _tileAt[(item.Position.X, item.Position.Y)].Items.Remove(item);
-            _tileAt[(newX, newY)].Items.Add(item);
             return true;
         }
 
@@ -139,13 +142,14 @@ namespace AuroraEmu.Game.Rooms
                     }
                     else
                     {
-                        _tileAt[(point.X, point.Y)].Items.Add(item);
+                        _tileAt[(point.X, point.Y)].AddItem(item);
                     }
                 }
 
                 foreach (Point2D point in item.AffectedTiles)
                     _tileAt[(point.X, point.Y)].Items.Remove(item);
             }
+            _tileAt[(item.Position.X, item.Position.Y)].RotateItem(item);
             return true;
         }
 

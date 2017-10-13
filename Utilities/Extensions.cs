@@ -77,5 +77,12 @@ namespace AuroraEmu.Utilities
 
             return points;
         }
+
+        public static List<Point2D> Tiles(int length, int width, int posX, int posY, int rotation)
+        {
+            List<Point2D> affTiles = AffectedTiles(length, width, posX, posY, rotation);
+            affTiles.Add(new Point2D(posX, posY));
+            return affTiles;
+        }
     }
 }
