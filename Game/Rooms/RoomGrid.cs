@@ -27,12 +27,14 @@ namespace AuroraEmu.Game.Rooms
 
             foreach (Item item in _room.Items.Values.Where(x => (x.Position.X != 0 && x.Position.Y != 0)))
             {
-                foreach (Point2D tile in item.Tiles())
+                var tiles = Utilities.Extensions.AffectedTiles(item.Definition.Length, item.Definition.Width, item.Position.X, item.Position.Y, item.Rotation);
+                tiles.Add(new Point2D(item.Position.X, item.Position.Y));
+                foreach (Point2D tile in tiles)
                 {
                     _tileAt[(tile.X, tile.Y)].AddItem(item);
                 }
             }
-            EntityGrid = new bool[_room.Map.MapSize.Item1, _room.Map.MapSize.Item2];
+            EntityGrid = new bool[_room.Map.MapSize.Item1 + 1, _room.Map.MapSize.Item2 + 1];
         }
 
         /// <summary>
@@ -42,7 +44,9 @@ namespace AuroraEmu.Game.Rooms
         /// <param name="item">The object</param>
         public void PickupObject(Item item)
         {
-            foreach (Point2D point in item.Tiles())
+            var tiles = Utilities.Extensions.AffectedTiles(item.Definition.Length, item.Definition.Width, item.Position.X, item.Position.Y, item.Rotation);
+            tiles.Add(new Point2D(item.Position.X, item.Position.Y));
+            foreach (Point2D point in tiles)
             {
                 _tileAt[(point.X, point.Y)].Items.Remove(item);
             }
@@ -58,35 +62,17 @@ namespace AuroraEmu.Game.Rooms
         /// <returns>true if it's able to place else false</returns>
         public bool PlaceObject(int x, int y, int rot, Item item)
         {
-            if (ItemsAt(x, y).Count > 0)
-                if (ItemsAt(x, y)[0].Definition.CanStack)
-                {
-                    _tileAt[(x, y)].AddItem(item);
-                    return true;
-                }
-                else
-                    return false;
+            var points = Utilities.Extensions.AffectedTiles(item.Definition.Length, item.Definition.Width, x, y, rot);
+            points.Add(new Point2D(x, y));
 
-            if (EntityGrid[x, y])
-                return false;
-
-            if (item.Definition.Length > 1 || item.Definition.Width > 1)
+            foreach (Point2D point in points)
             {
-                foreach (Point2D point in Utilities.Extensions.AffectedTiles(item.Definition.Length, item.Definition.Width, x, y, rot))
-                {
-                    if (ItemsAt(point).Count > 0)
-                    {
-                        if (ItemsAt(x, y)[0].Definition.CanStack)
-                            return true;
-                        else
-                            return false;
-                    }
-                    else
-                    {
-                        _tileAt[(point.X, point.Y)].AddItem(item);
-                    }
-                }
+                if (!ValidPoint(point))
+                    return false;
             }
+            foreach (Point2D point in points)
+                _tileAt[(point.X, point.Y)].AddItem(item);
+
             return true;
         }
 
@@ -100,25 +86,27 @@ namespace AuroraEmu.Game.Rooms
         /// <returns>True if it succeeded else false</returns>
         public bool MoveItem(Item item, int rot, int newX, int newY)
         {
-            foreach (Point2D point in Utilities.Extensions.Tiles(item.Definition.Length, item.Definition.Width, newX, newY, rot))
+            if (item.Definition.Width > 1 || item.Definition.Length > 1)
             {
-                if (EntityGrid[point.X, point.Y])
-                    return false;
+                var points = Utilities.Extensions.AffectedTiles(item.Definition.Length, item.Definition.Width, newX, newY, rot);
+                points.Add(new Point2D(newX, newY));
 
-                if (ItemsAt(point.X, point.Y).Count > 0)
-                {
-                    if (ItemsAt(point.X, point.Y)[0].Definition.CanStack)
-                        _tileAt[(point.X, point.Y)].AddItem(item);
-                    else
+                foreach (Point2D point in points)
+                    if (!ValidPoint(point))
                         return false;
-                }
-                else
-                {
+
+                foreach (Point2D point in points)
                     _tileAt[(point.X, point.Y)].AddItem(item);
-                }
+
+                foreach (Point2D point in item.AffectedTiles)
+                    _tileAt[(point.X, point.Y)].Items.Remove(item);
             }
-            foreach (Point2D point in item.AffectedTiles)
-                _tileAt[(point.X, point.Y)].Items.Remove(item);
+            else
+            {
+                if (!ValidPoint(newX, newY))
+                    _tileAt[(newX, newY)].AddItem(item);
+            }
+
             _tileAt[(item.Position.X, item.Position.Y)].Items.Remove(item);
             return true;
         }
@@ -150,6 +138,19 @@ namespace AuroraEmu.Game.Rooms
                     _tileAt[(point.X, point.Y)].Items.Remove(item);
             }
             _tileAt[(item.Position.X, item.Position.Y)].RotateItem(item);
+            return true;
+        }
+
+        public bool ValidPoint(Point2D point) =>
+            ValidPoint(point.X, point.Y);
+
+        public bool ValidPoint(int x, int y)
+        {
+            if (EntityGrid[x, y])
+                return false;
+
+            if (ItemsAt(x, y).Count > 0)
+                return false;
             return true;
         }
 
