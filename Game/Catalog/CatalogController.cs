@@ -1,63 +1,95 @@
-﻿using AuroraEmu.Network.Game.Packets;
-using NHibernate;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using AuroraEmu.DI.Game.Catalog;
+using System;
+using System.Linq;
+using AuroraEmu.Game.Catalog.Models.Vouchers;
+using AuroraEmu.Game.Catalog.Models;
+using AuroraEmu.DI.Database.DAO;
 
 namespace AuroraEmu.Game.Catalog
 {
-    public class CatalogController
+    public class CatalogController : ICatalogController
     {
-        private readonly IReadOnlyList<CatalogPage> pages;
+        private readonly Dictionary<int, List<CatalogDealItem>> _deals;
+        private readonly Dictionary<int, CatalogPage> _pages;
+        private readonly Dictionary<int, CatalogProduct> _products;
+        public Dictionary<string, Voucher> Vouchers { get; }
+        public ICatalogDao Dao { get; }
 
-        public CatalogController()
+        public CatalogController(ICatalogDao dao)
         {
-            using (ISession session = Engine.Database.SessionFactory.OpenSession())
-            {
-                pages = session.CreateCriteria<CatalogPage>().List<CatalogPage>() as IReadOnlyList<CatalogPage>;
-            }
+            Dao = dao;
+            Vouchers = new Dictionary<string, Voucher>();
+            _deals = new Dictionary<int, List<CatalogDealItem>>();
+            _pages = new Dictionary<int, CatalogPage>();
+            _products = new Dictionary<int, CatalogProduct>();
 
-            Engine.Logger.Info($"Loaded {pages.Count} catalog pages.");
+            ReloadPages();
+            ReloadProducts();
+            ReloadDeals();
+            ReloadVouchers();
         }
 
-        private IReadOnlyList<CatalogPage> GetPagesByParent(int parentId)
+        public void ReloadPages()
         {
-            List<CatalogPage> childs = new List<CatalogPage>();
+            _pages.Clear();
+            Dao.ReloadCatalogPage(_pages);
 
-            foreach (CatalogPage page in pages)
-            {
-                if (page.ParentId == parentId)
-                    childs.Add(page);
-            }
-
-            return childs;
+            Engine.Logger.Info($"Loaded {_pages.Count} catalogue pages.");
         }
 
-        public void SerializeIndex(MessageComposer composer)
+        public string GenerateExtraData(CatalogProduct product, string extraData)
         {
-            IReadOnlyList<CatalogPage> categories = GetPagesByParent(0);
-            composer.AppendVL64(categories.Count);
-
-            foreach (CatalogPage page in pages)
+            switch (product.Template.ItemType)
             {
-                SerializePage(composer, page);
+                case "poster":
+                    return product.Data;
+                case "trophy":
+                    return $"{{USERNAME}} {(char)9} {DateTime.Now.ToString("dd-MM-yyyy")} {(char)9} {extraData}";
+                case "dimmer":
+                    return "1,1,1,#000000,255";
+                default:
+                    return "";
             }
         }
 
-        private void SerializePage(MessageComposer composer, CatalogPage page)
+        public void ReloadProducts()
         {
-            IReadOnlyList<CatalogPage> children = GetPagesByParent(page.Id);
+            _products.Clear();
+            Dao.ReloadProducts(_products);
 
-            composer.AppendVL64(page.Visible);
-            composer.AppendVL64(page.IconColor);
-            composer.AppendVL64(page.IconImage);
-            composer.AppendVL64(page.Id);
-            composer.AppendString(page.Name);
-            composer.AppendVL64(page.Development);
-            composer.AppendVL64(children.Count);
-
-            foreach (CatalogPage child in children)
-            {
-                SerializePage(composer, child);
-            }
+            Engine.Logger.Info($"Loaded {_products.Count} catalogue products.");
         }
+
+        public void ReloadDeals()
+        {
+            _deals.Clear();
+            Dao.ReloadDeals(_deals);
+
+            Engine.Logger.Info($"Loaded {_deals.Count} deals.");
+        }
+
+        public void ReloadVouchers()
+        {
+            Vouchers.Clear();
+            Dao.ReloadVouchers(Vouchers);
+
+            Engine.Logger.Info($"Loaded {Vouchers.Count} vouchers.");
+        }
+
+        public CatalogPage GetPage(int id) =>
+            _pages.TryGetValue(id, out CatalogPage page) ? page : null;
+
+        public CatalogProduct GetProduct(int id) =>
+            _products.TryGetValue(id, out CatalogProduct product) ? product : null;
+
+        public List<CatalogDealItem> GetDeal(int dealId) =>
+            _deals.TryGetValue(dealId, out List<CatalogDealItem> dealItems) ? dealItems : null;
+
+        public List<CatalogPage> GetPages(int parent) =>
+            _pages.Values.Where(page => page.ParentId == parent).ToList();
+
+        public List<CatalogProduct> GetProducts(int pageId) =>
+            _products.Values.Where(product => product.PageId == pageId).ToList();
     }
 }

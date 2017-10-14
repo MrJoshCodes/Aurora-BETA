@@ -32,6 +32,14 @@ namespace AuroraEmu.Network.Game.Packets
             return dest;
         }
 
+        public bool HasBytes
+        {
+            get
+            {
+                return buffer.ReadableBytes > 0;
+            }
+        }
+
         public int ReadB64()
         {
             return Base64Encoding.DecodeInt32(ReadBytes(2));
@@ -39,8 +47,7 @@ namespace AuroraEmu.Network.Game.Packets
 
         public int ReadVL64()
         {
-            int totalBytes;
-            int value = WireEncoding.DecodeInt32(GetBytes(buffer.ReadableBytes), out totalBytes);
+            int value = WireEncoding.DecodeInt32(GetBytes(buffer.ReadableBytes), out int totalBytes);
 
             ReadBytes(totalBytes);
 
@@ -49,12 +56,12 @@ namespace AuroraEmu.Network.Game.Packets
 
         public string ReadString()
         {
-            return Encoding.Default.GetString(ReadBytes(ReadB64()));
+            return Encoding.GetEncoding(0).GetString(ReadBytes(ReadB64()));
         }
 
         public override string ToString()
         {
-            return Encoding.Default.GetString(buffer.ToArray());
+            return Encoding.GetEncoding(0).GetString(buffer.ToArray());
         }
     }
 }

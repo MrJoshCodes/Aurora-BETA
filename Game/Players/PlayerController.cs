@@ -1,61 +1,71 @@
-﻿using NHibernate;
-using NHibernate.Criterion;
+﻿using AuroraEmu.DI.Database.DAO;
+using AuroraEmu.DI.Game.Players;
+using AuroraEmu.Game.Players.Models;
 using System.Collections.Concurrent;
 
 namespace AuroraEmu.Game.Players
 {
-    public class PlayerController
+    public class PlayerController : IPlayerController
     {
-        private readonly ConcurrentDictionary<int, Player> players;
+        private readonly ConcurrentDictionary<int, Player> _playersById;
+        private readonly ConcurrentDictionary<int, string> _playerNamesById;
+        private readonly ConcurrentDictionary<string, Player> _playersByName;
+        public IPlayerDao Dao { get; }
 
-        public PlayerController()
+        public PlayerController(IPlayerDao dao)
         {
-            players = new ConcurrentDictionary<int, Players.Player>();
+            Dao = dao;
+            _playersById = new ConcurrentDictionary<int, Player>();
+            _playerNamesById = new ConcurrentDictionary<int, string>();
+            _playersByName = new ConcurrentDictionary<string, Player>();
         }
 
-        public Player this[int id]
+        public Player GetPlayerById(int id)
         {
-            get
+            if (_playersById.TryGetValue(id, out Player player))
+                return player;
+
+            Player result = Dao.GetPlayerById(id);
+            if (result != null)
             {
-                return GetPlayerById(id);
+                _playersById.TryAdd(player.Id, player);
+                _playerNamesById.TryAdd(player.Id, player.Username);
+                return result;
             }
-        }
-
-        private Player GetPlayerById(int id)
-        {
-            Player player;
-
-            if (players.TryGetValue(id, out player))
-                return players[id];
-
-            using (ISession session = Engine.Database.SessionFactory.OpenSession())
-            {
-                player = session.Get<Player>(id);
-            }
-
-            if (player != null)
-            {
-                players.TryAdd(player.Id, player);
-            }
-
-            return player;
+            return null;
         }
 
         public Player GetPlayerBySSO(string sso)
         {
-            Player player;
-
-            using (ISession session = Engine.Database.SessionFactory.OpenSession())
+            Player newPlayer = Dao.GetPlayerBySSO(sso);
+            if (newPlayer != null)
             {
-                player = session.CreateCriteria<Player>().Add(Restrictions.Eq("SSO", sso)).UniqueResult<Player>();
+                _playersById.AddOrUpdate(newPlayer.Id, newPlayer, (oldkey, oldvalue) => newPlayer);
+                _playerNamesById.AddOrUpdate(newPlayer.Id, newPlayer.Username, (oldkey, oldvalue) => newPlayer.Username);
+                _playersByName.AddOrUpdate(newPlayer.Username, newPlayer, (oldkey, oldvalue) => newPlayer);
+                return newPlayer;
             }
+            return null;
+        }
 
-            if (player != null)
-            {
-                players.AddOrUpdate(player.Id, player, ((id, plr) => player));
-            }
+        public string GetPlayerNameById(int id)
+        {
+            if (_playerNamesById.TryGetValue(id, out string name))
+                return name;
 
-            return player;
+            Dao.GetPlayerNameById(id, out name);
+            return name;
+        }
+
+        public Player GetPlayerByName(string name)
+        {
+            if (_playersByName.TryGetValue(name, out Player player))
+                return player;
+
+            Player newPlayer = Dao.GetPlayerByName(name);
+            if (newPlayer != null)
+                return newPlayer;
+            return null;
         }
     }
 }

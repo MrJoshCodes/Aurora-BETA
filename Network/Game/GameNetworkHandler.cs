@@ -3,54 +3,64 @@ using AuroraEmu.Utilities.Encoding;
 using DotNetty.Buffers;
 using DotNetty.Transport.Channels;
 using System.Text;
+using System;
 
 namespace AuroraEmu.Network.Game
 {
     public class GameNetworkHandler : ChannelHandlerAdapter
     {
-        public GameNetworkHandler()
-        {
-        }
-
         public override void ChannelActive(IChannelHandlerContext ctx)
         {
             base.ChannelActive(ctx);
 
-            Engine.Game.Clients.AddClient(ctx.Channel);
+            Engine.Locator.ClientController.AddClient(ctx.Channel);
 
-            Engine.Logger.Debug($"Client connected to client: {ctx.Channel.RemoteAddress.ToString()}");
+            Engine.Logger.Debug($"Client connected to client: {ctx.Channel.RemoteAddress}");
         }
 
         public override void ChannelInactive(IChannelHandlerContext ctx)
         {
             base.ChannelInactive(ctx);
+            using (Client client = Engine.Locator.ClientController.GetClient(ctx.Channel))
+            {
+                client.Disconnect();
+            }
+            Engine.Locator.ClientController.RemoveClient(ctx.Channel);
 
-            Engine.Game.Clients.RemoveClient(ctx.Channel);
-
-            Engine.Logger.Debug($"Client disconnected from client: {ctx.Channel.RemoteAddress.ToString()}");
+            Engine.Logger.Debug($"Client disconnected from client: {ctx.Channel.RemoteAddress}");
         }
 
         public override void ChannelReadComplete(IChannelHandlerContext context) => context.Flush();
 
         public override void ChannelRead(IChannelHandlerContext ctx, object msg)
         {
-            Client client = Engine.Game.Clients.GetClient(ctx.Channel);
-            var message = msg as IByteBuffer;
-
-            if (message.ReadByte() == 60)
+            Client client = Engine.Locator.ClientController.GetClient(ctx.Channel);
+            IByteBuffer message = msg as IByteBuffer;
+            if (message.GetByte(0) == 60)
             {
-                string policy = "<?xml version=\"1.0\"?>\r\n<!DOCTYPE cross-domain-policy SYSTEM \"/xml/dtds/cross-domain-policy.dtd\">\r\n<cross-domain-policy>\r\n   <allow-access-from domain=\"*\" to-ports=\"1-65535\" />\r\n</cross-domain-policy>\0";
-                ctx.Channel.WriteAndFlushAsync(Unpooled.CopiedBuffer(Encoding.Default.GetBytes(policy))).Wait();
+                string policy =
+                    "<?xml version=\"1.0\"?>\r\n<!DOCTYPE cross-domain-policy SYSTEM \"/xml/dtds/cross-domain-policy.dtd\">\r\n<cross-domain-policy>\r\n   <allow-access-from domain=\"*\" to-ports=\"1-65535\" />\r\n</cross-domain-policy>\0";
+                ctx.Channel.WriteAndFlushAsync(Unpooled.CopiedBuffer(Encoding.GetEncoding(0).GetBytes(policy))).Wait();
             }
             else
             {
-                int length = Base64Encoding.DecodeInt32(message.ReadBytes(2).ToArray());
-                IByteBuffer packet = message.ReadBytes(length);
+                while (message.ReadableBytes >= 5)
+                {
+                    int length = Base64Encoding.DecodeInt32(message.ReadBytes(3).ToArray());
 
-                Engine.GameNetwork.Packets.Handle(client, packet);
+                    if (length > 0)
+                    {
+                        IByteBuffer packet = message.ReadBytes(length);
+
+                        Engine.Locator.PacketController.Handle(client, packet);
+                    }
+                }
             }
 
             base.ChannelRead(ctx, msg);
         }
+
+        public override void ExceptionCaught(IChannelHandlerContext context, Exception exception) =>
+            Engine.Logger.Error(exception.ToString());
     }
 }
