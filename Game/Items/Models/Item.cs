@@ -22,8 +22,15 @@ namespace AuroraEmu.Game.Items.Models
         public bool Cycling { get; private set; } = false;
         public RoomActor ActorOnItem { get; set; }
         public Point2D Position { get; set; }
-        public IList<Point2D> AffectedTiles =>
+        public List<Point2D> AffectedTiles =>
             Utilities.Extensions.AffectedTiles(Definition.Length, Definition.Width, Position.X, Position.Y, Rotation);
+        public List<Point2D> Tiles {
+            get {
+                List<Point2D> affTiles = Utilities.Extensions.AffectedTiles(Definition.Length, Definition.Width, Position.X, Position.Y, Rotation);
+                affTiles.Add(Position);
+                return affTiles;
+            }
+        }
 
         public Item(int id, int ownerId, int definitionId, string data)
         {

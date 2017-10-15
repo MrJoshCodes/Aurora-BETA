@@ -1,6 +1,8 @@
 ﻿using AuroraEmu.Game.Clients;
 using AuroraEmu.Game.Items.Models;
+using AuroraEmu.Game.Rooms.Pathfinder;
 using AuroraEmu.Network.Game.Packets.Composers.Items;
+using System.Collections.Generic;
 
 namespace AuroraEmu.Network.Game.Packets.Events.Rooms.Items
 {
@@ -40,7 +42,17 @@ namespace AuroraEmu.Network.Game.Packets.Events.Rooms.Items
                         int y = int.Parse(dataBits[2]);
                         int rot = int.Parse(dataBits[3]);
 
-                        if (!client.CurrentRoom.Grid.PlaceObject(x, y, rot, item)) return;
+                        //Generate tiles
+                        List<Point2D> points = Utilities.Extensions.AffectedTiles(item.Definition.Length, item.Definition.Width, x, y, rot);
+                        points.Add(new Point2D(x, y));
+
+                        //Check if the point is valid
+                        foreach (Point2D point in points)
+                            if (!client.CurrentRoom.Grid.ValidPoint(point))
+                                return;
+
+                        //Place the object
+                        client.CurrentRoom.Grid.PlaceObject(points, item);
 
                         item.Position.X = x;
                         item.Position.Y = y;
