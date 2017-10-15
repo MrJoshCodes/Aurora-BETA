@@ -82,6 +82,10 @@ namespace AuroraEmu
                         Locator.CatalogController.ReloadDeals();
                         Locator.CatalogController.ReloadVouchers();
                         break;
+
+                    default:
+                        System.Console.WriteLine("Unknown command");
+                        break;
                 }
             }
         }

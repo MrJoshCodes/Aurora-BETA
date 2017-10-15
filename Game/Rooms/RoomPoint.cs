@@ -10,8 +10,9 @@ namespace AuroraEmu.Game.Rooms
         public int X { get; }
         public int Y { get; }
         public List<Item> Items { get; private set; }
-        private Item HighestItem =>
+        public Item HighestItem =>
             Items[Items.Count - 1];
+        private double highestHeight = 0d;
 
         public RoomPoint(int x, int y)
         {
@@ -22,15 +23,22 @@ namespace AuroraEmu.Game.Rooms
 
         public void AddItem(Item item)
         {
-            double _totalHeight = 0;
-            foreach (Item stackItem in Items)
+            if (Items.Count > 0)
+                foreach (Item stackItem in Items)
+                {
+                    double totalHeight = stackItem.Position.Z;
+                    if (totalHeight > highestHeight)
+                    {
+                        highestHeight = totalHeight;
+                    }
+                }
+            else
             {
-                if (stackItem.Position.Z > stackItem.Definition.Height)
-                    _totalHeight += stackItem.Position.Z;
-                else
-                    _totalHeight += stackItem.Definition.Height;
+                highestHeight = 0;
             }
-            item.Position.Z = _totalHeight;
+
+            item.Position.Z = highestHeight;
+            highestHeight += item.Definition.Height;
             Items.Add(item);
             Items.OrderByDescending(x => x.Position.Z);
         }
@@ -39,12 +47,9 @@ namespace AuroraEmu.Game.Rooms
         {
             if (item.Equals(HighestItem))
                 return;
-            double _totalHeight = 0;
-            foreach (Item stackItem in Items)
-            {
-                _totalHeight += stackItem.Definition.Height + stackItem.Position.Z;
-            }
-            item.Position.Z = _totalHeight;
+
+            item.Position.Z = highestHeight;
+            highestHeight += item.Definition.Height;
             Items.OrderByDescending(x => x.Position.Z);
         }
 

@@ -24,7 +24,7 @@ namespace AuroraEmu.DI.Database.DAO
 
         Dictionary<int, Item> GetItemsFromOwner(int ownerId);
 
-        void UpdateItem(int itemId, int x, int y, int rot, object roomId);
+        void UpdateItem(int itemId, int x, int y, double z, int rot, object roomId);
 
         void DeleteItem(int itemId);
 
