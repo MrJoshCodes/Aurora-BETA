@@ -17,7 +17,7 @@ namespace AuroraEmu.Game.Rooms.Models
         public bool[,] PassableTiles { get; }
         public double[,] TileHeights { get; }
         public char[,] HeightMap { get; }
-        public (int, int) MapSize { get; }
+        public (int X, int Y) MapSize { get; }
 
         public RoomMap(MySqlDataReader reader)
         {
@@ -32,9 +32,9 @@ namespace AuroraEmu.Game.Rooms.Models
 
             MapSize = (_splitMap[0].Length, _splitMap.Length);
 
-            PassableTiles = new bool[MapSize.Item1, MapSize.Item2];
-            TileHeights = new double[MapSize.Item1, MapSize.Item2];
-            HeightMap = new char[MapSize.Item1, MapSize.Item2];
+            PassableTiles = new bool[MapSize.X, MapSize.Y];
+            TileHeights = new double[MapSize.X, MapSize.Y];
+            HeightMap = new char[MapSize.X, MapSize.Y];
 
             Generate();
             DisableDiagonal = false;
@@ -42,12 +42,12 @@ namespace AuroraEmu.Game.Rooms.Models
 
         public void Generate()
         {
-            for (int y = 0; y < MapSize.Item2; y++)
+            for (int y = 0; y < MapSize.Y; y++)
             {
                 //if (y > 0)
                 //    splitMap[y] = splitMap[y].Substring(1); 
 
-                for (int x = 0; x < MapSize.Item1; x++)
+                for (int x = 0; x < MapSize.X; x++)
                 {
                     string square = _splitMap[y].Substring(x, 1).Trim().ToLower();
 

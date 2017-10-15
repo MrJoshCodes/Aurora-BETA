@@ -16,134 +16,107 @@ namespace AuroraEmu.Game.Rooms
         public RoomGrid(Room room)
         {
             _room = room;
+
+            //Initialize the grid
             _tileAt = new Dictionary<(int, int), RoomPoint>();
-            for (int x = 0; x < _room.Map.MapSize.Item1; x++)
+            for (int x = 0; x < _room.Map.MapSize.X; x++)
             {
-                for (int y = 0; y < _room.Map.MapSize.Item2; y++)
+                for (int y = 0; y < _room.Map.MapSize.Y; y++)
                 {
                     _tileAt.Add((x, y), new RoomPoint(x, y));
                 }
             }
 
+            //Add the items to the grid
             foreach (Item item in _room.Items.Values.Where(x => (x.Position.X != 0 && x.Position.Y != 0)))
             {
-                var tiles = Utilities.Extensions.AffectedTiles(item.Definition.Length, item.Definition.Width, item.Position.X, item.Position.Y, item.Rotation);
-                tiles.Add(new Point2D(item.Position.X, item.Position.Y));
-                foreach (Point2D tile in tiles)
+                foreach (Point2D tile in item.Tiles)
                 {
                     _tileAt[(tile.X, tile.Y)].AddItem(item);
                 }
             }
-            EntityGrid = new bool[_room.Map.MapSize.Item1 + 1, _room.Map.MapSize.Item2 + 1];
+            EntityGrid = new bool[_room.Map.MapSize.X + 1, _room.Map.MapSize.Y + 1];
         }
-
+        
         /// <summary>
-        /// Removes the object from the dictionary
-        /// Even the affected tiles will be removed.
+        /// Removes the item from the list
         /// </summary>
-        /// <param name="item">The object</param>
+        /// <param name="item">Rememoves the affected item</param>
         public void PickupObject(Item item)
         {
-            var tiles = Utilities.Extensions.AffectedTiles(item.Definition.Length, item.Definition.Width, item.Position.X, item.Position.Y, item.Rotation);
-            tiles.Add(new Point2D(item.Position.X, item.Position.Y));
-            foreach (Point2D point in tiles)
+            foreach (Point2D point in item.Tiles)
             {
                 _tileAt[(point.X, point.Y)].Items.Remove(item);
             }
         }
 
         /// <summary>
-        /// Tries to place the object to the roomgrid.
+        /// Adds the item to the list
         /// </summary>
-        /// <param name="x">The X-Coordination</param>
-        /// <param name="y">The Y-Coordination</param>
-        /// <param name="rot">The rotation state</param>
-        /// <param name="item">The object</param>
-        /// <returns>true if it's able to place else false</returns>
-        public bool PlaceObject(int x, int y, int rot, Item item)
+        /// <param name="points">The tiles the item is affecting</param>
+        /// <param name="item">The item</param>
+        public void PlaceObject(List<Point2D> points, Item item)
         {
-            var points = Utilities.Extensions.AffectedTiles(item.Definition.Length, item.Definition.Width, x, y, rot);
-            points.Add(new Point2D(x, y));
-
+            //Adds the item to the list
             foreach (Point2D point in points)
             {
-                if (!ValidPoint(point))
-                    return false;
-            }
-            foreach (Point2D point in points)
                 _tileAt[(point.X, point.Y)].AddItem(item);
-
-            return true;
+            }
         }
 
         /// <summary>
-        /// Tries to move the object on the roomgrid.
+        /// Moves the item
         /// </summary>
-        /// <param name="item">The object</param>
-        /// <param name="rot">The rotation-state</param>
-        /// <param name="newX">The new X-Coordination</param>
-        /// <param name="newY">The new Y-Coordination</param>
-        /// <returns>True if it succeeded else false</returns>
-        public bool MoveItem(Item item, int rot, int newX, int newY)
+        /// <param name="item">The item</param>
+        /// <param name="points">The tiles the item is affecting</param>
+        public void MoveItem(Item item, List<Point2D> points)
         {
-            if (item.Definition.Width > 1 || item.Definition.Length > 1)
+            //Removes the old affected tiles
+            foreach (Point2D point in item.Tiles)
             {
-                var points = Utilities.Extensions.AffectedTiles(item.Definition.Length, item.Definition.Width, newX, newY, rot);
-                points.Add(new Point2D(newX, newY));
-
-                foreach (Point2D point in points)
-                    if (!ValidPoint(point))
-                        return false;
-
-                foreach (Point2D point in points)
-                    _tileAt[(point.X, point.Y)].AddItem(item);
-
-                foreach (Point2D point in item.AffectedTiles)
-                    _tileAt[(point.X, point.Y)].Items.Remove(item);
-            }
-            else
-            {
-                if (!ValidPoint(newX, newY))
-                    _tileAt[(newX, newY)].AddItem(item);
+                _tileAt[(point.X, point.Y)].Items.Remove(item);
             }
 
-            _tileAt[(item.Position.X, item.Position.Y)].Items.Remove(item);
-            return true;
+            //Adds the item to the new tiles
+            foreach (Point2D point in points)
+            {
+                _tileAt[(point.X, point.Y)].AddItem(item);
+            }
         }
 
         /// <summary>
-        /// Tries to rotate the objects, this is for wider objects, so they don't collide
+        /// Rotates the item
         /// </summary>
-        /// <param name="item">The object</param>
+        /// <param name="item">The item</param>
         /// <param name="rot">The new rotation</param>
-        /// <returns>True if it succeeded else false</returns>
-        public bool RotateItem(Item item, int rot)
+        /// <param name="affTiles">The affected tiles</param>
+        public void RotateItem(Item item, int rot, List<Point2D> affTiles)
         {
             if (item.Definition.Length > 1 || item.Definition.Width > 1)
             {
-                var affectedTiles = Utilities.Extensions.AffectedTiles(item.Definition.Length, item.Definition.Width, item.Position.X, item.Position.Y, rot);
-                foreach (Point2D point in affectedTiles)
+                //Adds the item to the affected tiles
+                foreach (Point2D point in affTiles)
                 {
-                    if (ItemsAt(point.X, point.Y).Count > 0)
-                    {
-                        return false;
-                    }
-                    else
-                    {
-                        _tileAt[(point.X, point.Y)].AddItem(item);
-                    }
+                    _tileAt[(point.X, point.Y)].Items.Add(item);
+
                 }
 
+                //REmoves the item from the old affected tiles
                 foreach (Point2D point in item.AffectedTiles)
+                {
                     _tileAt[(point.X, point.Y)].Items.Remove(item);
+                }
             }
+
+            //Rotates the item
             _tileAt[(item.Position.X, item.Position.Y)].RotateItem(item);
-            return true;
         }
 
+        //Simplify the ValidPoint method
         public bool ValidPoint(Point2D point) =>
             ValidPoint(point.X, point.Y);
 
+        //Checks if the point is valid
         public bool ValidPoint(int x, int y)
         {
             if (EntityGrid[x, y])
@@ -154,13 +127,14 @@ namespace AuroraEmu.Game.Rooms
             return true;
         }
 
+
         /// <summary>
-        /// Checks if the step is valid.
+        /// Checks if the step is valid, used by pathfinder
         /// </summary>
-        /// <param name="x">The X-Coordination</param>
-        /// <param name="y">The Y-Coordination</param>
-        /// <param name="actor">The room actor</param>
-        /// <returns>True if the step was valid else false</returns>
+        /// <param name="x"></param>
+        /// <param name="y"></param>
+        /// <param name="actor"></param>
+        /// <returns></returns>
         public bool ValidStep(int x, int y, RoomActor actor)
         {
             if (!_room.Map.PassableTiles[x, y])
@@ -188,7 +162,7 @@ namespace AuroraEmu.Game.Rooms
         }
 
         /// <summary>
-        /// Gets the item at a specific tile, instead of looping through all items
+        /// Gets the items at a specific point, instead of looping through all items
         /// and checking by value.
         /// </summary>
         /// <param name="point">The Point (Coordination)</param>
@@ -203,6 +177,9 @@ namespace AuroraEmu.Game.Rooms
             return _tileAt[(x, y)].Items;
         }
 
+        /// <summary>
+        /// Dispose the points
+        /// </summary>
         public void Dispose()
         {
             foreach (RoomPoint point in _tileAt.Values)

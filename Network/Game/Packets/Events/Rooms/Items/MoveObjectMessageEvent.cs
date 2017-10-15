@@ -1,6 +1,8 @@
 ﻿using AuroraEmu.Game.Clients;
 using AuroraEmu.Game.Items.Models;
+using AuroraEmu.Game.Rooms.Pathfinder;
 using AuroraEmu.Network.Game.Packets.Composers.Items;
+using System.Collections.Generic;
 
 namespace AuroraEmu.Network.Game.Packets.Events.Rooms.Items
 {
@@ -15,13 +17,24 @@ namespace AuroraEmu.Network.Game.Packets.Events.Rooms.Items
 
             if (client.CurrentRoom.Items.TryGetValue(itemId, out Item item))
             {
+                //Gets the affected tiles and checks if the point is valid
+                List<Point2D> points = Utilities.Extensions.AffectedTiles(item.Definition.Length, item.Definition.Width, x, y, rotation);
+                foreach (Point2D point in points)
+                    if (!client.CurrentRoom.Grid.ValidPoint(point))
+                        return;
+
                 if (item.Rotation == rotation)
                 {
-                    if (!client.CurrentRoom.Grid.MoveItem(item, rotation, x, y)) return;
+                    if (!client.CurrentRoom.Grid.ValidPoint(x, y))
+                        return;
+
+                    points.Add(new Point2D(x, y));
+                    client.CurrentRoom.Grid.MoveItem(item, points);
+                    
                 }
                 else
                 {
-                    if (!client.CurrentRoom.Grid.RotateItem(item, rotation)) return;
+                    client.CurrentRoom.Grid.RotateItem(item, rotation, points);
                 }
                 item.Position.X = x;
                 item.Position.Y = y;
