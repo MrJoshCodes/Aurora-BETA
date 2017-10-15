@@ -9,6 +9,7 @@ namespace AuroraEmu.Game.Items.Models
         public int SpriteId { get; set; }
         public int Length { get; set; }
         public int Width { get; set; }
+        public int InteractorCount { get; set; }
         public bool CanStack { get; set; }
         public bool CanGift { get; set; }
         public bool CanRecycle { get; set; }
@@ -36,6 +37,7 @@ namespace AuroraEmu.Game.Items.Models
             CanRecycle = reader.GetBoolean("can_recycle");
             InteractorRightsRequired = reader.GetBoolean("interactor_requires_rights");
             InteractorType = reader.GetString("interactor_type");
+            InteractorCount = reader.GetInt32("interactor_count");
             HandleType = HandlerParser.GetItemHandle(InteractorType);
             VendorIDs = reader.GetString("vendor_ids");
         }

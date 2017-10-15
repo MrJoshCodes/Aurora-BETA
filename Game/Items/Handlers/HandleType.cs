@@ -5,7 +5,8 @@
         NONE,
         DICE,
         COLOR_WHEEL,
-        DIMMER
+        DIMMER,
+        SWITCH
     }
 
     public static class HandlerParser
@@ -20,6 +21,8 @@
                     return HandleType.COLOR_WHEEL;
                 case "dimmer":
                     return HandleType.DIMMER;
+                case "switch":
+                    return HandleType.SWITCH;
                 default:
                     return HandleType.NONE;
             }

@@ -35,6 +35,7 @@ namespace AuroraEmu.Game.Items
         {
             Handlers = new Dictionary<HandleType, IItemHandler>()
             {
+                { HandleType.SWITCH, new SwitchHandler() },
                 { HandleType.DICE, new DiceHandler() },
                 { HandleType.COLOR_WHEEL, new ColorWheelHandler() }
             };
