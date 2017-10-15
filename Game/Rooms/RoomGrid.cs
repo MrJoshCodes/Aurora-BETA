@@ -123,7 +123,11 @@ namespace AuroraEmu.Game.Rooms
                 return false;
 
             if (ItemsAt(x, y).Count > 0)
-                return false;
+                if (_tileAt[(x, y)].HighestItem.Definition.CanStack)
+                    return true;
+                else
+                    return false;
+
             return true;
         }
 
@@ -146,7 +150,7 @@ namespace AuroraEmu.Game.Rooms
 
             if (ItemsAt(x, y).Count > 0)
             {
-                Item item = ItemsAt(x, y)[0];
+                Item item = _tileAt[(x, y)].HighestItem;
 
                 if (actor.TargetPoint.X == x && actor.TargetPoint.Y == y)
                     if (item.Definition.ItemType == "seat")

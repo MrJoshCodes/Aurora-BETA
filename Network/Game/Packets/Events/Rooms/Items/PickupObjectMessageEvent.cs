@@ -19,7 +19,7 @@ namespace AuroraEmu.Network.Game.Packets.Events.Rooms.Items
                 client.QueueComposer(new FurniListUpdateComposer());
                 client.QueueComposer(new ObjectRemoveMessageComposer(itemId));
                 client.Flush();
-                Engine.Locator.ItemController.Dao.UpdateItem(itemId, 0, 0, 0, null);
+                Engine.Locator.ItemController.Dao.UpdateItem(itemId, 0, 0, 0, 0, null);
             }
         }
     }

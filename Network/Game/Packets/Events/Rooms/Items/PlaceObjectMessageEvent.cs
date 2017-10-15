@@ -61,7 +61,7 @@ namespace AuroraEmu.Network.Game.Packets.Events.Rooms.Items
                         if (client.CurrentRoom.Items.TryAdd(itemId, item))
                         {
                             client.Items.Remove(itemId);
-                            Engine.Locator.ItemController.Dao.UpdateItem(itemId, x, y, rot, client.CurrentRoom.Id);
+                            Engine.Locator.ItemController.Dao.UpdateItem(itemId, x, y, item.Position.Z, rot, client.CurrentRoom.Id);
                             client.SendComposer(new Composers.Rooms.FurniListUpdateComposer());
                             client.CurrentRoom.SendComposer(new ObjectAddMessageComposer(item));
                         }

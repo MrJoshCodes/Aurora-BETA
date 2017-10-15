@@ -136,14 +136,15 @@ namespace AuroraEmu.Database.DAO
             return items;
         }
 
-        public void UpdateItem(int itemId, int x, int y, int rot, object roomId)
+        public void UpdateItem(int itemId, int x, int y, double z, int rot, object roomId)
         {
             using (DatabaseConnection dbConnection = Engine.Locator.ConnectionPool.PopConnection())
             {
-                dbConnection.SetQuery("UPDATE items SET room_id = @roomId, x = @x, y = @y, rotation = @rot WHERE id = @itemId LIMIT 1");
+                dbConnection.SetQuery("UPDATE items SET room_id = @roomId, x = @x, y = @y, z = @z, rotation = @rot WHERE id = @itemId LIMIT 1");
                 dbConnection.AddParameter("@roomId", roomId);
                 dbConnection.AddParameter("@x", x);
                 dbConnection.AddParameter("@y", y);
+                dbConnection.AddParameter("@z", z);
                 dbConnection.AddParameter("@rot", rot);
                 dbConnection.AddParameter("@itemId", itemId);
                 dbConnection.Execute();
