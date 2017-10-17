@@ -25,7 +25,7 @@ namespace AuroraEmu.Game.Rooms.Components
                         Item item = itemsAbove[i];
 
                         if (blacklist.Contains(item))
-                            return;
+                            continue;
 
                         if (item.Id == roller.Id)
                             continue;
