@@ -31,18 +31,16 @@ namespace AuroraEmu.Game.Rooms
         public void AddItem(Item item)
         {
             if (Items.Count > 0)
+            {
                 foreach (Item stackItem in Items)
                 {
-                    if (!stackItem.Definition.ApplyStackHeight) {
-                        continue;
-                    }
-
                     double totalHeight = stackItem.Position.Z;
-                    
+
                     if (totalHeight > _highestHeight)
                         _highestHeight = totalHeight;
                     
                 }
+            }
             else
             {
                 _highestHeight = 0;
@@ -62,7 +60,10 @@ namespace AuroraEmu.Game.Rooms
         {
             if (HighestItem != null && HighestItem.Equals(item))
             {
-                _highestHeight -= item.Definition.Height;
+                if (item.Definition.ApplyStackHeight) 
+                {
+                    _highestHeight -= item.Definition.Height;
+                }
             }
 
             Items.Remove(item);

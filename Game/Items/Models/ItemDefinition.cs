@@ -25,7 +25,7 @@ namespace AuroraEmu.Game.Items.Models
         {
             get
             {
-                if (ItemType == "seat")
+                if (ItemType.ToLower().Equals("seat"))
                     return false;
                 
                 return true;
