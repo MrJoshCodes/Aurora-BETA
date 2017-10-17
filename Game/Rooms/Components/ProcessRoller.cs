@@ -48,7 +48,7 @@ namespace AuroraEmu.Game.Rooms.Components
                         blacklist.Add(item);
                         double nextHeight = room.Grid.TileHeight(nextPoint);
 
-                        room.SendComposer(new SlideObjectBundleMessageEvent(0, item.Id, item.Position.X, item.Position.Y, nextPoint.X, nextPoint.Y, roller.Id, item.Position.Z, nextHeight));
+                        room.SendComposer(new SlideObjectBundleMessageEvent(-1, item.Id, item.Position.X, item.Position.Y, nextPoint.X, nextPoint.Y, roller.Id, item.Position.Z, nextHeight));
                         room.Grid.MoveItem(item, points);
 
                         item.Position.X = nextPoint.X;
@@ -81,7 +81,7 @@ namespace AuroraEmu.Game.Rooms.Components
                         blacklist.Add(actor);
                         double nextHeight = room.Grid.TileHeight(nextPoint);
 
-                        room.SendComposer(new SlideObjectBundleMessageEvent(0, actor.VirtualId, actor.Position.X, actor.Position.Y, nextPoint.X, nextPoint.Y, roller.Id, actor.Position.Z, nextHeight));
+                        room.SendComposer(new SlideObjectBundleMessageEvent(actor.VirtualId, -1, actor.Position.X, actor.Position.Y, nextPoint.X, nextPoint.Y, roller.Id, actor.Position.Z, nextHeight));
 
                         room.Grid.PointAt(actor.Position.X, actor.Position.Y).Actors.Remove(actor);
                         room.Grid.PointAt(nextPoint.X, nextPoint.Y).Actors.Add(actor);
