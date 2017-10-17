@@ -64,8 +64,11 @@ namespace AuroraEmu.Game.Rooms.Components
                     {
                         RoomActor actor = actorsAbove[i];
 
+                        if (actor.IsWalking)
+                            continue;
+
                         if (blacklist.Contains(actor))
-                            return;
+                            continue;
 
                         if (actor.Position.Z < roller.Position.Z) 
                             continue;
