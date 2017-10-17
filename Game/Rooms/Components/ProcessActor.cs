@@ -108,7 +108,7 @@ namespace AuroraEmu.Game.Rooms.Components
                 if (highestItem.Definition.ItemType == "seat")
                 {
                     if (!actor.Statusses.ContainsKey("sit"))
-                        actor.Statusses.Add("sit", (highestItem.Position.Z).ToString());
+                        actor.Statusses.Add("sit", (highestItem.Definition.Height).ToString());
                     actor.Rotation = highestItem.Rotation;
                 }
             }
