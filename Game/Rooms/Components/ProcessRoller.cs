@@ -28,7 +28,7 @@ namespace AuroraEmu.Game.Rooms.Components
                             continue;
 
                         
-                        Point2D nextPoint = item.Position.GetSquareInFront(item.Rotation);
+                        Point2D nextPoint = roller.Position.GetSquareInFront(roller.Rotation);
 
                         if (!room.Grid.ValidPoint(nextPoint.X, nextPoint.Y)) 
                             continue;
