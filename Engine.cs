@@ -1,4 +1,9 @@
-﻿using AuroraEmu.Config;
+﻿using System.IO;
+using System.Reflection;
+using Autofac;
+using log4net;
+using log4net.Config;
+using AuroraEmu.Config;
 using AuroraEmu.Database;
 using AuroraEmu.Database.DAO;
 using AuroraEmu.DI.Config;
@@ -34,11 +39,8 @@ using AuroraEmu.Game.Tasks;
 using AuroraEmu.Game.Wordfilter;
 using AuroraEmu.Network.Game;
 using AuroraEmu.Network.Game.Packets;
-using Autofac;
-using log4net;
-using log4net.Config;
-using System.IO;
-using System.Reflection;
+using System.Threading.Tasks;
+using System.Threading;
 
 namespace AuroraEmu
 {
@@ -48,7 +50,7 @@ namespace AuroraEmu
         public static IContainer Container { get; set; }
         public static DILocator Locator { get; set; }
 
-        static void Main(string[] args)
+        static async Task Main()
         {
             var logRepository = LogManager.GetRepository(Assembly.GetEntryAssembly());
             XmlConfigurator.Configure(logRepository, new FileInfo("log4net.config"));
@@ -64,7 +66,7 @@ namespace AuroraEmu
                                                                                  ");
 
             ContainerBuilder();
-            Locator.GameNetworkListener.RunServer().Wait();
+            await Locator.GameNetworkListener.RunServer();
             while (true)
             {
                 switch (System.Console.ReadLine())
@@ -81,6 +83,12 @@ namespace AuroraEmu
                         Locator.CatalogController.ReloadProducts();
                         Locator.CatalogController.ReloadDeals();
                         Locator.CatalogController.ReloadVouchers();
+                        break;
+                    case "close":
+                    case "dispose":
+                    case "shutdown":
+                    case "arcturus":
+                        Shutdown();
                         break;
 
                     default:
@@ -134,6 +142,12 @@ namespace AuroraEmu
         public static int GetUnixTimeStamp()
         {
             return (int)(System.DateTime.UtcNow.Subtract(new System.DateTime(1970, 1, 1))).TotalSeconds;
+        }
+        
+        private static void Shutdown()
+        {
+            Locator.ClientController.Dispose();
+            Locator.GameNetworkListener.Dispose();
         }
     }
 }

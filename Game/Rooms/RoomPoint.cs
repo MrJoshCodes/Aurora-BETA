@@ -10,15 +10,15 @@ namespace AuroraEmu.Game.Rooms
     {
         public int X { get; }
         public int Y { get; }
-        public List<Item> Items { get; private set; }
-        public Item HighestItem =>
-            Items.Count > 0 ? Items[Items.Count - 1] : null;
-
         private double _highestHeight = 0d;
         public double TileHeight =>
             _highestHeight;
-        
         public List<RoomActor> Actors { get; private set; }
+        public List<Item> Items { get; private set; }
+        public Item HighestItem =>
+            Items.Count > 0 ? Items[0] : null;
+        public Item ItemBeneath(Item item) =>
+            Items.Count > 1 ? Items[Items.IndexOf(item) + 1] : null;
 
         public RoomPoint(int x, int y)
         {
@@ -51,7 +51,7 @@ namespace AuroraEmu.Game.Rooms
                 _highestHeight += item.Definition.Height;
 
             Items.Add(item);
-            Items.OrderByDescending(itemToOrder => itemToOrder.Position.Z);
+            Items.OrderBy(itemToOrder => itemToOrder.Position.Z);
         }
 
         public void RemoveItem(Item item)
@@ -69,13 +69,8 @@ namespace AuroraEmu.Game.Rooms
 
         public void RotateItem(Item item)
         {
-            if (HighestItem != null && HighestItem.Equals(item))
-                return;
-
-            item.Position.Z = _highestHeight;
-            _highestHeight += item.Definition.Height;
-            Items.OrderByDescending(itemToOrder => itemToOrder.Position.Z);
-            Console.WriteLine(HighestItem.Definition.SwfName);
+            RemoveItem(item);
+            AddItem(item);
         }
 
         public void Dispose()

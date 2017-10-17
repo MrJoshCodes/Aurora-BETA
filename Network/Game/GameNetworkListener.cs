@@ -8,14 +8,19 @@ using System.Threading.Tasks;
 
 namespace AuroraEmu.Network.Game
 {
-    public class GameNetworkListener : IGameNetworkListener
+    public class GameNetworkListener : IGameNetworkListener, IDisposable
     {
+        private IEventLoopGroup workerGroup;
+        private IEventLoopGroup bossGroup;
+
         public async Task RunServer()
         {
+            bossGroup = new MultithreadEventLoopGroup(1);
+            workerGroup = new MultithreadEventLoopGroup(10);
             try
             {
                 ServerBootstrap bootstrap = new ServerBootstrap()
-                    .Group(new MultithreadEventLoopGroup(1), new MultithreadEventLoopGroup(10))
+                    .Group(bossGroup, workerGroup)
                     .Channel<TcpServerSocketChannel>()
                     .ChildHandler(new ActionChannelInitializer<IChannel>(channel =>
                         channel.Pipeline.AddLast("ClientHandler", new GameNetworkHandler())
@@ -33,6 +38,13 @@ namespace AuroraEmu.Network.Game
             {
                 Engine.Logger.Error($"Failed to setup network listener... {e}");
             }
+        }
+
+        public async void Dispose()
+        {
+            Engine.Logger.Info("Listener shutdown gracefully.");
+            await bossGroup.ShutdownGracefullyAsync();
+            await workerGroup.ShutdownGracefullyAsync();
         }
     }
 }
