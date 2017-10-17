@@ -126,7 +126,7 @@ namespace AuroraEmu.Game.Rooms
                 return false;
 
             if (ItemsAt(x, y).Count > 0)
-                if (_tileAt[(x, y)].HighestItem.Definition.CanStack)
+                if (_tileAt[(x, y)].HighestItem.Definition.CanStack || _tileAt[(x, y)].HighestItem.Definition.InteractorType == "roller")
                     return true;
                 else
                     return false;
