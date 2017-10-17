@@ -1,8 +1,9 @@
-﻿using System;
+﻿using AuroraEmu.Utilities.Queue;
+using System;
 
 namespace AuroraEmu.Game.Rooms.Pathfinder
 {
-    public sealed class Node : IComparable<Node>
+    public sealed class Node : FastPriorityQueueNode, IComparable<Node>
     {
         public int X { get; }
         public int Y { get; }

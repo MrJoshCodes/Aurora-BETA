@@ -12,7 +12,9 @@ namespace AuroraEmu.Game.Rooms
         public List<Item> Items { get; private set; }
         public Item HighestItem =>
             Items[Items.Count - 1];
-        private double highestHeight = 0d;
+        private double _highestHeight = 0d;
+        public double TileHeight =>
+            _highestHeight;
 
         public RoomPoint(int x, int y)
         {
@@ -27,20 +29,28 @@ namespace AuroraEmu.Game.Rooms
                 foreach (Item stackItem in Items)
                 {
                     double totalHeight = stackItem.Position.Z;
-                    if (totalHeight > highestHeight)
+                    if (totalHeight > _highestHeight)
                     {
-                        highestHeight = totalHeight;
+                        _highestHeight = totalHeight;
                     }
                 }
             else
             {
-                highestHeight = 0;
+                _highestHeight = 0;
             }
 
-            item.Position.Z = highestHeight;
-            highestHeight += item.Definition.Height;
+            item.Position.Z = _highestHeight;
+            _highestHeight += item.Definition.Height;
             Items.Add(item);
-            Items.OrderByDescending(x => x.Position.Z);
+            Items.OrderByDescending(itemToOrder => itemToOrder.Position.Z);
+        }
+
+        public void RemoveItem(Item item)
+        {
+            if (HighestItem.Equals(item))
+            {
+                _highestHeight -= item.Definition.Height;
+            }
         }
 
         public void RotateItem(Item item)
@@ -48,9 +58,10 @@ namespace AuroraEmu.Game.Rooms
             if (item.Equals(HighestItem))
                 return;
 
-            item.Position.Z = highestHeight;
-            highestHeight += item.Definition.Height;
-            Items.OrderByDescending(x => x.Position.Z);
+            item.Position.Z = _highestHeight;
+            _highestHeight += item.Definition.Height;
+            Items.OrderByDescending(itemToOrder => itemToOrder.Position.Z);
+            Console.WriteLine(HighestItem.Definition.SwfName);
         }
 
         public void Dispose()

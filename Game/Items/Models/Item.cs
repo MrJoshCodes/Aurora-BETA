@@ -88,5 +88,10 @@ namespace AuroraEmu.Game.Items.Models
                 Cycling = false;
             });
         }
+
+        public bool Equals(Item item)
+        {
+            return (Id == item.Id);
+        }
     }
 }
