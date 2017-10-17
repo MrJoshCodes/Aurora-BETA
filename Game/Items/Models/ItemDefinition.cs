@@ -25,7 +25,7 @@ namespace AuroraEmu.Game.Items.Models
         {
             get
             {
-                if (ItemType.ToLower().Equals("seat"))
+                if (ItemType == "seat")
                     return false;
                 
                 return true;
@@ -52,8 +52,6 @@ namespace AuroraEmu.Game.Items.Models
 
             if (Height == 0)
                 Height = 0.001;
-
-            
         }
     }
 }

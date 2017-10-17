@@ -38,7 +38,6 @@ namespace AuroraEmu.Game.Rooms
 
                     if (totalHeight > _highestHeight)
                         _highestHeight = totalHeight;
-                    
                 }
             }
             else
@@ -48,9 +47,8 @@ namespace AuroraEmu.Game.Rooms
 
             item.Position.Z = _highestHeight;
 
-            if (item.Definition.ApplyStackHeight) {
+            if (item.Definition.ApplyStackHeight)
                 _highestHeight += item.Definition.Height;
-            }
 
             Items.Add(item);
             Items.OrderByDescending(itemToOrder => itemToOrder.Position.Z);
