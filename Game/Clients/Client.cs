@@ -37,8 +37,14 @@ namespace AuroraEmu.Game.Clients
             SubscriptionData = new Dictionary<string, SubscriptionData>();
         }
 
-        public void Disconnect() =>
+        public void Disconnect() {
+
+            if (this.CurrentRoom != null && this.UserActor != null) {
+                this.CurrentRoom.RemoveActor(UserActor, true);
+            }
+
             _channel.DisconnectAsync();
+        }
 
         public void SendComposer(MessageComposer composer) =>
             Send(composer, true);
