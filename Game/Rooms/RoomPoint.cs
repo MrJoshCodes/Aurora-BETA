@@ -11,7 +11,8 @@ namespace AuroraEmu.Game.Rooms
         public int Y { get; }
         public List<Item> Items { get; private set; }
         public Item HighestItem =>
-            Items[Items.Count - 1];
+            Items.Count > 0 ? Items[Items.Count - 1] : null;
+
         private double _highestHeight = 0d;
         public double TileHeight =>
             _highestHeight;
@@ -47,15 +48,17 @@ namespace AuroraEmu.Game.Rooms
 
         public void RemoveItem(Item item)
         {
-            if (HighestItem.Equals(item))
+            if (HighestItem != null && HighestItem.Equals(item))
             {
                 _highestHeight -= item.Definition.Height;
             }
+
+            Items.Remove(item);
         }
 
         public void RotateItem(Item item)
         {
-            if (item.Equals(HighestItem))
+            if (HighestItem != null && HighestItem.Equals(item))
                 return;
 
             item.Position.Z = _highestHeight;

@@ -74,7 +74,7 @@ namespace AuroraEmu.Game.Rooms
             //Removes the old affected tiles
             foreach (Point2D point in item.Tiles)
             {
-                _tileAt[(point.X, point.Y)].Items.Remove(item);
+                _tileAt[(point.X, point.Y)].RemoveItem(item);
             }
 
             //Adds the item to the new tiles
@@ -119,6 +119,9 @@ namespace AuroraEmu.Game.Rooms
         //Checks if the point is valid
         public bool ValidPoint(int x, int y)
         {
+            if (!_room.Map.PassableTiles[x, y])
+                return false;
+
             if (EntityGrid[x, y])
                 return false;
 
