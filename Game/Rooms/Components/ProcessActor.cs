@@ -35,6 +35,12 @@ namespace AuroraEmu.Game.Rooms.Components
                 if (actor.IsWalking)
                     actor.Path.Clear();
 
+                if (!room.Grid.ValidPoint(actor.TargetPoint.X, actor.TargetPoint.Y)) 
+                {
+                    actor.CalcPath = false;
+                    return;
+                }
+                
                 actor.Path = Pathfinder.Pathfinder.GetPath(room, actor.Position, actor.TargetPoint, actor);
 
                 if (actor.IsWalking)
