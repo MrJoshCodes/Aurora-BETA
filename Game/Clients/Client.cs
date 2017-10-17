@@ -1,10 +1,9 @@
-﻿using AuroraEmu.Network.Game.Packets;
-using DotNetty.Transport.Channels;
+﻿using System;
 using System.Collections.Generic;
+using DotNetty.Buffers;
+using DotNetty.Transport.Channels;
 using AuroraEmu.Game.Rooms.User;
 using AuroraEmu.Game.Players.Components;
-using DotNetty.Buffers;
-using System;
 using AuroraEmu.Network.Game.Packets.Composers.Users;
 using AuroraEmu.Network.Game.Packets.Composers.Misc;
 using AuroraEmu.Network.Game.Packets.Composers.Moderation;
@@ -12,6 +11,7 @@ using AuroraEmu.Game.Items.Models;
 using AuroraEmu.Game.Players.Models;
 using AuroraEmu.Game.Rooms.Models;
 using AuroraEmu.Game.Subscription.Models;
+using AuroraEmu.Network.Game.Packets;
 
 namespace AuroraEmu.Game.Clients
 {
@@ -37,7 +37,8 @@ namespace AuroraEmu.Game.Clients
             SubscriptionData = new Dictionary<string, SubscriptionData>();
         }
 
-        public void Disconnect() {
+        public void Disconnect()
+        {
 
             if (this.CurrentRoom != null && this.UserActor != null)
                 this.CurrentRoom.RemoveActor(UserActor, true);
@@ -65,6 +66,9 @@ namespace AuroraEmu.Game.Clients
 
         public IChannel Flush() =>
             _channel.Flush();
+
+        public async void Close() =>
+            await _channel.CloseAsync();
 
         public void Login(string sso)
         {

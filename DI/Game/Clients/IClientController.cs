@@ -1,11 +1,12 @@
 ﻿using AuroraEmu.Game.Clients;
 using AuroraEmu.Game.Players.Models;
 using DotNetty.Transport.Channels;
+using System;
 using System.Collections.Generic;
 
 namespace AuroraEmu.DI.Game.Clients
 {
-    public interface IClientController
+    public interface IClientController : IDisposable
     {
         Dictionary<IChannelId, Client> Clients { get; }
 

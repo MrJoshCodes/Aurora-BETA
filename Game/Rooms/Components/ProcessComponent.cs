@@ -1,10 +1,10 @@
-﻿using AuroraEmu.Game.Rooms.Models;
-using AuroraEmu.Network.Game.Packets.Composers.Users;
-using AuroraEmu.Game.Items.Models;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks.Dataflow;
+using AuroraEmu.Game.Rooms.Models;
+using AuroraEmu.Network.Game.Packets.Composers.Users;
+using AuroraEmu.Game.Items.Models;
 
 namespace AuroraEmu.Game.Rooms.Components
 {

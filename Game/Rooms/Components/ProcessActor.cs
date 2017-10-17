@@ -1,8 +1,8 @@
-﻿using AuroraEmu.Game.Items.Models;
+﻿using System;
+using System.Collections.Generic;
+using AuroraEmu.Game.Items.Models;
 using AuroraEmu.Game.Rooms.Models;
 using AuroraEmu.Game.Rooms.Pathfinder;
-using System;
-using System.Collections.Generic;
 
 namespace AuroraEmu.Game.Rooms.Components
 {

@@ -1,8 +1,9 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 
 namespace AuroraEmu.DI.Network.Game
 {
-    public interface IGameNetworkListener
+    public interface IGameNetworkListener : IDisposable
     {
         Task RunServer();
     }

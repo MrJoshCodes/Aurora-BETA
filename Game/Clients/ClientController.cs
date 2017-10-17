@@ -1,12 +1,14 @@
 ﻿using AuroraEmu.DI.Game.Clients;
 using AuroraEmu.Game.Players.Models;
 using DotNetty.Transport.Channels;
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace AuroraEmu.Game.Clients
 {
-    public class ClientController : IClientController
+    public class ClientController : IClientController, IDisposable
     {
         public Dictionary<IChannelId, Client> Clients { get; }
 
@@ -67,6 +69,16 @@ namespace AuroraEmu.Game.Clients
             player = null;
 
             return false;
+        }
+
+        public void Dispose()
+        {
+            Parallel.ForEach(Clients.Values, client =>
+            {
+                client.Close();
+            });
+
+            Clients.Clear();
         }
     }
 }
