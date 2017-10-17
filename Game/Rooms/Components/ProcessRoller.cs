@@ -11,6 +11,8 @@ namespace AuroraEmu.Game.Rooms.Components
     {
         public void Process(List<Item> rollers, Room room)
         {
+            List<Object> blacklist = new List<Object>();
+
             try 
             {
                 foreach (Item roller in rollers) 
@@ -20,6 +22,10 @@ namespace AuroraEmu.Game.Rooms.Components
                     for (int i = 0; i < itemsAbove.Count; i++)//foreach (Item item in itemsAbove) 
                     {
                         Item item = itemsAbove[i];
+
+                        if (blacklist.Contains(item))
+                            return;
+                        
 
                         if (item.Id == roller.Id)
                             continue;
@@ -39,8 +45,8 @@ namespace AuroraEmu.Game.Rooms.Components
                         foreach (Point2D point in points)
                             if (!room.Grid.ValidPoint(point))
                                 continue;
-
-
+                        
+                        blacklist.Add(item);
                         double nextHeight = room.Grid.TileHeight(nextPoint);
 
                         room.SendComposer(new SlideObjectBundleMessageEvent(item.Id, item.Position.X, item.Position.Y, nextPoint.X, nextPoint.Y, roller.Id, item.Position.Z, nextHeight));
