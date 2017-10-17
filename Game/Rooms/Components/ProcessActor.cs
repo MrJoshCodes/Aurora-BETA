@@ -15,7 +15,7 @@ namespace AuroraEmu.Game.Rooms.Components
                 room.Grid.EntityGrid[actor.Position.X, actor.Position.Y] = false;
                 room.Grid.EntityGrid[actor.NextTile.X, actor.NextTile.Y] = true;
                 actor.Position = actor.NextTile;
-                actor.Position.Z = Math.Round(room.Map.TileHeights[actor.Position.X, actor.Position.Y], 1);
+                actor.Position.Z = Math.Round(room.Grid.TileHeight(actor.Position), 1);
 
                 if (actor.Position.Equals(actor.TargetPoint))
                     UpdateUserStatus(actor, room.Grid.ItemsAt(actor.Position));
@@ -40,13 +40,20 @@ namespace AuroraEmu.Game.Rooms.Components
                 if (actor.IsWalking)
                 {
                     actor.StepsOnPath = 1;
-                    actor.CalcPath = false;
                 }
                 else
                 {
-                    actor.CalcPath = false;
-                    actor.Path.Clear();
+                    actor.Path = Pathfinder.Pathfinder.GetPath(room, actor.Position, actor.TargetPoint, actor, true);
+                    if (actor.IsWalking)
+                    {
+                        actor.StepsOnPath = 1;
+                    }
+                    else
+                    {
+                        actor.Path.Clear();
+                    }
                 }
+                actor.CalcPath = false;
             }
 
             if (actor.IsWalking)
@@ -94,7 +101,7 @@ namespace AuroraEmu.Game.Rooms.Components
                 if (highestItem.Definition.ItemType == "seat")
                 {
                     if (!actor.Statusses.ContainsKey("sit"))
-                        actor.Statusses.Add("sit", (highestItem.Position.Z + 1.00d).ToString());
+                        actor.Statusses.Add("sit", (highestItem.Position.Z).ToString());
                     actor.Rotation = highestItem.Rotation;
                 }
             }

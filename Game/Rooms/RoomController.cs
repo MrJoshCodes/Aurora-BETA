@@ -41,6 +41,7 @@ namespace AuroraEmu.Game.Rooms
 
         public bool TryCreateRoom(string name, string model, int ownerId, out int roomId)
         {
+            System.Console.WriteLine(model);
             Room tmpRoom = new Room()
             {
                 Name = name,

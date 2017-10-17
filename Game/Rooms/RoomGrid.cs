@@ -139,7 +139,7 @@ namespace AuroraEmu.Game.Rooms
         /// <param name="y"></param>
         /// <param name="actor"></param>
         /// <returns></returns>
-        public bool ValidStep(int x, int y, RoomActor actor)
+        public bool ValidStep(int x, int y, RoomActor actor, bool retry)
         {
             if (!_room.Map.PassableTiles[x, y])
                 return false;
@@ -156,10 +156,19 @@ namespace AuroraEmu.Game.Rooms
                     if (item.Definition.ItemType == "seat")
                         return true;
 
-                if (item.Definition.ItemType == "solid" ||
-                    item.Definition.ItemType == "trophy" ||
-                    item.Definition.ItemType == "seat")
-                    return false;
+                if (retry)
+                {
+                    if (item.Definition.ItemType == "solid" ||
+                        item.Definition.ItemType == "trophy")
+                        return false;
+                }
+                else
+                {
+                    if (item.Definition.ItemType == "solid" ||
+                        item.Definition.ItemType == "trophy" ||
+                        item.Definition.ItemType == "seat")
+                        return false;
+                }
             }
 
             return true;
@@ -180,6 +189,9 @@ namespace AuroraEmu.Game.Rooms
         {
             return _tileAt[(x, y)].Items;
         }
+
+        public double TileHeight(Point2D point) =>
+            _tileAt[(point.X, point.Y)].TileHeight + _room.Map.TileHeights[point.X, point.Y];
 
         /// <summary>
         /// Dispose the points

@@ -1,5 +1,5 @@
 ﻿using AuroraEmu.Game.Rooms.Models;
-using DotNetty.Common.Utilities;
+using AuroraEmu.Utilities.Queue;
 using System;
 using System.Collections.Generic;
 
@@ -7,11 +7,11 @@ namespace AuroraEmu.Game.Rooms.Pathfinder
 {
     public static class Pathfinder
     {
-        public static List<Point2D> GetPath(Room room, Point2D start, Point2D end, RoomActor actor)
+        public static List<Point2D> GetPath(Room room, Point2D start, Point2D end, RoomActor actor, bool retry = false)
         {
             List<Point2D> steps = new List<Point2D>();
 
-            var path = FindReversePath(room, start, end, actor);
+            var path = FindReversePath(room, start, end, actor, retry);
 
             Node current = path;
             while (current != null)
@@ -35,18 +35,22 @@ namespace AuroraEmu.Game.Rooms.Pathfinder
             new Point2D(-1, 0)
         };
 
-        public static Node FindReversePath(Room room, Point2D start, Point2D end, RoomActor actor)
+        public static Node FindReversePath(Room room, Point2D start, Point2D end, RoomActor actor, bool retry)
         {
-            PriorityQueue<Node> openList = new PriorityQueue<Node>();
-            var brWorld = new Node[room.Map.MapSize.Item1, room.Map.MapSize.Item2];
+            FastPriorityQueue<Node> openList = new FastPriorityQueue<Node>(256);
+            
+            var brWorld = new Node[room.Map.MapSize.X, room.Map.MapSize.Y];
             Node node;
             int cost, diff, tmpX, tmpY;
-            Node current = new Node(start.X, start.Y);
-            current.cost = 0;
+            Node current = new Node(start.X, start.Y)
+            {
+                cost = 0
+            };
 
             Node finish = new Node(end.X, end.Y);
             brWorld[current.X, current.Y] = current;
-            openList.Enqueue(current);
+
+            openList.Enqueue(current, 0);
 
             while (openList.Count > 0)
             {
@@ -60,7 +64,7 @@ namespace AuroraEmu.Game.Rooms.Pathfinder
 
                     try
                     {
-                        if (room.Grid.ValidStep(tmpX, tmpY, actor))
+                        if (room.Grid.ValidStep(tmpX, tmpY, actor, retry))
                         {
                             if (brWorld[tmpX, tmpY] == null)
                             {
@@ -102,7 +106,7 @@ namespace AuroraEmu.Game.Rooms.Pathfinder
                                     }
 
                                     node.onOpenList = true;
-                                    openList.Enqueue(node);
+                                    openList.Enqueue(node, node.cost);
                                 }
                             }
                         }
