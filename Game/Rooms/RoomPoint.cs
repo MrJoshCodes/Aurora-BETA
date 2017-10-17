@@ -1,4 +1,5 @@
 ﻿using AuroraEmu.Game.Items.Models;
+using AuroraEmu.Game.Rooms.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,12 +17,15 @@ namespace AuroraEmu.Game.Rooms
         private double _highestHeight = 0d;
         public double TileHeight =>
             _highestHeight;
+        
+        public List<RoomActor> Actors { get; private set; }
 
         public RoomPoint(int x, int y)
         {
             X = x;
             Y = y;
             Items = new List<Item>();
+            Actors = new List<RoomActor>();
         }
 
         public void AddItem(Item item)

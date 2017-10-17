@@ -12,8 +12,9 @@ namespace AuroraEmu.Game.Rooms.Components
         {
             if (actor.SetStep)
             {
-                room.Grid.EntityGrid[actor.Position.X, actor.Position.Y] = false;
-                room.Grid.EntityGrid[actor.NextTile.X, actor.NextTile.Y] = true;
+                room.Grid.PointAt(actor.Position.X, actor.Position.Y).Actors.Remove(actor);
+                room.Grid.PointAt(actor.NextTile.X, actor.NextTile.Y).Actors.Add(actor);
+                
                 actor.Position = actor.NextTile;
                 actor.Position.Z = Math.Round(room.Grid.TileHeight(actor.Position), 1);
 
@@ -40,7 +41,7 @@ namespace AuroraEmu.Game.Rooms.Components
                     actor.CalcPath = false;
                     return;
                 }
-                
+
                 actor.Path = Pathfinder.Pathfinder.GetPath(room, actor.Position, actor.TargetPoint, actor);
 
                 if (actor.IsWalking)

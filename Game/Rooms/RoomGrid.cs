@@ -11,7 +11,7 @@ namespace AuroraEmu.Game.Rooms
     {
         private Room _room;
         private Dictionary<(int, int), RoomPoint> _tileAt;
-        public bool[,] EntityGrid { get; }
+        //public bool[,] EntityGrid { get; }
 
         public RoomGrid(Room room)
         {
@@ -35,7 +35,7 @@ namespace AuroraEmu.Game.Rooms
                     _tileAt[(tile.X, tile.Y)].AddItem(item);
                 }
             }
-            EntityGrid = new bool[_room.Map.MapSize.X + 1, _room.Map.MapSize.Y + 1];
+            //EntityGrid = new bool[_room.Map.MapSize.X + 1, _room.Map.MapSize.Y + 1];
         }
         
         /// <summary>
@@ -122,7 +122,7 @@ namespace AuroraEmu.Game.Rooms
             if (!_room.Map.PassableTiles[x, y])
                 return false;
 
-            if (EntityGrid[x, y])
+            if (PointAt(x, y).Actors.Count > 0)
                 return false;
 
             if (ItemsAt(x, y).Count > 0)
@@ -147,7 +147,7 @@ namespace AuroraEmu.Game.Rooms
             if (!_room.Map.PassableTiles[x, y])
                 return false;
 
-            if (EntityGrid[x, y])
+            if (PointAt(x, y).Actors.Count > 0 && !PointAt(x, y).Actors.Contains(actor))
                 return false;
 
 
@@ -191,6 +191,11 @@ namespace AuroraEmu.Game.Rooms
         public List<Item> ItemsAt(int x, int y)
         {
             return _tileAt[(x, y)].Items;
+        }
+
+        public RoomPoint PointAt(int x, int y) 
+        {
+            return _tileAt[(x, y)];
         }
 
         public double TileHeight(Point2D point) =>

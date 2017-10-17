@@ -11,6 +11,7 @@ namespace AuroraEmu.Game.Rooms.Components
     {
         public void Process(List<Item> rollers, Room room)
         {
+            // This is to stop actors or items being processed more than once in the same loop...
             List<Object> blacklist = new List<Object>();
 
             try 
@@ -18,14 +19,13 @@ namespace AuroraEmu.Game.Rooms.Components
                 foreach (Item roller in rollers) 
                 {
                     List<Item> itemsAbove = room.Grid.ItemsAt(roller.Position.X, roller.Position.Y);
-
-                    for (int i = 0; i < itemsAbove.Count; i++)//foreach (Item item in itemsAbove) 
+                   
+                   for (int i = 0; i < itemsAbove.Count; i++)
                     {
                         Item item = itemsAbove[i];
 
                         if (blacklist.Contains(item))
                             return;
-                        
 
                         if (item.Id == roller.Id)
                             continue;
@@ -33,7 +33,6 @@ namespace AuroraEmu.Game.Rooms.Components
                         if (item.Position.Z < roller.Position.Z) 
                             continue;
 
-                        
                         Point2D nextPoint = roller.Position.GetSquareInFront(roller.Rotation);
 
                         if (!room.Grid.ValidPoint(nextPoint.X, nextPoint.Y)) 
@@ -49,7 +48,7 @@ namespace AuroraEmu.Game.Rooms.Components
                         blacklist.Add(item);
                         double nextHeight = room.Grid.TileHeight(nextPoint);
 
-                        room.SendComposer(new SlideObjectBundleMessageEvent(item.Id, item.Position.X, item.Position.Y, nextPoint.X, nextPoint.Y, roller.Id, item.Position.Z, nextHeight));
+                        room.SendComposer(new SlideObjectBundleMessageEvent(0, item.Id, item.Position.X, item.Position.Y, nextPoint.X, nextPoint.Y, roller.Id, item.Position.Z, nextHeight));
                         room.Grid.MoveItem(item, points);
 
                         item.Position.X = nextPoint.X;
@@ -57,6 +56,36 @@ namespace AuroraEmu.Game.Rooms.Components
                         item.Position.Z = nextHeight;
 
                         Engine.Locator.ItemController.Dao.UpdateItem(item.Id, item.Position.X, item.Position.Y, item.Position.Z, item.Rotation, room.Id);
+                    }
+
+                    List<RoomActor> actorsAbove = room.Grid.PointAt(roller.Position.X, roller.Position.Y).Actors;
+
+                    for (int i = 0; i < actorsAbove.Count; i++)
+                    {
+                        RoomActor actor = actorsAbove[i];
+
+                        if (blacklist.Contains(actor))
+                            return;
+
+                        if (actor.Position.Z < roller.Position.Z) 
+                            continue;
+
+                        Point2D nextPoint = roller.Position.GetSquareInFront(roller.Rotation);
+
+                        if (!room.Grid.ValidPoint(nextPoint.X, nextPoint.Y)) 
+                            continue;
+                        
+                        blacklist.Add(actor);
+                        double nextHeight = room.Grid.TileHeight(nextPoint);
+
+                        room.SendComposer(new SlideObjectBundleMessageEvent(0, actor.VirtualId, actor.Position.X, actor.Position.Y, nextPoint.X, nextPoint.Y, roller.Id, actor.Position.Z, nextHeight));
+
+                        room.Grid.PointAt(actor.Position.X, actor.Position.Y).Actors.Remove(actor);
+                        room.Grid.PointAt(nextPoint.X, nextPoint.Y).Actors.Add(actor);
+
+                        actor.Position.X = nextPoint.X;
+                        actor.Position.Y = nextPoint.Y;
+                        actor.Position.Z = nextHeight;
                     }
                 }
             }
