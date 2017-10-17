@@ -39,9 +39,8 @@ namespace AuroraEmu.Game.Clients
 
         public void Disconnect() {
 
-            if (this.CurrentRoom != null && this.UserActor != null) {
+            if (this.CurrentRoom != null && this.UserActor != null)
                 this.CurrentRoom.RemoveActor(UserActor, true);
-            }
 
             _channel.DisconnectAsync();
         }
