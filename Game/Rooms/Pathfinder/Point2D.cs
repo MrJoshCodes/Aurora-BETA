@@ -21,6 +21,22 @@ namespace AuroraEmu.Game.Rooms.Pathfinder
             Y = y;
         }
 
+        public Point2D GetSquareInFront(int rotation) 
+        {
+            Point2D square = new Point2D(this.X, this.Y, this.Z);
+
+            if (rotation == 0)
+                square.Y--;
+            else if (rotation == 2)
+                square.X++;
+            else if (rotation == 4)
+                square.Y++;
+            else if (rotation == 6)
+                square.X--;
+
+            return square;
+        }
+
         public bool Equals(Point2D other)
         {
             return (X == other.X && Y == other.Y);

@@ -1,5 +1,6 @@
 ﻿using AuroraEmu.Game.Rooms.Models;
 using AuroraEmu.Network.Game.Packets.Composers.Users;
+using AuroraEmu.Game.Items.Models;
 using System;
 using System.Collections.Generic;
 using System.Threading;
@@ -13,12 +14,16 @@ namespace AuroraEmu.Game.Rooms.Components
         private CancellationTokenSource _wtoken;
         private ActionBlock<DateTimeOffset> _task;
         private ProcessActor actorProcessor;
+        private ProcessRoller rollerProcessor;
+
         private int idleRoom = 0;
+        private int rollerTick = 0;
 
         public ProcessComponent(Room room)
         {
             this.room = room;
             actorProcessor = new ProcessActor();
+            rollerProcessor = new ProcessRoller();
         }
 
         public void SetupRoomLoop()
@@ -40,6 +45,17 @@ namespace AuroraEmu.Game.Rooms.Components
             else
                 idleRoom = 0;
 
+            if (rollerTick == 4) { // 2 seconds
+                List<Item> rollers = this.room.GetItems("roller");
+                
+                if (rollers != null)
+                    rollerProcessor.Process(rollers, room);
+
+                rollerTick = 0;
+            }
+            
+            rollerTick++;
+
             List<RoomActor> toUpdate = new List<RoomActor>();
             foreach (RoomActor actor in room.Actors.Values)
             {
@@ -50,6 +66,7 @@ namespace AuroraEmu.Game.Rooms.Components
                 actor.UpdateNeeded = false;
                 toUpdate.Add(actor);
             }
+
             if (toUpdate.Count > 0)
                 room.SendComposer(new UserUpdateMessageComposer(toUpdate));
         }

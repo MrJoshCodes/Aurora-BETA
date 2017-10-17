@@ -101,6 +101,9 @@ namespace AuroraEmu.Game.Rooms.Models
         public List<Item> GetItems() =>
            Items.Values.ToList();
 
+         public List<Item> GetItems(string interactorType) =>
+           Items.Values.Where(x => x.Definition.InteractorType.ToLower().Equals(interactorType.ToLower())).ToList();
+
         public List<Item> GetWallItems() =>
             Items.Values.Where(x => x.Definition.SpriteType.ToLower().Equals("i")).ToList();
 
