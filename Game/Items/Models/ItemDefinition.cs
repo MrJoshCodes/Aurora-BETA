@@ -21,6 +21,17 @@ namespace AuroraEmu.Game.Items.Models
         public double Height { get; set; }
         public HandleType HandleType { get; set; }
 
+        public bool ApplyStackHeight
+        {
+            get
+            {
+                if (ItemType == "seat")
+                    return false;
+                
+                return true;
+            }
+        }
+
         public ItemDefinition(MySqlDataReader reader)
         {
             Id = reader.GetInt32("Id");

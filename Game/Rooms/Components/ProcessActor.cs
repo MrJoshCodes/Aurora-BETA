@@ -36,7 +36,7 @@ namespace AuroraEmu.Game.Rooms.Components
                 if (actor.IsWalking)
                     actor.Path.Clear();
 
-                if (!room.Grid.ValidPoint(actor.TargetPoint.X, actor.TargetPoint.Y)) 
+                if (!room.Grid.ValidStep(actor.TargetPoint.X, actor.TargetPoint.Y, actor, false)) 
                 {
                     actor.CalcPath = false;
                     return;
@@ -79,7 +79,7 @@ namespace AuroraEmu.Game.Rooms.Components
                     actor.Statusses.Remove("mv");
                     if (actor.Statusses.ContainsKey("sit"))
                         actor.Statusses.Remove("sit");
-                    actor.Statusses.Add("mv", $"{nextStep.X},{nextStep.Y},{Math.Round(room.Map.TileHeights[nextStep.X, nextStep.Y], 1)}");
+                    actor.Statusses.Add("mv", $"{nextStep.X},{nextStep.Y},{Math.Round(room.Grid.TileHeight(nextStep), 1)}");
 
                     actor.Rotation = Pathfinder.Pathfinder.CalculateRotation(actor.Position.X, actor.Position.Y, nextStep.X,
                         nextStep.Y);
