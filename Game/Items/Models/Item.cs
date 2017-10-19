@@ -1,10 +1,6 @@
-﻿using AuroraEmu.Game.Clients;
-using AuroraEmu.Game.Rooms.Models;
-using AuroraEmu.Game.Rooms.Pathfinder;
-using AuroraEmu.Network.Game.Packets.Composers.Items;
+﻿using AuroraEmu.Game.Rooms.Pathfinder;
 using MySql.Data.MySqlClient;
 using System.Collections.Generic;
-using System.Threading.Tasks;
 
 namespace AuroraEmu.Game.Items.Models
 {
@@ -19,8 +15,7 @@ namespace AuroraEmu.Game.Items.Models
         public int Rotation { get; set; }
         public string Data { get; set; }
         public string Wallposition { get; set; }
-        public bool Cycling { get; private set; } = false;
-        public RoomActor ActorOnItem { get; set; }
+        public bool Cycling { get; set; } = false;
         public Point2D Position { get; set; }
         public List<Point2D> AffectedTiles =>
             Utilities.Extensions.AffectedTiles(Definition.Length, Definition.Width, Position.X, Position.Y, Rotation);
@@ -31,6 +26,8 @@ namespace AuroraEmu.Game.Items.Models
                 return affTiles;
             }
         }
+
+        public ProcessItem ItemProcessor { get; }
 
         public Item(int id, int ownerId, int definitionId, string data)
         {
@@ -50,48 +47,17 @@ namespace AuroraEmu.Game.Items.Models
             Rotation = reader.GetInt32("rotation");
             Data = reader.GetString("data");
             Wallposition = reader.GetString("wallposition");
+
+            ItemProcessor = new ProcessItem();
         }
 
-        public ItemDefinition Definition {
-            get {
-                if (_definition == null)
-                    _definition = Engine.Locator.ItemController.GetTemplate(DefinitionId);
+        public ItemDefinition Definition =>
+            _definition ?? (_definition = Engine.Locator.ItemController.GetTemplate(DefinitionId));
 
-                return _definition;
-            }
-        }
+        public IItemHandler Handler =>
+            Engine.Locator.ItemController.Handlers.TryGetValue(Definition.HandleType, out IItemHandler handler) ? handler : null;
 
-        public IItemHandler Handler {
-            get {
-                if (Engine.Locator.ItemController.Handlers.TryGetValue(Definition.HandleType, out IItemHandler handler))
-                {
-                    return handler;
-                }
-                return null;
-            }
-        }
-
-        public void ProcessItem(Client interactor, int cycles = 0)
-        {
-            Task.Run(async delegate
-            {
-                Cycling = true;
-                await Task.Delay(cycles * 500);
-                if (Engine.Locator.ItemController.Handlers.TryGetValue(Definition.HandleType, out IItemHandler itemHandler))
-                {
-                    itemHandler.Handle(this, interactor);
-                }
-                if (Definition.SpriteType == "i")
-                    interactor.CurrentRoom.SendComposer(new ItemUpdateMessageComposer(this));
-                else
-                    interactor.CurrentRoom.SendComposer(new ObjectDataUpdateMessageComposer(Id, Data));
-                Cycling = false;
-            });
-        }
-
-        public bool Equals(Item item)
-        {
-            return (Id == item.Id);
-        }
+        public bool Equals(Item item) =>
+            (Id == item.Id);
     }
 }

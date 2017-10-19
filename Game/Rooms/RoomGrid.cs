@@ -113,11 +113,11 @@ namespace AuroraEmu.Game.Rooms
         }
 
         //Simplify the ValidPoint method
-        public bool ValidPoint(Point2D point) =>
-            ValidPoint(point.X, point.Y);
+        public bool ValidPoint(Point2D point, Item item = null) =>
+            ValidPoint(point.X, point.Y, item);
 
         //Checks if the point is valid
-        public bool ValidPoint(int x, int y)
+        public bool ValidPoint(int x, int y, Item item = null)
         {
             if (!_room.Map.PassableTiles[x, y])
                 return false;
@@ -129,7 +129,12 @@ namespace AuroraEmu.Game.Rooms
                 if (_tileAt[(x, y)].HighestItem.Definition.CanStack || _tileAt[(x, y)].HighestItem.Definition.InteractorType == "roller")
                     return true;
                 else
+                {
+                    if (item != null && ItemsAt(x, y).Count == 1)
+                        if (_tileAt[(x, y)].HighestItem.Equals(item))
+                            return true;
                     return false;
+                }
 
             return true;
         }
@@ -196,6 +201,11 @@ namespace AuroraEmu.Game.Rooms
         public RoomPoint PointAt(int x, int y) 
         {
             return _tileAt[(x, y)];
+        }
+
+        public RoomPoint PointAt(Point2D point)
+        {
+            return _tileAt[(point.X, point.Y)];
         }
 
         public double TileHeight(Point2D point) =>

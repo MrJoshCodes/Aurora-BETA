@@ -20,12 +20,12 @@ namespace AuroraEmu.Network.Game.Packets.Events.Rooms.Items
                 //Gets the affected tiles and checks if the point is valid
                 List<Point2D> points = Utilities.Extensions.AffectedTiles(item.Definition.Length, item.Definition.Width, x, y, rotation);
                 foreach (Point2D point in points)
-                    if (!client.CurrentRoom.Grid.ValidPoint(point))
+                    if (!client.CurrentRoom.Grid.ValidPoint(point, item))
                         return;
 
                 if (item.Rotation == rotation)
                 {
-                    if (!client.CurrentRoom.Grid.ValidPoint(x, y))
+                    if (!client.CurrentRoom.Grid.ValidPoint(x, y, item))
                         return;
 
                     points.Add(new Point2D(x, y));

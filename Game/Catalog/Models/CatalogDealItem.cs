@@ -18,15 +18,7 @@ namespace AuroraEmu.Game.Catalog.Models
             Amount = reader.GetInt32("amount");
         }
 
-        public ItemDefinition Template
-        {
-            get
-            {
-                if (_template == null)
-                    _template = Engine.Locator.ItemController.GetTemplate(TemplateId);
-
-                return _template;
-            }
-        }
+        public ItemDefinition Template =>
+            _template ?? (Engine.Locator.ItemController.GetTemplate(TemplateId));
     }
 }

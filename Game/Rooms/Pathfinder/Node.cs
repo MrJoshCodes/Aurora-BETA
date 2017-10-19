@@ -27,9 +27,7 @@ namespace AuroraEmu.Game.Rooms.Pathfinder
             }
         }
 
-        public int CompareTo(Node Other)
-        {
-            return cost.CompareTo(Other.cost);
-        }
+        public int CompareTo(Node Other) =>
+            cost.CompareTo(Other.cost);
     }
 }

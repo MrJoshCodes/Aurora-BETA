@@ -36,26 +36,10 @@ namespace AuroraEmu.Game.Catalog.Models
             Order = reader.GetInt32("order");
         }
 
-        public List<CatalogDealItem> DealItems
-        {
-            get
-            {
-                if (_dealItems == null)
-                    _dealItems = Engine.Locator.CatalogController.GetDeal(DealId);
+        public List<CatalogDealItem> DealItems =>
+            _dealItems ?? (Engine.Locator.CatalogController.GetDeal(DealId));
 
-                return _dealItems;
-            }
-        }
-
-        public ItemDefinition Template
-        {
-            get
-            {
-                if (_template == null)
-                    _template = Engine.Locator.ItemController.GetTemplate(TemplateId);
-
-                return _template;
-            }
-        }
+        public ItemDefinition Template =>
+            _template ?? (Engine.Locator.ItemController.GetTemplate(TemplateId));
     }
 }
