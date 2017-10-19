@@ -37,9 +37,7 @@ namespace AuroraEmu.Game.Rooms.Pathfinder
             return square;
         }
 
-        public bool Equals(Point2D other)
-        {
-            return (X == other.X && Y == other.Y);
-        }
+        public bool Equals(Point2D other) =>
+            (X == other.X && Y == other.Y);
     }
 }
