@@ -76,6 +76,7 @@ namespace AuroraEmu.Network.Game.Packets
 
                 { 157, new GetBadgesEvent() },
                 { 158, new SetActivatedBadgesEvent() },
+                { 159, new GetSelectedBadgesMessageEvent()},
                 { 67, new PickupObjectMessageEvent() },
                 { 90, new PlaceObjectMessageEvent() },
                 { 129, new RedeemVoucherMessageEvent() },
