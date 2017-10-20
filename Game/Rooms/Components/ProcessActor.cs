@@ -102,9 +102,9 @@ namespace AuroraEmu.Game.Rooms.Components
         private void UpdateUserStatus(RoomActor actor, RoomPoint point)
         {
             Item highestItem = point.HighestItem;
+
             if (highestItem != null)
             {
-                point.Actors.Add(actor);
                 actor.Position.Z = highestItem.Position.Z;
                 if (highestItem.Definition.ItemType == "seat")
                 {
