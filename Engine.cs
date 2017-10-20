@@ -148,7 +148,7 @@ namespace AuroraEmu
         {
             Locator.ClientController.Dispose();
             Locator.GameNetworkListener.Dispose();
-            Environment.exit();
+            System.Environment.Exit(0);
         }
     }
 }
