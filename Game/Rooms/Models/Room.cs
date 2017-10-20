@@ -47,6 +47,8 @@ namespace AuroraEmu.Game.Rooms.Models
         public RoomGrid Grid { get; }
         public RoomMap Map { get; set; }
         public List<int> UserRights { get; }
+        
+        public ConcurrentDictionary<int, Item> ItemUpdates { get; set; }
 
         public Room()
         {
