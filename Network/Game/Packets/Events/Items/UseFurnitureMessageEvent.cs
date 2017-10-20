@@ -10,7 +10,7 @@ namespace AuroraEmu.Network.Game.Packets.Events.Items
         {
             int itemId = msgEvent.ReadVL64();
 
-            if (Engine.Locator.RoomController.GetRoom(client.CurrentRoomId).Items.TryGetValue(itemId, out Item item))
+            if (client.CurrentRoom.Items.TryGetValue(itemId, out Item item))
             {
                 if (item.Definition.MaxInteractionState == 0) return;
                 
@@ -28,6 +28,7 @@ namespace AuroraEmu.Network.Game.Packets.Events.Items
 
                 item.Data = nextState.ToString();
                 client.CurrentRoom.SendComposer(new ObjectDataUpdateMessageComposer(itemId, item.Data));
+                client.CurrentRoom.ItemUpdates.TryAdd(itemId, item);
             }
         }
     }
