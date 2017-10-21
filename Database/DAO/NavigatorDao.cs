@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using AuroraEmu.DI.Database.DAO;
 using AuroraEmu.Game.Navigator.Models;
 using AuroraEmu.Game.Rooms.Models;
@@ -88,6 +89,24 @@ namespace AuroraEmu.Database.DAO
             }
 
             return rooms;
+        }
+
+        public List<Room> GetTopRooms()
+        {
+            List<Room> rooms = new List<Room>();
+
+            using (DatabaseConnection dbConnection = Engine.Locator.ConnectionPool.PopConnection())
+            {
+                dbConnection.SetQuery("SELECT `id` FROM rooms ORDER BY `players_in`,`name` ASC LIMIT 40");
+                using (var reader = dbConnection.ExecuteReader())
+                    while (reader.Read())
+                    {
+                        Room room = Engine.Locator.RoomController.GetRoom(reader.GetInt32("id"));
+                        rooms.Add(room);
+                    }
+            }
+
+            return rooms.OrderByDescending(room => room.Actors.Count).ToList();
         }
     }
 }

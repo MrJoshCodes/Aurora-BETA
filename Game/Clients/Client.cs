@@ -78,7 +78,7 @@ namespace AuroraEmu.Game.Clients
             {
                 QueueComposer(new UserRightsMessageComposer());
                 QueueComposer(new MessageComposer(3));
-                QueueComposer(new HabboBroadcastMessageComposer($"Welcome {Player.Username} to Aurora BETA, enjoy your stay!"));
+                QueueComposer(new ModMessageComposer($"Welcome {Player.Username} to Aurora BETA, enjoy your stay! Please report any bugs to us and we'll sort it ASAP.", "URL"));
 
                 if (Player.Rank > 5)
                 {

@@ -46,5 +46,8 @@ namespace AuroraEmu.Game.Navigator
 
         public List<RoomCategory> GetUserCategories(byte rank) =>
             Categories.Values.Where(catecory => catecory.MinRank <= rank).ToList();
+
+        public List<Room> GetTopRooms() =>
+            Dao.GetTopRooms();
     }
 }
