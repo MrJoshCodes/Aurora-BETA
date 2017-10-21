@@ -23,5 +23,7 @@ namespace AuroraEmu.DI.Game.Navigator
         List<RoomCategory> GetUserCategories(byte rank);
         
         List<Room> GetTopRooms();
+
+        List<Room> GetRoomsInCategory(int categoryId);
     }
 }

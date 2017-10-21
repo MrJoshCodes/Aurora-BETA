@@ -97,7 +97,26 @@ namespace AuroraEmu.Database.DAO
 
             using (DatabaseConnection dbConnection = Engine.Locator.ConnectionPool.PopConnection())
             {
-                dbConnection.SetQuery("SELECT `id` FROM rooms ORDER BY `players_in`,`name` ASC LIMIT 40");
+                dbConnection.SetQuery("SELECT `id` FROM rooms ORDER BY `name` ASC LIMIT 40");
+                using (var reader = dbConnection.ExecuteReader())
+                    while (reader.Read())
+                    {
+                        Room room = Engine.Locator.RoomController.GetRoom(reader.GetInt32("id"));
+                        rooms.Add(room);
+                    }
+            }
+
+            return rooms.OrderByDescending(room => room.Actors.Count).ToList();
+        }
+
+        public List<Room> GetRoomsInCategory(int categoryId)
+        {
+            List<Room> rooms = new List<Room>();
+
+            using (DatabaseConnection dbConnection = Engine.Locator.ConnectionPool.PopConnection())
+            {
+                dbConnection.SetQuery("SELECT `id` FROM rooms WHERE `category_id` = @categoryid ORDER BY `name` ASC LIMIT 40");
+                dbConnection.AddParameter("@categoryid", categoryId);
                 using (var reader = dbConnection.ExecuteReader())
                     while (reader.Read())
                     {

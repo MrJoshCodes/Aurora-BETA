@@ -49,5 +49,8 @@ namespace AuroraEmu.Game.Navigator
 
         public List<Room> GetTopRooms() =>
             Dao.GetTopRooms();
+
+        public List<Room> GetRoomsInCategory(int categoryId) =>
+            Dao.GetRoomsInCategory(categoryId);
     }
 }

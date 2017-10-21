@@ -13,6 +13,10 @@ namespace AuroraEmu.Network.Game.Packets.Events.Navigator
             {
                 client.SendComposer(new GuestRoomSearchResultComposer(1, category.ToString(), Engine.Locator.NavigatorController.GetTopRooms()));
             }
+            else
+            {
+                client.SendComposer(new GuestRoomSearchResultComposer(1, category.ToString(), Engine.Locator.NavigatorController.GetRoomsInCategory(category)));
+            }
         }
     }
 }

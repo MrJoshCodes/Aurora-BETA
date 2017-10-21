@@ -17,5 +17,7 @@ namespace AuroraEmu.DI.Database.DAO
         List<Room> GetRoomsByFriends(int playerId);
         
         List<Room> GetTopRooms();
+        
+        List<Room> GetRoomsInCategory(int categoryId);
     }
 }
