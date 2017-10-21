@@ -19,6 +19,7 @@ namespace AuroraEmu.Game.Items.Models
         public string VendorIDs { get; set; }
         public double Height { get; set; }
         public HandleType HandleType { get; set; }
+        public int MaxInteractionState { get; set; }
 
         public bool ApplyStackHeight
         {
@@ -47,6 +48,7 @@ namespace AuroraEmu.Game.Items.Models
             InteractorType = reader.GetString("interactor_type");
             HandleType = HandlerParser.GetItemHandle(InteractorType);
             VendorIDs = reader.GetString("vendor_ids");
+            MaxInteractionState = reader.GetInt32("max_interaction_state");
 
             if (Height == 0)
                 Height = 0.001;

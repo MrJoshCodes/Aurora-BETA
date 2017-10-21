@@ -7,7 +7,7 @@ namespace AuroraEmu.Network.Game.Packets.Events.Users.Clothing
     {
         public void Run(Client client, MessageEvent msgEvent)
         {
-            string gender = msgEvent.ReadString().ToUpper();
+            string gender = msgEvent.ReadString();
             string figure = msgEvent.ReadString();
 
             client.Player.Figure = figure;

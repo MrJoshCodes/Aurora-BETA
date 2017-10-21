@@ -15,15 +15,18 @@ namespace AuroraEmu.Game.Rooms.Components
         private ActionBlock<DateTimeOffset> _task;
         private ProcessActor actorProcessor;
         private ProcessRoller rollerProcessor;
+        private ProcessItems itemsProcessor;
 
         private int idleRoom = 0;
         private int rollerTick = 0;
+        private int itemsTick = 0;
 
         public ProcessComponent(Room room)
         {
             this.room = room;
             actorProcessor = new ProcessActor();
             rollerProcessor = new ProcessRoller();
+            itemsProcessor = new ProcessItems();
         }
 
         public void SetupRoomLoop()
@@ -45,6 +48,13 @@ namespace AuroraEmu.Game.Rooms.Components
             else
                 idleRoom = 0;
 
+            if (itemsTick == 2)
+            {
+                itemsProcessor.Process(room);
+
+                itemsTick = 0;
+            }
+
             if (rollerTick == 4) { // 2 seconds
                 List<Item> rollers = this.room.GetItems("roller");
                 
@@ -55,6 +65,7 @@ namespace AuroraEmu.Game.Rooms.Components
             }
             
             rollerTick++;
+            itemsTick++;
 
             List<RoomActor> toUpdate = new List<RoomActor>();
             foreach (RoomActor actor in room.Actors.Values)

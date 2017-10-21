@@ -133,9 +133,11 @@ namespace AuroraEmu.Game.Clients
                     Items.Clear();
                     using (var dbConnection = Engine.Locator.ConnectionPool.PopConnection())
                     {
-                        dbConnection.SetQuery("UPDATE players SET coins = @coins, pixels = @pixels WHERE id = @id");
+                        dbConnection.SetQuery("UPDATE players SET coins = @coins, pixels = @pixels, figure = @figure, gender = @gender WHERE id = @id");
                         dbConnection.AddParameter("@coins", player.Coins);
                         dbConnection.AddParameter("@pixels", player.Pixels);
+                        dbConnection.AddParameter("@figure", player.Figure);
+                        dbConnection.AddParameter("@gender", player.Gender);
                         dbConnection.AddParameter("@id", player.Id);
                         dbConnection.Execute();
                     }
