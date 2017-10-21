@@ -85,6 +85,7 @@ namespace AuroraEmu.Game.Rooms.Models
             }
 
             Actors = new ConcurrentDictionary<int, RoomActor>();
+            ItemUpdates = new ConcurrentDictionary<int, Item>();
 
             ProcessComponent = new ProcessComponent(this);
             ProcessComponent.SetupRoomLoop();

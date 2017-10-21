@@ -1,6 +1,8 @@
-﻿using AuroraEmu.Database;
+﻿using System;
+using AuroraEmu.Database;
 using AuroraEmu.Game.Items.Models;
 using AuroraEmu.Game.Rooms.Models;
+using AuroraEmu.Network.Game.Packets.Composers.Items;
 
 namespace AuroraEmu.Game.Rooms.Components
 {
@@ -8,20 +10,28 @@ namespace AuroraEmu.Game.Rooms.Components
     {
         public void Process(Room room)
         {
-            foreach (Item item in room.ItemUpdates.Values)
+            try
             {
-                using (DatabaseConnection dbConnection = Engine.Locator.ConnectionPool.PopConnection())
+                foreach (Item item in room.ItemUpdates.Values)
                 {
-                    dbConnection.SetQuery("UPDATE `items` SET `x` = @x, `y` = @y, `z` = @z, `rotation` = @rotation, `data` = @data, `wallposition` = @wallposition WHERE `id` = @id LIMIT 1");
-                    dbConnection.AddParameter("@x", item.Position.X);
-                    dbConnection.AddParameter("@y", item.Position.Y);
-                    dbConnection.AddParameter("@z", item.Position.Z);
-                    dbConnection.AddParameter("@data", item.Data);
-                    dbConnection.AddParameter("@wallposition", item.Wallposition);
-                    dbConnection.AddParameter("@id", item.Id);
+                    using (DatabaseConnection dbConnection = Engine.Locator.ConnectionPool.PopConnection())
+                    {
+                        dbConnection.SetQuery("UPDATE `items` SET `x` = @x, `y` = @y, `z` = @z, `rotation` = @rotation, `data` = @data, `wallposition` = @wallposition WHERE `id` = @id LIMIT 1");
+                        dbConnection.AddParameter("@x", item.Position.X);
+                        dbConnection.AddParameter("@y", item.Position.Y);
+                        dbConnection.AddParameter("@z", item.Position.Z);
+                        dbConnection.AddParameter("@data", item.Data);
+                        dbConnection.AddParameter("@wallposition", item.Wallposition);
+                        dbConnection.AddParameter("@id", item.Id);
 
-                    room.ItemUpdates.TryRemove(item.Id, out Item _);
+                        room.ItemUpdates.TryRemove(item.Id, out Item _);
+                    }
                 }
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                throw;
             }
         }
     }
