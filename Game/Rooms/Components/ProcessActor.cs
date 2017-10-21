@@ -19,7 +19,7 @@ namespace AuroraEmu.Game.Rooms.Components
                 actor.Position.Z = Math.Round(room.Grid.TileHeight(actor.Position), 1);
 
                 if (actor.Position.Equals(actor.TargetPoint))
-                    UpdateUserStatus(actor, room.Grid.PointAt(actor.NextTile));
+                    UpdateUserStatus(room, actor, room.Grid.PointAt(actor.NextTile));
 
                 actor.UpdateNeeded = true;
                 actor.SetStep = false;
@@ -99,13 +99,13 @@ namespace AuroraEmu.Game.Rooms.Components
             }
         }
 
-        private void UpdateUserStatus(RoomActor actor, RoomPoint point)
+        private void UpdateUserStatus(Room room, RoomActor actor, RoomPoint point)
         {
             Item highestItem = point.HighestItem;
 
             if (highestItem != null)
             {
-                actor.Position.Z = highestItem.Position.Z;
+                actor.Position.Z = room.Grid.TileHeight(actor.Position);
                 if (highestItem.Definition.ItemType == "seat")
                 {
                     if (!actor.Statusses.ContainsKey("sit"))
