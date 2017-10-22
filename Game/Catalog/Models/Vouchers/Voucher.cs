@@ -5,12 +5,12 @@ namespace AuroraEmu.Game.Catalog.Models.Vouchers
 {
     public class Voucher
     {
-        public int Amount { get; set; }
+        public string Reward { get; set; }
         public VoucherType Type { get; set; }
 
         public Voucher(MySqlDataReader reader)
         {
-            Amount = reader.GetInt32("reward");
+            Reward = reader.GetString("reward");
             Type = (VoucherType)Enum.Parse(typeof(VoucherType), reader.GetString("type"));
         }
     }

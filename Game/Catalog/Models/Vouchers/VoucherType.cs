@@ -4,6 +4,7 @@
     {
         Credit,
         Pixel,
-        Item
+        Item,
+        Badge
     }
 }
