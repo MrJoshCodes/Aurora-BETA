@@ -13,6 +13,7 @@ using AuroraEmu.Network.Game.Packets.Events.Users;
 using AuroraEmu.Network.Game.Packets.Events.Users.Clothing;
 using DotNetty.Buffers;
 using System.Collections.Generic;
+using AuroraEmu.Network.Game.Packets.Events.Achievements;
 using AuroraEmu.Network.Game.Packets.Events.Moderation;
 using AuroraEmu.Network.Game.Packets.Events.Rooms.Action;
 
@@ -78,6 +79,7 @@ namespace AuroraEmu.Network.Game.Packets
                 { 157, new GetBadgesEvent() },
                 { 158, new SetActivatedBadgesEvent() },
                 { 159, new GetSelectedBadgesMessageEvent()},
+                {370, new GetAchievementsEvent()},
                 { 67, new PickupObjectMessageEvent() },
                 { 90, new PlaceObjectMessageEvent() },
                 { 129, new RedeemVoucherMessageEvent() },

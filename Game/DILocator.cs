@@ -1,6 +1,7 @@
 ﻿using AuroraEmu.DI.Config;
 using AuroraEmu.DI.Database;
 using AuroraEmu.DI.Game;
+using AuroraEmu.DI.Game.Achievements;
 using AuroraEmu.DI.Game.Badges;
 using AuroraEmu.DI.Game.Catalog;
 using AuroraEmu.DI.Game.Clients;
@@ -21,6 +22,7 @@ namespace AuroraEmu.Game
     public class DILocator
     {
         private readonly IDependencyLocator _locator;
+        public IAchievementController AchievementController { get; private set; }
         public IBadgeController BadgeController { get; private set; }
         public ICatalogController CatalogController { get; private set; }
         public IClientController ClientController { get; private set; } 
@@ -50,6 +52,7 @@ namespace AuroraEmu.Game
             ConfigController = _locator.Resolve<IConfigController>();
             ConnectionPool = _locator.Resolve<IConnectionPool>();
             PlayerController = _locator.Resolve<IPlayerController>();
+            AchievementController = _locator.Resolve<IAchievementController>();
             ItemController = _locator.Resolve<IItemController>();
             CatalogController = _locator.Resolve<ICatalogController>();
             NavigatorController = _locator.Resolve<INavigatorController>();

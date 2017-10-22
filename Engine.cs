@@ -41,6 +41,8 @@ using AuroraEmu.Network.Game;
 using AuroraEmu.Network.Game.Packets;
 using System.Threading.Tasks;
 using System.Threading;
+using AuroraEmu.DI.Game.Achievements;
+using AuroraEmu.Game.Achievements;
 
 namespace AuroraEmu
 {
@@ -108,6 +110,7 @@ namespace AuroraEmu
             builder.RegisterType<ConfigController>().As<IConfigController>();
             builder.RegisterType<PacketController>().As<IPacketController>();
             builder.RegisterType<GameNetworkListener>().As<IGameNetworkListener>();
+            builder.RegisterType<AchievementController>().As<IAchievementController>();
             builder.RegisterType<BadgeController>().As<IBadgeController>();
             builder.RegisterType<CatalogController>().As<ICatalogController>();
             builder.RegisterType<ClientController>().As<IClientController>();
@@ -129,6 +132,7 @@ namespace AuroraEmu
             builder.RegisterType<PlayerDao>().As<IPlayerDao>();
             builder.RegisterType<RoomDao>().As<IRoomDao>();
             builder.RegisterType<WordfilterDao>().As<IWordfilterDao>();
+            builder.RegisterType<AchievementsDao>().As<IAchievementsDao>();
             builder.RegisterType<BadgesDao>().As<IBadgesDao>();
             builder.RegisterType<SubscriptionDao>().As<ISubscriptionDao>();
 
