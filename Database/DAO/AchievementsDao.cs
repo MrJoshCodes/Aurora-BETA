@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Runtime.InteropServices.ComTypes;
 using AuroraEmu.DI.Database.DAO;
 using AuroraEmu.Game.Achievements.Models;
 
@@ -31,6 +32,27 @@ namespace AuroraEmu.Database.DAO
             }
 
             return achievements;
+        }
+
+        public Dictionary<int, int> GetUserAchievements(int playerId)
+        {
+            var userAchievements = new Dictionary<int, int>();
+
+            using (var dbConnection = Engine.Locator.ConnectionPool.PopConnection())
+            {
+                dbConnection.SetQuery("SELECT * FROM `player_achievements` WHERE `player_id` = @playerId");
+                dbConnection.AddParameter("@playerId", playerId);
+
+                using (var reader = dbConnection.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        userAchievements.Add(reader.GetInt32("achievement_id"), reader.GetInt32("level"));
+                    }
+                }
+            }
+
+            return userAchievements;
         }
     }
 }

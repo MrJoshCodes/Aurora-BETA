@@ -6,5 +6,6 @@ namespace AuroraEmu.DI.Database.DAO
     public interface IAchievementsDao
     {
         Dictionary<string, Achievement> GetAchievements();
+        Dictionary<int, int> GetUserAchievements(int playerId);
     }
 }

@@ -1,4 +1,6 @@
-﻿using AuroraEmu.Game.Clients;
+﻿using System.Collections.Generic;
+using System.Linq;
+using AuroraEmu.Game.Clients;
 using AuroraEmu.Network.Game.Packets.Composers.Achievements;
 
 namespace AuroraEmu.Network.Game.Packets.Events.Achievements
@@ -7,7 +9,21 @@ namespace AuroraEmu.Network.Game.Packets.Events.Achievements
     {
         public void Run(Client client, MessageEvent msgEvent)
         {
-            client.SendComposer(new AchievementsComposer(Engine.Locator.AchievementController.Achievements));
+            var achievements = Engine.Locator.AchievementController.Achievements;
+            var userAchievements = client.Achievements;
+
+            foreach (var kvp in userAchievements)
+            {
+                var achievement = achievements.Values.FirstOrDefault(x => x.Id == kvp.Key);
+
+                if (kvp.Value >= achievement.Levels.Keys.Max())
+                {
+                    achievements.Remove(achievement.Badge);
+                }
+            }
+            
+            
+            client.SendComposer(new AchievementsComposer(achievements, userAchievements));
         }
     }
 }

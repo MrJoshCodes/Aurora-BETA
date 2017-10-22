@@ -29,6 +29,7 @@ namespace AuroraEmu.Game.Clients
 
         public Dictionary<int, Item> Items { get; set; }
         public Dictionary<string, SubscriptionData> SubscriptionData { get; set; }
+        public Dictionary<int, int> Achievements { get; set; }
 
         public Client(IChannel channel)
         {
@@ -79,7 +80,7 @@ namespace AuroraEmu.Game.Clients
                 QueueComposer(new UserRightsMessageComposer());
                 QueueComposer(new MessageComposer(3));
                 QueueComposer(new ModMessageComposer($"Welcome {Player.Username} to Aurora BETA, enjoy your stay! Please report any bugs to us and we'll sort it ASAP.", "URL"));
-
+                
                 if (Player.Rank > 5)
                 {
                     QueueComposer(new ModeratorInitMessageComposer());
@@ -90,6 +91,7 @@ namespace AuroraEmu.Game.Clients
                 Player.BadgesComponent = new BadgesComponent(Player.Id);
                 Player.MessengerComponent = new MessengerComponent(Player);
                 Engine.Locator.SubscriptionController.GetSubscriptionData(SubscriptionData, Player.Id);
+                Achievements = Engine.Locator.AchievementController.Dao.GetUserAchievements(Player.Id);
             }
             else
             {
