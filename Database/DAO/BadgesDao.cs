@@ -62,5 +62,16 @@ namespace AuroraEmu.Database.DAO
 
             return id;
         }
+
+        public void UpdateBadge(int id, string code)
+        {
+            using (var dbConnection = Engine.Locator.ConnectionPool.PopConnection())
+            {
+                dbConnection.SetQuery("UPDATE `player_badges` SET `badge_code` = @code WHERE `id` = @id LIMIT 1");
+                dbConnection.AddParameter("@id", id);
+                dbConnection.AddParameter("@code", code);
+                dbConnection.Execute();
+            }
+        }
     }
 }

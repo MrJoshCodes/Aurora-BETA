@@ -8,11 +8,11 @@ namespace AuroraEmu.Game.Badges.Models
         public int Slot { get; set; }
         public string Code { get; }
 
-        public Badge(int id, string code)
+        public Badge(int id, string code, int slot = 0)
         {
             Id = id;
             Code = code;
-            Slot = 0;
+            Slot = slot;
         }
         
         public Badge(MySqlDataReader reader)
