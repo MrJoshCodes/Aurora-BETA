@@ -47,5 +47,20 @@ namespace AuroraEmu.Database.DAO
                 }
             }
         }
+
+        public int InsertBadge(int playerId, string code)
+        {
+            int id;
+            
+            using (var dbConnection = Engine.Locator.ConnectionPool.PopConnection())
+            {
+                dbConnection.SetQuery("INSERT INTO `player_badges` VALUES (NULL, @playerId, @code, 0)");
+                dbConnection.AddParameter("@playerId", playerId);
+                dbConnection.AddParameter("@code", code);
+                id = dbConnection.Insert();
+            }
+
+            return id;
+        }
     }
 }

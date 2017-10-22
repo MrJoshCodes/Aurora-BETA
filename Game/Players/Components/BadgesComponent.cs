@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System;
+using System.Globalization;
 using System.Linq;
 using AuroraEmu.Utilities;
 using AuroraEmu.Game.Badges.Models;
@@ -21,7 +22,7 @@ namespace AuroraEmu.Game.Players.Components
 
         public bool TryGetBadge(string badge, out Badge b)
         {
-            b = Badges.Values.Where(x => x.Code.Equals(badge)).FirstOrDefault();
+            b = Badges.Values.FirstOrDefault(x => x.Code.Equals(badge));
 
             return b != null;
         }
@@ -40,5 +41,16 @@ namespace AuroraEmu.Game.Players.Components
 
         public void Dispose() =>
             Badges.Clear();
+
+        public void AddOrUpdateBadge(string achievementBadge, int checkLevel)
+        {
+            var badge = Badges.Values.FirstOrDefault(x => x.Code.Equals(achievementBadge + (checkLevel - 1)));
+
+            if (badge == null)
+            {
+                int id = Engine.Locator.BadgeController.Dao.InsertBadge(_playerId, achievementBadge + checkLevel);
+                Badges.Add(id, new Badge(id, achievementBadge + checkLevel));
+            }
+        }
     }
 }

@@ -115,7 +115,7 @@ namespace AuroraEmu.Game.Clients
         public void IncreasePixels(int amount)
         {
             Player.Pixels += amount;
-            SendComposer(new HabboActivityPointNotificationMessageComposer(Player.Pixels, 0));
+            SendComposer(new HabboActivityPointNotificationMessageComposer(Player.Pixels, amount));
         }
 
 

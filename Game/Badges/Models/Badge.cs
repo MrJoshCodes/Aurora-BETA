@@ -8,6 +8,13 @@ namespace AuroraEmu.Game.Badges.Models
         public int Slot { get; set; }
         public string Code { get; }
 
+        public Badge(int id, string code)
+        {
+            Id = id;
+            Code = code;
+            Slot = 0;
+        }
+        
         public Badge(MySqlDataReader reader)
         {
             Id = reader.GetInt32("id");

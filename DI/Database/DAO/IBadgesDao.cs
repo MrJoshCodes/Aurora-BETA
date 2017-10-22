@@ -8,5 +8,6 @@ namespace AuroraEmu.DI.Database.DAO
         Dictionary<int, Badge> GetBadges(int playerId);
         void ClearBadgeSlots(int playerId);
         void UpdateBadgeSlots(int playerId, List<(int, int)> badges);
+        int InsertBadge(int playerId, string code);
     }
 }

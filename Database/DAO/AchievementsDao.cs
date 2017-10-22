@@ -54,5 +54,17 @@ namespace AuroraEmu.Database.DAO
 
             return userAchievements;
         }
+
+        public void AddOrUpdateUserAchievement(int playerId, int achievementId, int level)
+        {
+            using (var dbConnection = Engine.Locator.ConnectionPool.PopConnection())
+            {
+                dbConnection.SetQuery("INSERT INTO `player_achievements` VALUES (@playerId, @achievementId, @level) ON DUPLICATE KEY UPDATE `level` = VALUES(`level`)");
+                dbConnection.AddParameter("@playerId", playerId);
+                dbConnection.AddParameter("@achievementId", achievementId);
+                dbConnection.AddParameter("@level", level);
+                dbConnection.Execute();
+            }
+        }
     }
 }

@@ -15,6 +15,8 @@ namespace AuroraEmu.Network.Game.Packets.Events.Users.Clothing
 
             client.SendComposer(new UserChangeMessageComposer(client.Player));
             client.CurrentRoom.SendComposer(new UserChangeMessageComposer(client.UserActor.VirtualId, client.Player));
+            
+            Engine.Locator.AchievementController.CheckAchievement(client, "ACH_AvatarLooks", 1);
         }
     }
 }

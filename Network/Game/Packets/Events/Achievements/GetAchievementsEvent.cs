@@ -16,7 +16,7 @@ namespace AuroraEmu.Network.Game.Packets.Events.Achievements
             {
                 var achievement = achievements.Values.FirstOrDefault(x => x.Id == kvp.Key);
 
-                if (kvp.Value >= achievement.Levels.Keys.Max())
+                if (achievement != null && kvp.Value >= achievement.Levels.Keys.Max())
                 {
                     achievements.Remove(achievement.Badge);
                 }
