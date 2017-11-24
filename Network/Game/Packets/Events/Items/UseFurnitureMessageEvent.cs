@@ -28,6 +28,7 @@ namespace AuroraEmu.Network.Game.Packets.Events.Items
 
                 item.Data = nextState.ToString();
                 client.CurrentRoom.ItemUpdates.TryAdd(itemId, item);
+                Engine.Locator.ItemController.Dao.UpdateItemData(itemId, nextState.ToString());
                 client.CurrentRoom.SendComposer(new ObjectDataUpdateMessageComposer(item.Id, item.Data));
             }
         }

@@ -169,12 +169,20 @@ namespace AuroraEmu.Game.Rooms
                     if (item.Definition.ItemType == "solid" ||
                         item.Definition.ItemType == "trophy")
                         return false;
+                    
+                    // Second check for gates. 
+                    if (item.Definition.ItemType == "gate" && item.Data != "1")
+                        return false;
                 }
                 else
                 {
                     if (item.Definition.ItemType == "solid" ||
                         item.Definition.ItemType == "trophy" ||
                         item.Definition.ItemType == "seat")
+                        return false;
+                    
+                    // Second check for gates. 
+                    if (item.Definition.ItemType == "gate" && item.Data != "1")
                         return false;
                 }
             }

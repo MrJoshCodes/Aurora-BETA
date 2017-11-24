@@ -12,6 +12,7 @@ using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection.Metadata.Ecma335;
 
 namespace AuroraEmu.Game.Rooms.Models
 {
@@ -47,6 +48,7 @@ namespace AuroraEmu.Game.Rooms.Models
         public RoomGrid Grid { get; }
         public RoomMap Map { get; set; }
         public List<int> UserRights { get; }
+        public bool Active => ProcessComponent != null;
         
         public ConcurrentDictionary<int, Item> ItemUpdates { get; set; }
 
@@ -197,6 +199,7 @@ namespace AuroraEmu.Game.Rooms.Models
 
         public void Dispose()
         {
+            
             Engine.Locator.RoomController.Rooms.TryRemove(Id, out Room room);
             Actors.Clear();
             _items.Clear();
