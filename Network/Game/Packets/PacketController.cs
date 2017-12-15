@@ -59,6 +59,7 @@ namespace AuroraEmu.Network.Game.Packets
                 { 29, new CreateFlatMessageEvent() },
                 { 391, new OpenFlatConnectionMessageEvent() },
                 { 230, new GetHabboGroupBadgesMessageEvent() },
+                {231, new GetHabboGroupDetailsMessageEvent()},
                 { 215, new GetFurnitureAliasesMessageEvent() },
                 { 60, new GetHeightMapMessageEvent() },
                 { 390, new GetRoomEntryDataMessageEvent() },

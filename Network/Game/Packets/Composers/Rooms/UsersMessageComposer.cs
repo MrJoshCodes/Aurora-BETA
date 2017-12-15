@@ -37,7 +37,7 @@ namespace AuroraEmu.Network.Game.Packets.Composers.Rooms
             AppendVL64(1); // TODO: BOTs, PETs etc.
             AppendString(actor.Client.Player.Gender);
             AppendVL64(5);
-            AppendVL64(-1);
+            AppendVL64(actor.Client.Player.FavouriteGroupId);
             AppendVL64(-1);
             AppendString(""); // pool figure
         }

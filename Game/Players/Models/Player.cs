@@ -1,6 +1,7 @@
 ﻿using AuroraEmu.Game.Players.Components;
 using MySql.Data.MySqlClient;
 using System;
+using AuroraEmu.Game.Groups.Models;
 
 namespace AuroraEmu.Game.Players.Models
 {
@@ -19,7 +20,9 @@ namespace AuroraEmu.Game.Players.Models
         public string Motto { get; set; }
         public string SSO { get; set; }
         public byte Rank { get; set; }
+        public int FavouriteGroupId { get; set; }
 
+        public Group Group { get; set; }
         public MessengerComponent MessengerComponent { get; set; }
         public BadgesComponent BadgesComponent { get; set; }
 
@@ -37,6 +40,9 @@ namespace AuroraEmu.Game.Players.Models
             HomeRoom = reader.GetInt32("home_room");
             SSO = reader.GetString("sso_ticket");
             BlockNewFriends = reader.GetInt32("block_friendrequests");
+            FavouriteGroupId = reader.IsDBNull(reader.GetOrdinal("favourite_group"))
+                ? -1
+                : reader.GetInt32("favourite_group");
         }
 
         public void Dispose()
@@ -45,6 +51,7 @@ namespace AuroraEmu.Game.Players.Models
             MessengerComponent = null;
             BadgesComponent.Dispose();
             BadgesComponent = null;
+            Group = null;
         }
     }
 }

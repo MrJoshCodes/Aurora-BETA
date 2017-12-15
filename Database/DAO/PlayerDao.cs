@@ -11,7 +11,7 @@ namespace AuroraEmu.Database.DAO
             using (DatabaseConnection dbConnection = Engine.Locator.ConnectionPool.PopConnection())
             {
                 dbConnection.SetQuery(
-                    "SELECT id, username, password, email, gender, figure, motto, coins, pixels, rank, home_room, block_friendrequests, sso_ticket FROM players WHERE id = @id;");
+                    "SELECT id, username, password, email, gender, figure, motto, coins, pixels, rank, home_room, block_friendrequests, sso_ticket, favourite_group FROM players WHERE id = @id;");
                 dbConnection.AddParameter("@id", id);
                 using (var reader = dbConnection.ExecuteReader())
                     if (reader.Read())
@@ -26,7 +26,7 @@ namespace AuroraEmu.Database.DAO
             Player player = null;
             using (DatabaseConnection dbConnection = Engine.Locator.ConnectionPool.PopConnection())
             {
-                dbConnection.SetQuery("SELECT id, username, password, email, gender, figure, motto, coins, pixels, rank, home_room, block_friendrequests, sso_ticket FROM players WHERE sso_ticket = @sso_ticket;");
+                dbConnection.SetQuery("SELECT id, username, password, email, gender, figure, motto, coins, pixels, rank, home_room, block_friendrequests, sso_ticket, favourite_group FROM players WHERE sso_ticket = @sso_ticket;");
                 dbConnection.AddParameter("@sso_ticket", sso);
                 using (var reader = dbConnection.ExecuteReader())
                     if (reader.Read())
@@ -53,7 +53,7 @@ namespace AuroraEmu.Database.DAO
             Player player = null;
             using (DatabaseConnection dbConnection = Engine.Locator.ConnectionPool.PopConnection())
             {
-                dbConnection.SetQuery("SELECT id, username, password, email, gender, figure, motto, coins, pixels, rank, home_room, block_friendrequests, sso_ticket FROM players WHERE username = @username;");
+                dbConnection.SetQuery("SELECT id, username, password, email, gender, figure, motto, coins, pixels, rank, home_room, block_friendrequests, sso_ticket, favourite_group FROM players WHERE username = @username;");
                 dbConnection.AddParameter("@username", username);
                 using (var reader = dbConnection.ExecuteReader())
                     if (reader.Read())

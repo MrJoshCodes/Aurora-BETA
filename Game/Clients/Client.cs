@@ -92,6 +92,9 @@ namespace AuroraEmu.Game.Clients
                 Player.MessengerComponent = new MessengerComponent(Player);
                 Engine.Locator.SubscriptionController.GetSubscriptionData(SubscriptionData, Player.Id);
                 Achievements = Engine.Locator.AchievementController.Dao.GetUserAchievements(Player.Id);
+
+                if (Player.FavouriteGroupId != -1)
+                    Player.Group = Engine.Locator.GroupController.Dao.GetGroup(Player.FavouriteGroupId);
             }
             else
             {
