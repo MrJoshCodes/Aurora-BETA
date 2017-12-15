@@ -6,6 +6,7 @@ using AuroraEmu.DI.Game.Badges;
 using AuroraEmu.DI.Game.Catalog;
 using AuroraEmu.DI.Game.Clients;
 using AuroraEmu.DI.Game.Commands;
+using AuroraEmu.DI.Game.Groups;
 using AuroraEmu.DI.Game.Items;
 using AuroraEmu.DI.Game.Messenger;
 using AuroraEmu.DI.Game.Navigator;
@@ -40,6 +41,7 @@ namespace AuroraEmu.Game
         public ICommandController CommandController { get; private set; }
         public IGameNetworkListener GameNetworkListener { get; private set; }
         public ISubscriptionController SubscriptionController { get; private set; }
+        public IGroupController GroupController { get; private set; }
 
         public DILocator(IDependencyLocator locator)
         {
@@ -66,6 +68,7 @@ namespace AuroraEmu.Game
             CommandController = _locator.Resolve<ICommandController>();
             GameNetworkListener = _locator.Resolve<IGameNetworkListener>();
             SubscriptionController = _locator.Resolve<ISubscriptionController>();
+            GroupController = _locator.Resolve<IGroupController>();
         }
     }
 }
