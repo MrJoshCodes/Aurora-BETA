@@ -16,6 +16,7 @@ using System.Collections.Generic;
 using AuroraEmu.Network.Game.Packets.Events.Achievements;
 using AuroraEmu.Network.Game.Packets.Events.Moderation;
 using AuroraEmu.Network.Game.Packets.Events.Rooms.Action;
+using AuroraEmu.Network.Game.Packets.Events.Rooms.Avatar;
 
 namespace AuroraEmu.Network.Game.Packets
 {
@@ -72,6 +73,7 @@ namespace AuroraEmu.Network.Game.Packets
                 { 400, new GetRoomSettingsMessageEvent() },
                 { 386, new UpdateRoomThumbnailMessageEvent() },
                 { 75, new MoveAvatarMessageEvent() },
+                { 93, new DanceMessageEvent() },
                 { 94, new WaveMessageEvent() },
                 { 53, new QuitMessageEvent() },
                 { 182, new GetInterstitialMessageEvent() },
