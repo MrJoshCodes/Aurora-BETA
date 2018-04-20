@@ -73,32 +73,32 @@ namespace AuroraEmu
             await Locator.GameNetworkListener.RunServer();
             while (true)
             {
-                switch (System.Console.ReadLine())
-                {
-                    case "reload_packets":
-                        Locator.PacketController.LoadPackets();
-                        break;
-                    case "reload_models":
-                        Locator.RoomController.LoadRoomMaps();
-                        break;
-                    case "reload_catalog":
-                        Locator.ItemController.ReloadTemplates();
-                        Locator.CatalogController.ReloadPages();
-                        Locator.CatalogController.ReloadProducts();
-                        Locator.CatalogController.ReloadDeals();
-                        Locator.CatalogController.ReloadVouchers();
-                        break;
-                    case "close":
-                    case "dispose":
-                    case "shutdown":
-                    case "arcturus":
-                        Shutdown();
-                        break;
-
-                    default:
-                        System.Console.WriteLine("Unknown command");
-                        break;
-                }
+//                switch (System.Console.ReadLine())
+//                {
+//                    case "reload_packets":
+//                        Locator.PacketController.LoadPackets();
+//                        break;
+//                    case "reload_models":
+//                        Locator.RoomController.LoadRoomMaps();
+//                        break;
+//                    case "reload_catalog":
+//                        Locator.ItemController.ReloadTemplates();
+//                        Locator.CatalogController.ReloadPages();
+//                        Locator.CatalogController.ReloadProducts();
+//                        Locator.CatalogController.ReloadDeals();
+//                        Locator.CatalogController.ReloadVouchers();
+//                        break;
+//                    case "close":
+//                    case "dispose":
+//                    case "shutdown":
+//                    case "arcturus":
+//                        Shutdown();
+//                        break;
+//
+//                    default:
+//                        System.Console.WriteLine("Unknown command");
+//                        break;
+//                }
             }
         }
 

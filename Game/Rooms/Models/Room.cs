@@ -147,7 +147,10 @@ namespace AuroraEmu.Game.Rooms.Models
             client.UserActor = actor;
             PlayersIn++;
 
-            Engine.Locator.NavigatorController.Categories[CategoryId].PlayersInside++;
+            if (CategoryId > 0)
+            {
+                Engine.Locator.NavigatorController.Categories[CategoryId].PlayersInside++;
+            }
         }
 
         public void Save(string[] columns, object[] values)

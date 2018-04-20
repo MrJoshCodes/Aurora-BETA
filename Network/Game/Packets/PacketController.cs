@@ -102,7 +102,8 @@ namespace AuroraEmu.Network.Game.Packets
                 {392, new UseFurnitureMessageEvent()},
 
                 { 454, new GetModeratorUserInfoMessageEvent() },
-                { 96, new AssignRightsMessageEvent() }
+                { 96, new AssignRightsMessageEvent() },
+                { 440, new CallGuideBotMessageEvent()}
             };
         }
 

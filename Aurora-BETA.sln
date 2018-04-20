@@ -1,0 +1,16 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AuroraEmu", "AuroraEmu.csproj", "{69898C0F-26D7-4E62-B063-E34675D8253B}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{69898C0F-26D7-4E62-B063-E34675D8253B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{69898C0F-26D7-4E62-B063-E34675D8253B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{69898C0F-26D7-4E62-B063-E34675D8253B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{69898C0F-26D7-4E62-B063-E34675D8253B}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal
