@@ -12,6 +12,7 @@ using AuroraEmu.Game.Players.Models;
 using AuroraEmu.Game.Rooms.Models;
 using AuroraEmu.Game.Subscription.Models;
 using AuroraEmu.Network.Game.Packets;
+using AuroraEmu.Network.Game.Packets.Composers.Navigator;
 
 namespace AuroraEmu.Game.Clients
 {
@@ -80,6 +81,7 @@ namespace AuroraEmu.Game.Clients
                 QueueComposer(new UserRightsMessageComposer());
                 QueueComposer(new MessageComposer(3));
                 QueueComposer(new ModMessageComposer($"Welcome {Player.Username} to Aurora BETA, enjoy your stay! Please report any bugs to us and we'll sort it ASAP.", "URL"));
+                QueueComposer(new NavigatorSettingsComposer(Player.HomeRoom));
                 
                 if (Player.Rank > 5)
                 {

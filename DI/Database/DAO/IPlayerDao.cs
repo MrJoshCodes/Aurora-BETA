@@ -13,5 +13,6 @@ namespace AuroraEmu.DI.Database.DAO
         Player GetPlayerByName(string username);
 
         void UpdateCurrency(int playerId, int amount, string type);
+        void UpdateHomeRoom(int playerId, int homeRoom);
     }
 }

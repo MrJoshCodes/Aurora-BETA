@@ -78,6 +78,7 @@ namespace AuroraEmu.Network.Game.Packets
                 { 53, new QuitMessageEvent() },
                 { 182, new GetInterstitialMessageEvent() },
                 {430, new PopularRoomsSearchMessageEvent()},
+                {384, new UpdateNavigatorSettingsMessageEvent()},
 
                 { 157, new GetBadgesEvent() },
                 { 158, new SetActivatedBadgesEvent() },

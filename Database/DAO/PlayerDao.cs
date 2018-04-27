@@ -72,5 +72,16 @@ namespace AuroraEmu.Database.DAO
                 dbConnection.Execute();
             }
         }
+
+        public void UpdateHomeRoom(int playerId, int homeRoom)
+        {
+            using (DatabaseConnection dbConnection = Engine.Locator.ConnectionPool.PopConnection())
+            {
+                dbConnection.SetQuery("UPDATE players SET home_room = @homeRoom WHERE id = @playerId");
+                dbConnection.AddParameter("@homeRoom", homeRoom);
+                dbConnection.AddParameter("@playerId", playerId);
+                dbConnection.Execute();
+            }
+        }
     }
 }
