@@ -1,6 +1,9 @@
 ﻿using AuroraEmu.Game.Clients;
 using AuroraEmu.Game.Rooms;
 using AuroraEmu.Game.Rooms.Models;
+using AuroraEmu.Network.Game.Packets.Composers.Rooms;
+using AuroraEmu.Network.Game.Packets.Composers.Rooms.Settings;
+using RoomInfoUpdatedComposer = AuroraEmu.Network.Game.Packets.Composers.Rooms.Settings.RoomInfoUpdatedComposer;
 
 namespace AuroraEmu.Network.Game.Packets.Events.Rooms
 {
@@ -40,6 +43,13 @@ namespace AuroraEmu.Network.Game.Packets.Events.Rooms
                 new[] {"name", "description", "state", "players_max", "category_id"},
                 new object[] {name, description, room.State, maxUsers, categoryId}
             );
+
+            Engine.Locator.RoomController.Rooms[roomId] = room;
+
+            client.QueueComposer(new RoomSettingsSavedComposer(roomId));
+            client.QueueComposer(new RoomInfoUpdatedComposer(roomId));
+            client.QueueComposer(new GetGuestRoomResultComposer(room));
+            client.Flush();
         }
     }
 }
