@@ -3,8 +3,6 @@
     <OutputType>Exe</OutputType>
     <TargetFramework>netcoreapp2.0</TargetFramework>
     <StartupObject>AuroraEmu.Engine</StartupObject>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
     <LangVersion>7.1</LangVersion>
   </PropertyGroup>
   <ItemGroup>

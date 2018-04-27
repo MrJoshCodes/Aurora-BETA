@@ -21,6 +21,7 @@ namespace AuroraEmu.Game.Items
                     interactor.CurrentRoom.SendComposer(new ItemUpdateMessageComposer(item));
                 else
                     interactor.CurrentRoom.SendComposer(new ObjectDataUpdateMessageComposer(item.Id, item.Data));
+                Engine.Locator.ItemController.Dao.UpdateItemData(item.Id, item.Data);
                 item.Cycling = false;
             });
         }

@@ -16,8 +16,11 @@ namespace AuroraEmu.Network.Game.Packets.Events.Items
                 
                 int nextState;
 
-                if (!int.TryParse(item.Data, out int currentState) || currentState < 0 ||
-                    currentState >= item.Definition.MaxInteractionState)
+                if (!int.TryParse(item.Data, out int currentState) || currentState < 0)
+                {
+                    nextState = 1;
+                }
+                else if (currentState >= item.Definition.MaxInteractionState)
                 {
                     nextState = 0;
                 }
