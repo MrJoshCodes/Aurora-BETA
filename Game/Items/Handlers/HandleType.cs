@@ -16,7 +16,7 @@
             {
                 case "dice":
                     return HandleType.DICE;
-                case "color_wheel":
+                case "habbowheel":
                     return HandleType.COLOR_WHEEL;
                 case "dimmer":
                     return HandleType.DIMMER;

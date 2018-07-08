@@ -83,5 +83,18 @@ namespace AuroraEmu.Database.DAO
                 dbConnection.Execute();
             }
         }
+
+        public void UpdateAppearance(int playerId, string figure, string gender, string motto)
+        {
+            using (DatabaseConnection dbConnection = Engine.Locator.ConnectionPool.PopConnection())
+            {
+                dbConnection.SetQuery("UPDATE players SET figure = @figure, gender = @gender, motto = @motto WHERE id = @playerId");
+                dbConnection.AddParameter("@figure", figure);
+                dbConnection.AddParameter("@gender", gender);
+                dbConnection.AddParameter("@motto", motto);
+                dbConnection.AddParameter("@playerId", playerId);
+                dbConnection.Execute();
+            }
+        }
     }
 }

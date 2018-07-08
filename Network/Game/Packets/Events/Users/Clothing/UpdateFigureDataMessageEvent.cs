@@ -12,6 +12,7 @@ namespace AuroraEmu.Network.Game.Packets.Events.Users.Clothing
 
             client.Player.Figure = figure;
             client.Player.Gender = gender.ToLower();
+            Engine.Locator.PlayerController.Dao.UpdateAppearance(client.Player.Id, figure, gender, client.Player.Motto);
 
             client.SendComposer(new UserChangeMessageComposer(client.Player));
             client.CurrentRoom.SendComposer(new UserChangeMessageComposer(client.UserActor.VirtualId, client.Player));

@@ -14,5 +14,6 @@ namespace AuroraEmu.DI.Database.DAO
 
         void UpdateCurrency(int playerId, int amount, string type);
         void UpdateHomeRoom(int playerId, int homeRoom);
+        void UpdateAppearance(int playerId, string figure, string gender, string motto);
     }
 }
