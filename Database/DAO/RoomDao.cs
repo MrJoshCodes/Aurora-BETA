@@ -1,6 +1,7 @@
 ﻿using AuroraEmu.DI.Database.DAO;
 using System.Collections.Generic;
 using AuroraEmu.Game.Rooms.Models;
+using MySql.Data.MySqlClient;
 
 namespace AuroraEmu.Database.DAO
 {
@@ -64,6 +65,25 @@ namespace AuroraEmu.Database.DAO
             }
             
             return tmpRoomId;
+        }
+
+        public List<string> GetRoomTags(int id)
+        {
+            List<string> tags = new List<string>();
+
+            using (DatabaseConnection dbConnection = Engine.Locator.ConnectionPool.PopConnection())
+            {
+                dbConnection.SetQuery("SELECT tag FROM room_tags WHERE room_id = @roomId");
+                dbConnection.AddParameter("@roomId", id);
+
+                using (MySqlDataReader reader = dbConnection.ExecuteReader())
+                {
+                    while (reader.Read())
+                        tags.Add(reader.GetString("tag"));
+                }
+            }
+
+            return tags;
         }
     }
 }

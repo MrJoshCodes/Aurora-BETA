@@ -51,6 +51,7 @@ namespace AuroraEmu.Game.Rooms.Models
         public bool Active => ProcessComponent != null;
         
         public ConcurrentDictionary<int, Item> ItemUpdates { get; set; }
+        public List<string> Tags { get; set; }
 
         public Room()
         {
@@ -60,6 +61,7 @@ namespace AuroraEmu.Game.Rooms.Models
             AllPlayerRights = false;
             Icon = "HHIPAI";
             Landscape = 0.0;
+            Tags = new List<string>();
         }
 
         public Room(MySqlDataReader reader)
@@ -92,6 +94,7 @@ namespace AuroraEmu.Game.Rooms.Models
             ProcessComponent = new ProcessComponent(this);
             ProcessComponent.SetupRoomLoop();
             Grid = new RoomGrid(this);
+            Tags = Engine.Locator.RoomController.GetRoomTags(Id);
         }
 
         public string Owner =>
@@ -146,6 +149,7 @@ namespace AuroraEmu.Game.Rooms.Models
             client.CurrentRoom = Engine.Locator.RoomController.GetRoom(client.CurrentRoomId);
             client.UserActor = actor;
             PlayersIn++;
+            Save(("players_in", PlayersIn));
 
             if (CategoryId > 0)
             {
@@ -153,23 +157,18 @@ namespace AuroraEmu.Game.Rooms.Models
             }
         }
 
-        public void Save(string[] columns, object[] values)
+        public void Save(params (string key, object value)[] args)
         {
-            if (columns.Length < 1 || columns.Length != values.Length)
-            {
-                return;
-            }
-
             string query = "UPDATE rooms SET ";
-            MySqlParameter[] parameters = new MySqlParameter[columns.Length + 1];
+            MySqlParameter[] parameters = new MySqlParameter[args.Length + 1];
 
-            for (int i = 0; i < columns.Length && i < values.Length; i++)
+            for (int i = 0; i < args.Length; i++)
             {
                 if (i > 0)
                     query += ", ";
 
-                query += $"{columns[i]} = @{columns[i]}";
-                parameters[i] = new MySqlParameter($"@{columns[i]}", values[i]);
+                query += $"{args[i].key} = @{args[i].key}";
+                parameters[i] = new MySqlParameter($"@{args[i].key}", args[i].value);
             }
 
             query += " WHERE id = @roomId";

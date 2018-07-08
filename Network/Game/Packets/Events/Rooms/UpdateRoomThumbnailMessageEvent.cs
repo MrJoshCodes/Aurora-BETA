@@ -14,7 +14,7 @@ namespace AuroraEmu.Network.Game.Packets.Events.Rooms
                 string icon = msgEvent.ToString();
 
                 client.CurrentRoom.Icon = icon;
-                client.CurrentRoom.Save(new[] { "icon" }, new object[] { icon });
+                client.CurrentRoom.Save(("icon", icon));
 
                 client.SendComposer(new RoomThumbnailUpdateResultComposer(roomId));
                 client.SendComposer(new RoomInfoUpdatedComposer(roomId));

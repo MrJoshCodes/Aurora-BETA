@@ -39,10 +39,7 @@ namespace AuroraEmu.Network.Game.Packets.Events.Rooms
             room.State = (RoomState) state;
             room.PlayersMax = maxUsers;
             room.CategoryId = categoryId;
-            room.Save(
-                new[] {"name", "description", "state", "players_max", "category_id"},
-                new object[] {name, description, room.State, maxUsers, categoryId}
-            );
+            room.Save(("name", name), ("description", description), ("state", state), ("players_max", maxUsers), ("category_id", categoryId));
 
             Engine.Locator.RoomController.Rooms[roomId] = room;
 

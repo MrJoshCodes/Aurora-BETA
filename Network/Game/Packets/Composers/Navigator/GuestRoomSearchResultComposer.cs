@@ -31,9 +31,15 @@ namespace AuroraEmu.Network.Game.Packets.Composers.Navigator
             composer.AppendVL64(0);
             composer.AppendVL64(Engine.Locator.NavigatorController.Categories.ContainsKey(room.CategoryId) && Engine.Locator.NavigatorController.Categories[room.CategoryId].TradeAllowed);
             composer.AppendVL64(0); // score
-            composer.AppendVL64(0); // tags
+            composer.AppendVL64(room.CategoryId);
             composer.AppendString("");
-            composer.AppendVL64(0);
+            composer.AppendVL64(room.Tags.Count);
+
+            foreach (string tag in room.Tags)
+            {
+                composer.AppendString(tag);
+            }
+
             composer.AppendString(room.Icon, 0);
         }
     }

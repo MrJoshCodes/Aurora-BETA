@@ -59,12 +59,12 @@ namespace AuroraEmu.Database.DAO
 
             using (DatabaseConnection dbConnection = Engine.Locator.ConnectionPool.PopConnection())
             {
-                dbConnection.SetQuery("SELECT `id` FROM rooms WHERE name LIKE @search OR owner_id IN (SELECT id FROM players WHERE username LIKE @search)");
+                dbConnection.SetQuery("SELECT * FROM rooms WHERE name LIKE @search OR owner_id IN (SELECT id FROM players WHERE username LIKE @search)");
                 dbConnection.AddParameter("@search", "%" + search + "%");
                 using (var reader = dbConnection.ExecuteReader())
                     while (reader.Read())
                     {
-                        Room room = Engine.Locator.RoomController.GetRoom(reader.GetInt32("id"));
+                        Room room = new Room(reader);
                         rooms.Add(room);
                     }
             }
@@ -78,12 +78,12 @@ namespace AuroraEmu.Database.DAO
 
             using (DatabaseConnection dbConnection = Engine.Locator.ConnectionPool.PopConnection())
             {
-                dbConnection.SetQuery("SELECT `id` FROM rooms WHERE owner_id IN (SELECT `user_two_id` FROM `messenger_friends` WHERE `user_one_id` = @playerId) ORDER BY `players_in` DESC LIMIT 40");
+                dbConnection.SetQuery("SELECT * FROM rooms WHERE owner_id IN (SELECT `user_two_id` FROM `messenger_friends` WHERE `user_one_id` = @playerId) ORDER BY `players_in` DESC LIMIT 40");
                 dbConnection.AddParameter("@playerId", playerId);
                 using (var reader = dbConnection.ExecuteReader())
                     while (reader.Read())
                     {
-                        Room room = Engine.Locator.RoomController.GetRoom(reader.GetInt32("id"));
+                        Room room = new Room(reader);
                         rooms.Add(room);
                     }
             }
@@ -97,11 +97,11 @@ namespace AuroraEmu.Database.DAO
 
             using (DatabaseConnection dbConnection = Engine.Locator.ConnectionPool.PopConnection())
             {
-                dbConnection.SetQuery("SELECT `id` FROM rooms ORDER BY `name` ASC LIMIT 40");
+                dbConnection.SetQuery("SELECT * FROM rooms ORDER BY `name` ASC LIMIT 40");
                 using (var reader = dbConnection.ExecuteReader())
                     while (reader.Read())
                     {
-                        Room room = Engine.Locator.RoomController.GetRoom(reader.GetInt32("id"));
+                        Room room = new Room(reader);
                         rooms.Add(room);
                     }
             }
@@ -115,12 +115,12 @@ namespace AuroraEmu.Database.DAO
 
             using (DatabaseConnection dbConnection = Engine.Locator.ConnectionPool.PopConnection())
             {
-                dbConnection.SetQuery("SELECT `id` FROM rooms WHERE `category_id` = @categoryid ORDER BY `name` ASC LIMIT 40");
+                dbConnection.SetQuery("SELECT * FROM rooms WHERE `category_id` = @categoryid ORDER BY `name` ASC LIMIT 40");
                 dbConnection.AddParameter("@categoryid", categoryId);
                 using (var reader = dbConnection.ExecuteReader())
                     while (reader.Read())
                     {
-                        Room room = Engine.Locator.RoomController.GetRoom(reader.GetInt32("id"));
+                        Room room = new Room(reader);
                         rooms.Add(room);
                     }
             }

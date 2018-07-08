@@ -12,5 +12,7 @@ namespace AuroraEmu.DI.Database.DAO
         int GetUserRoomCount(int userId);
 
         int GetRoomId(string name, string model, int ownerId);
+
+        List<string> GetRoomTags(int id);
     }
 }

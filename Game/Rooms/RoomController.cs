@@ -61,5 +61,10 @@ namespace AuroraEmu.Game.Rooms
             roomId = -1;
             return false;
         }
+
+        public List<string> GetRoomTags(int roomId)
+        {
+            return Dao.GetRoomTags(roomId);
+        }
     }
 }

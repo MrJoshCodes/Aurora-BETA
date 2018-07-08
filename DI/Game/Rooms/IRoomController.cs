@@ -17,5 +17,7 @@ namespace AuroraEmu.DI.Game.Rooms
         int GetUserRoomCount(int userId);
 
         bool TryCreateRoom(string name, string model, int ownerId, out int roomId);
+
+        List<string> GetRoomTags(int roomId);
     }
 }

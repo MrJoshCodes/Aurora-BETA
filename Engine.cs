@@ -56,6 +56,8 @@ namespace AuroraEmu
 
         static async Task Main()
         {
+            System.Console.WindowWidth = System.Console.LargestWindowWidth - 20;
+
             var logRepository = LogManager.GetRepository(Assembly.GetEntryAssembly());
             XmlConfigurator.Configure(logRepository, new FileInfo("log4net.config"));
             Logger = LogManager.GetLogger(typeof(Engine));
