@@ -188,6 +188,7 @@ namespace AuroraEmu.Game.Rooms.Models
             Actors.TryRemove(actor.VirtualId, out RoomActor roomActor);
             SendComposer(new UserRemoveMessageComposer(actor));
             PlayersIn--;
+            Save(("players_in", PlayersIn));
 
             // Since when switching rooms it SHOULDN'T close connection, this check:
             if (closeConnection)

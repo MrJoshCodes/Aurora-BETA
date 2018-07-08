@@ -72,7 +72,15 @@ namespace AuroraEmu
                                                                                  ");
 
             ContainerBuilder();
+
+            using (DatabaseConnection dbConnection = Locator.ConnectionPool.PopConnection())
+            {
+                dbConnection.SetQuery("UPDATE rooms SET players_in = 0");
+                dbConnection.Execute();
+            }
+
             await Locator.GameNetworkListener.RunServer();
+
             while (true)
             {
                 switch (System.Console.ReadLine())
@@ -156,6 +164,12 @@ namespace AuroraEmu
         
         private static void Shutdown()
         {
+            using (DatabaseConnection dbConnection = Locator.ConnectionPool.PopConnection())
+            {
+                dbConnection.SetQuery("UPDATE rooms SET players_in = 0");
+                dbConnection.Execute();
+            }
+
             Locator.ClientController.Dispose();
             Locator.GameNetworkListener.Dispose();
             System.Environment.Exit(0);

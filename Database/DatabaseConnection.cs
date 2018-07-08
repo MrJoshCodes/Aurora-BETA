@@ -92,7 +92,15 @@ namespace AuroraEmu.Database
 
         public string GetString()
         {
-            return _command.ExecuteScalar().ToString();
+            try
+            {
+                return _command.ExecuteScalar().ToString();
+            }
+            catch (Exception ex)
+            {
+                Engine.Logger.Error(ex.Message);
+                return string.Empty;
+            }
         }
 
         public int GetInt()
