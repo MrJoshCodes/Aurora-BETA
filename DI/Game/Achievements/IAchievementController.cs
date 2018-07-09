@@ -12,5 +12,6 @@ namespace AuroraEmu.DI.Game.Achievements
         Dictionary<string, Achievement> Achievements { get; }
 
         void CheckAchievement(Client client, string achievement, int current);
+        void UpdateAchievementProgress(Client client, string achievementCode);
     }
 }

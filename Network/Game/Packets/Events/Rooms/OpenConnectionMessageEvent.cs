@@ -23,7 +23,7 @@ namespace AuroraEmu.Network.Game.Packets.Events.Rooms
             client.LoadingRoomId = id;
             
             MessageComposer fuseResponse = new MessageComposer(166);
-            fuseResponse.AppendString("/client/public/" + room.Model + "/0", 0);
+            fuseResponse.AppendString("/client/public/" + room.Model + "/" + room.Id, 0);
             client.SendComposer(fuseResponse);
 
             client.SendComposer(new RoomReadyMessageComposer(id, room.Model));

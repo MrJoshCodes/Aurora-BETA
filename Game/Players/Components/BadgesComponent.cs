@@ -53,8 +53,11 @@ namespace AuroraEmu.Game.Players.Components
             }
             else
             {
-                Engine.Locator.BadgeController.Dao.UpdateBadge(_playerId, achievementBadge + checkLevel);
-                Badges[badge.Id] = new Badge(badge.Id, achievementBadge + checkLevel, badge.Slot);
+                Engine.Locator.BadgeController.Dao.UpdateBadge(badge.Id, achievementBadge + checkLevel);
+                int slot = badge.Slot;
+                int id = badge.Id;
+                Badges.Remove(badge.Id);
+                Badges.Add(id, new Badge(id, achievementBadge + checkLevel, slot));
             }
         }
     }

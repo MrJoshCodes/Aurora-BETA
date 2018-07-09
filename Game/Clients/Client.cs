@@ -31,6 +31,7 @@ namespace AuroraEmu.Game.Clients
         public Dictionary<int, Item> Items { get; set; }
         public Dictionary<string, SubscriptionData> SubscriptionData { get; set; }
         public Dictionary<int, int> Achievements { get; set; }
+        public Dictionary<int, int> AchievementProgresses { get; set; }
 
         public Client(IChannel channel)
         {
@@ -94,6 +95,7 @@ namespace AuroraEmu.Game.Clients
                 Player.MessengerComponent = new MessengerComponent(Player);
                 Engine.Locator.SubscriptionController.GetSubscriptionData(SubscriptionData, Player.Id);
                 Achievements = Engine.Locator.AchievementController.Dao.GetUserAchievements(Player.Id);
+                AchievementProgresses = Engine.Locator.AchievementController.Dao.GetUserAchievementProgresses(Player.Id);
 
                 if (Player.FavouriteGroupId != -1)
                     Player.Group = Engine.Locator.GroupController.Dao.GetGroup(Player.FavouriteGroupId);

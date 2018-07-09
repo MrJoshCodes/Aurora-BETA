@@ -5,6 +5,7 @@ using AuroraEmu.DI.Game.Achievements;
 using AuroraEmu.Game.Achievements.Models;
 using AuroraEmu.Game.Clients;
 using AuroraEmu.Network.Game.Packets.Composers.Achievements;
+using AuroraEmu.Network.Game.Packets.Composers.Inventory.Badges;
 using AuroraEmu.Network.Game.Packets.Events.Achievements;
 
 namespace AuroraEmu.Game.Achievements
@@ -21,6 +22,24 @@ namespace AuroraEmu.Game.Achievements
             
             Engine.Logger.Info($"Loaded {Achievements.Count} Achievements.");
         }
+
+        public void UpdateAchievementProgress(Client client, string achievementCode)
+        {
+            if (!Achievements.TryGetValue(achievementCode, out Achievement achievement)) return;
+
+
+            if (client.AchievementProgresses.TryGetValue(achievement.Id, out int progress) == false)
+            {
+                client.AchievementProgresses.Add(achievement.Id, 1);
+                progress = 1;
+            }
+            else
+            {
+                client.AchievementProgresses[achievement.Id]++;
+            }
+
+            Engine.Locator.AchievementController.Dao.AddOrUpdateUserAchievementProgress(client.Player.Id, achievement.Id, client.AchievementProgresses[achievement.Id]);
+        }
         
         public void CheckAchievement(Client client, string achievementCode, int current)
         {
@@ -29,20 +48,20 @@ namespace AuroraEmu.Game.Achievements
             int checkLevel;
             bool hasAchievementBase;
 
-            if (!client.Achievements.TryGetValue(achievement.Id, out int currentLevel))
-            {
-                checkLevel = 1;
-                hasAchievementBase = false;
-            }
-            else
+            if (client.Achievements.TryGetValue(achievement.Id, out int currentLevel))
             {
                 if (currentLevel >= achievement.Levels.Keys.Max())
                 {
                     return; // No more levels...
                 }
-                
+
                 checkLevel = currentLevel + 1;
                 hasAchievementBase = true;
+            }
+            else
+            {
+                checkLevel = 1;
+                hasAchievementBase = false;
             }
 
             if (current < achievement.Levels[checkLevel].Required) return;

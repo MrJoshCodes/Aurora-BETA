@@ -55,11 +55,44 @@ namespace AuroraEmu.Database.DAO
             return userAchievements;
         }
 
+        public Dictionary<int, int> GetUserAchievementProgresses(int playerId)
+        {
+            var userAchievementProgresses = new Dictionary<int, int>();
+
+            using (var dbConnection = Engine.Locator.ConnectionPool.PopConnection())
+            {
+                dbConnection.SetQuery("SELECT * FROM player_achievement_progress WHERE player_id = @playerId");
+                dbConnection.AddParameter("@playerId", playerId);
+
+                using (var reader = dbConnection.ExecuteReader())
+                {
+                    while(reader.Read())
+                    {
+                        userAchievementProgresses.Add(reader.GetInt32("achievement_id"), reader.GetInt32("progress"));
+                    }
+                }
+            }
+
+            return userAchievementProgresses;
+        }
+
+        public void AddOrUpdateUserAchievementProgress(int playerId, int achievementId, int progress)
+        {
+            using (var dbConnection = Engine.Locator.ConnectionPool.PopConnection())
+            {
+                dbConnection.SetQuery("INSERT INTO player_achievement_progress VALUES (@playerId, @achievementId, @progress) ON DUPLICATE KEY UPDATE progress = VALUES(progress)");
+                dbConnection.AddParameter("@playerId", playerId);
+                dbConnection.AddParameter("@achievementId", achievementId);
+                dbConnection.AddParameter("@progress", progress);
+                dbConnection.Execute();
+            }
+        }
+
         public void AddOrUpdateUserAchievement(int playerId, int achievementId, int level)
         {
             using (var dbConnection = Engine.Locator.ConnectionPool.PopConnection())
             {
-                dbConnection.SetQuery("INSERT INTO `player_achievements` VALUES (@playerId, @achievementId, @level) ON DUPLICATE KEY UPDATE `level` = VALUES(`level`)");
+                dbConnection.SetQuery("INSERT INTO `player_achievements` VALUES (@achievementId, @level, @playerId) ON DUPLICATE KEY UPDATE `level` = VALUES(`level`)");
                 dbConnection.AddParameter("@playerId", playerId);
                 dbConnection.AddParameter("@achievementId", achievementId);
                 dbConnection.AddParameter("@level", level);
