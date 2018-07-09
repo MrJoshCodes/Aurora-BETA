@@ -23,10 +23,23 @@ namespace AuroraEmu.Game.Achievements
             Engine.Logger.Info($"Loaded {Achievements.Count} Achievements.");
         }
 
+        private bool AchievementIsDone(Client client, string achievementCode)
+        {
+            if (!Achievements.TryGetValue(achievementCode, out Achievement achievement)) return false;
+
+            if (client.Achievements.TryGetValue(achievement.Id, out int level))
+            {
+                return level >= achievement.Levels.Count;
+            }
+
+            return false;
+        }
+
         public void UpdateAchievementProgress(Client client, string achievementCode)
         {
             if (!Achievements.TryGetValue(achievementCode, out Achievement achievement)) return;
 
+            if (AchievementIsDone(client, achievementCode)) return;
 
             if (client.AchievementProgresses.TryGetValue(achievement.Id, out int progress) == false)
             {
@@ -41,9 +54,22 @@ namespace AuroraEmu.Game.Achievements
             Engine.Locator.AchievementController.Dao.AddOrUpdateUserAchievementProgress(client.Player.Id, achievement.Id, client.AchievementProgresses[achievement.Id]);
         }
         
-        public void CheckAchievement(Client client, string achievementCode, int current)
+        public void CheckAchievement(Client client, string achievementCode)
         {
             if (!Achievements.TryGetValue(achievementCode, out Achievement achievement)) return;
+
+            if (AchievementIsDone(client, achievementCode)) return;
+
+            int current;
+
+            if (client.AchievementProgresses.TryGetValue(achievement.Id, out int progress))
+            {
+                current = progress;
+            }
+            else
+            {
+                current = 0;
+            }
 
             int checkLevel;
             bool hasAchievementBase;

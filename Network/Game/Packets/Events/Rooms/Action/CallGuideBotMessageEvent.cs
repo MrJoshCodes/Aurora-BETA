@@ -9,7 +9,8 @@ namespace AuroraEmu.Network.Game.Packets.Events.Rooms.Action
         {
             client.SendComposer(new HabboBroadcastMessageComposer("Feature not implemented but enjoy your achievement..."));
             
-            Engine.Locator.AchievementController.CheckAchievement(client, "ACH_Graduate", 1);
+            Engine.Locator.AchievementController.UpdateAchievementProgress(client, "ACH_Student");
+            Engine.Locator.AchievementController.CheckAchievement(client, "ACH_Student");
         }
     }
 }

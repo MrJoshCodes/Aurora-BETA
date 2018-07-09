@@ -159,7 +159,7 @@ namespace AuroraEmu.Game.Rooms.Models
             if (OwnerId != client.Player.Id)
             {
                 Engine.Locator.AchievementController.UpdateAchievementProgress(client, "ACH_RoomEntry");
-                Engine.Locator.AchievementController.CheckAchievement(client, "ACH_RoomEntry", client.AchievementProgresses[Engine.Locator.AchievementController.Achievements["ACH_RoomEntry"].Id]);
+                Engine.Locator.AchievementController.CheckAchievement(client, "ACH_RoomEntry");
             }
         }
 
