@@ -45,6 +45,7 @@ using AuroraEmu.DI.Game.Achievements;
 using AuroraEmu.DI.Game.Groups;
 using AuroraEmu.Game.Achievements;
 using AuroraEmu.Game.Groups;
+using System.Collections.Generic;
 
 namespace AuroraEmu
 {
@@ -54,8 +55,12 @@ namespace AuroraEmu
         public static IContainer Container { get; set; }
         public static DILocator Locator { get; set; }
 
+        public static List<string> FlashClients { get; set; }
+
         static async Task Main()
         {
+            FlashClients = new List<string>();
+
             System.Console.WindowWidth = System.Console.LargestWindowWidth - 20;
 
             var logRepository = LogManager.GetRepository(Assembly.GetEntryAssembly());

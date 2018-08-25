@@ -7,7 +7,14 @@ namespace AuroraEmu.Network.Game.Packets.Events.Handshake
     {
         public void Run(Client client, MessageEvent msgEvent)
         {
-            client.SendComposer(new SessionParamsMessageComposer());
+            if (client.FlashClient)
+            {
+                client.SendComposer(new SessionParamsMessageComposer());
+            }
+            else
+            {
+                client.SendComposer(new InitCryptoMessageComposer());
+            }
         }
     }
 }

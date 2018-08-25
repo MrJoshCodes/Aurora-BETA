@@ -21,7 +21,12 @@ namespace AuroraEmu.Database.DAO
                 dbConnection.SetQuery("SELECT page_id,type,value FROM catalog_pages_data;");
                 using (var reader = dbConnection.ExecuteReader())
                     while (reader.Read())
-                        pages[reader.GetInt32("page_id")].Data[reader.GetString("type")].Add(reader.GetString("value"));
+                    {
+                        if (pages.TryGetValue(reader.GetInt32("page_id"), out CatalogPage page))
+                        {
+                            page.Data[reader.GetString("type")].Add(reader.GetString("value"));
+                        }
+                    }
             }
         }
 

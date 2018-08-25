@@ -32,6 +32,9 @@ namespace AuroraEmu.Game.Clients
         public Dictionary<string, SubscriptionData> SubscriptionData { get; set; }
         public Dictionary<int, int> Achievements { get; set; }
         public Dictionary<int, int> AchievementProgresses { get; set; }
+        public string IP => _channel.RemoteAddress.ToString().Split(']')[0].Substring(1);
+
+        public bool FlashClient { get; set; }
 
         public Client(IChannel channel)
         {
@@ -42,7 +45,6 @@ namespace AuroraEmu.Game.Clients
 
         public void Disconnect()
         {
-
             if (this.CurrentRoom != null && this.UserActor != null)
                 this.CurrentRoom.RemoveActor(UserActor, true);
 
@@ -99,6 +101,9 @@ namespace AuroraEmu.Game.Clients
 
                 if (Player.FavouriteGroupId != -1)
                     Player.Group = Engine.Locator.GroupController.Dao.GetGroup(Player.FavouriteGroupId);
+
+                Player.Online = true;
+                Player.MessengerComponent.SendUpdate();
             }
             else
             {
@@ -138,6 +143,9 @@ namespace AuroraEmu.Game.Clients
             {
                 using (Player player = Player)
                 {
+                    player.Online = false;
+                    player.MessengerComponent.SendUpdate();
+
                     SubscriptionData.Clear();
                     Items.Clear();
                     using (var dbConnection = Engine.Locator.ConnectionPool.PopConnection())

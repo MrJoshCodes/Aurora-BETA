@@ -41,7 +41,9 @@ namespace AuroraEmu.Network.Game.Packets
                 { 102, new GetCatalogPageMessageEvent() },
                 { 380, new GetOfficialRoomsMessageEvent() },
                 { 206, new InitCryptoMessageEvent() },
+                {204,new SSOTicketMessageEvent() },
                 { 415, new SSOTicketMessageEvent() },
+                {2002, new GenerateSecretKeyMessageEvent() },
 
                 { 12, new MessengerInitMessageEvent() },
                 { 33, new SendMsgMessageEvent() },
@@ -54,6 +56,7 @@ namespace AuroraEmu.Network.Game.Packets
                 { 2, new OpenConnectionMessageEvent()},
                 { 41, new HabboSearchMessageEvent() },
                 { 434, new MyRoomsSearchMessageEvent() },
+                { 16, new MyRoomsSearchMessageEvent() },
                 { 432, new MyFriendsRoomsSearchMessageEvent()},
                 { 151, new GetUserFlatCatsMessageEvent() },
                 { 387, new CanCreateRoomMessageEvent() },
@@ -79,6 +82,10 @@ namespace AuroraEmu.Network.Game.Packets
                 { 182, new GetInterstitialMessageEvent() },
                 {430, new PopularRoomsSearchMessageEvent()},
                 {384, new UpdateNavigatorSettingsMessageEvent()},
+                { 21, new GetFlatInfoMessageEvent() },
+                { 61, new GetUsersMessageEvent() },
+                { 62, new GetObjectsMessageEvent() },
+                { 63, new GetItemsMessageEvent() },
 
                 { 157, new GetBadgesEvent() },
                 { 158, new SetActivatedBadgesEvent() },

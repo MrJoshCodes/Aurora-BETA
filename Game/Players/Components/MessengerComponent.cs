@@ -2,6 +2,10 @@
 using System;
 using AuroraEmu.Game.Messenger.Models;
 using AuroraEmu.Game.Players.Models;
+using AuroraEmu.Network.Game.Packets;
+using AuroraEmu.Network.Game.Packets.Composers.Messenger;
+using System.Threading.Tasks;
+using AuroraEmu.Game.Clients;
 
 namespace AuroraEmu.Game.Players.Components
 {
@@ -58,6 +62,21 @@ namespace AuroraEmu.Game.Players.Components
         {
             Friends.Clear();
             Requests.Clear();
+        }
+
+        public void SendUpdate()
+        {
+            FriendListUpdateMessageComposer friendListUpdateMessageComposer = new FriendListUpdateMessageComposer(Player);
+
+            Parallel.ForEach(Friends.Values, (friend) =>
+            {
+                Client client = Engine.Locator.ClientController.GetClientByHabbo(friend.UserTwoId);
+                
+                if (client != null)
+                {
+                    client.SendComposer(friendListUpdateMessageComposer);
+                }
+            });
         }
     }
 }

@@ -21,6 +21,7 @@ namespace AuroraEmu.Game.Players.Models
         public string SSO { get; set; }
         public byte Rank { get; set; }
         public int FavouriteGroupId { get; set; }
+        public bool Online { get; set; }
 
         public Group Group { get; set; }
         public MessengerComponent MessengerComponent { get; set; }

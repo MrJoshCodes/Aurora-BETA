@@ -26,6 +26,8 @@ namespace AuroraEmu.Game.Clients
             else
             {
                 client = new Client(channel);
+                client.FlashClient = Engine.FlashClients.Contains(client.IP);
+                Engine.FlashClients.Remove(client.IP);
 
                 Clients.Add(channel.Id, client);
             }

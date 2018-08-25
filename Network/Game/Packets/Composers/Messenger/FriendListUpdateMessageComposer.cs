@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using AuroraEmu.Game.Clients;
 using AuroraEmu.Game.Messenger.Models;
 using AuroraEmu.Game.Players.Models;
 
@@ -27,6 +28,27 @@ namespace AuroraEmu.Network.Game.Packets.Composers.Messenger
 
                 AppendVL64(false);
             }
+        }
+
+        public FriendListUpdateMessageComposer(Player player)
+            : base(13)
+        {
+            Client client = Engine.Locator.ClientController.GetClientByHabbo(player.Id);
+
+            AppendVL64(0);
+            AppendVL64(1);
+            AppendVL64(0);
+            AppendVL64(player.Id);
+            AppendString(player.Username);
+            AppendVL64(1);
+            AppendVL64(player.Online);
+            AppendVL64(client != null && client.CurrentRoomId != 0);
+            AppendString(player.Figure);
+            AppendVL64(0);
+            AppendString(player.Motto);
+            AppendString("");
+
+            AppendVL64(false);
         }
 
         public FriendListUpdateMessageComposer(int friendId)
